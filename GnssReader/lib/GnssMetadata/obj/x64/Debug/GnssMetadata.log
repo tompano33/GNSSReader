@@ -1,0 +1,17 @@
+﻿Build started 5/29/2015 10:18:27 AM.
+     1>Project "C:\Users\ANTadmin\Desktop\MetaAPI\lib\GnssMetadata\GnssMetadata.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "C:\Users\ANTadmin\Desktop\MetaAPI\lib\GnssMetadata\\obj\x64\Debug\GnssMetadata.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Lib:
+         All outputs are up-to-date.
+         GnssMetadata.vcxproj -> C:\Users\ANTadmin\Desktop\MetaAPI\\lib\x64\Debug\GnssMetadata.lib
+       FinalizeBuildStatus:
+         Deleting file "C:\Users\ANTadmin\Desktop\MetaAPI\lib\GnssMetadata\\obj\x64\Debug\GnssMetadata.unsuccessfulbuild".
+         Touching "C:\Users\ANTadmin\Desktop\MetaAPI\lib\GnssMetadata\\obj\x64\Debug\GnssMetadata.lastbuildstate".
+     1>Done Building Project "C:\Users\ANTadmin\Desktop\MetaAPI\lib\GnssMetadata\GnssMetadata.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.07

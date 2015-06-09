@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{F9B10659-1E73-466D-BD31-C29A7A5AEADE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{A891C50C-6850-44E7-A167-04C214765601}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GnssMetadata", "lib\GnssMetadata\GnssMetadata.vcxproj", "{7063ED65-8D65-44F0-AF2D-B1555601BD0B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GNSSReader", "app\TestApp\TestApp.vcxproj", "{242571B3-59FC-4E0C-938F-A35763D5AE36}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Debug|Win32.Build.0 = Debug|Win32
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Debug|x64.ActiveCfg = Debug|x64
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Debug|x64.Build.0 = Debug|x64
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Release|Win32.ActiveCfg = Release|Win32
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Release|Win32.Build.0 = Release|Win32
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Release|x64.ActiveCfg = Release|x64
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B}.Release|x64.Build.0 = Release|x64
+		{242571B3-59FC-4E0C-938F-A35763D5AE36}.Debug|Win32.ActiveCfg = Debug|Win32
+		{242571B3-59FC-4E0C-938F-A35763D5AE36}.Debug|Win32.Build.0 = Debug|Win32
+		{242571B3-59FC-4E0C-938F-A35763D5AE36}.Debug|x64.ActiveCfg = Debug|x64
+		{242571B3-59FC-4E0C-938F-A35763D5AE36}.Debug|x64.Build.0 = Debug|x64
+		{242571B3-59FC-4E0C-938F-A35763D5AE36}.Release|Win32.ActiveCfg = Release|Win32
+		{242571B3-59FC-4E0C-938F-A35763D5AE36}.Release|Win32.Build.0 = Release|Win32
+		{242571B3-59FC-4E0C-938F-A35763D5AE36}.Release|x64.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7063ED65-8D65-44F0-AF2D-B1555601BD0B} = {F9B10659-1E73-466D-BD31-C29A7A5AEADE}
+		{242571B3-59FC-4E0C-938F-A35763D5AE36} = {A891C50C-6850-44E7-A167-04C214765601}
+	EndGlobalSection
+EndGlobal
