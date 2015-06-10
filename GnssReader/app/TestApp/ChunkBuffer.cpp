@@ -88,3 +88,4 @@ using namespace GnssMetadata;
 	{
 		delete [] chunkInputBuffer;
 	};
+

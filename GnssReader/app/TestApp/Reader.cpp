@@ -51,7 +51,7 @@ public:
 class GNSSReader {
 	Metadata md;
 
-	//helper funtion to read XML. returns a metadata object.
+	//Reads XML files as Metadata object. returns a metadata object.
 	Metadata ReadXmlFile(const char* pszFilename)
 	{
 		Metadata md;
@@ -63,6 +63,7 @@ class GNSSReader {
 		}
 	}
 
+	//helper Function for fixAllRefdObj
 	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList){
 		for(std::list<T>::iterator iter = objList->begin();
 			iter !=objList->end();)
@@ -94,48 +95,7 @@ class GNSSReader {
 		}
 	}
 
-	//void fixAllRefdObj(){
-
-
-
-
-	//Given a reference in a list, search through all XML items for the original object.
-	//sets the 'objwasref' flag to true if it was a reference and it was repaired.
-	//if objwasref, the item needs deleted from the list.
-	template<typename T, typename U> T findNonRefObj(Metadata* md, AttributedObject* obj,std::list<U, std::allocator<U>>* objList)
-	{
-		if(obj->IsReference())
-		{
-			//The object is a reference, so we are going to need to search to find the original object.
-			AttributedObject::SearchItem::List returnList;
-			int objectsFound = md->FindObject(returnList,obj->Id(),*md);
-			if(objectsFound == 0)
-			{
-				//no matching XML found!
-				BadID e ;
-				std::string badIDName = obj->Id().c_str();
-				char * badIdc = new char[badIDName.size() + 1];
-				std::copy(badIDName.begin(), badIDName.end(), badIdc);
-				badIdc[badIDName.size()] = '\0'; 
-				e.setBadIDName(badIdc);
-				throw e;
-			}
-			//Got an non-referenced object! now, put it on the list.
-			//TODO: don't tell objWasRef to get rid of it, do it here.
-			const AttributedObject* foundObject = (returnList.front().pObject);
-			AttributedObject* foundObjectNoConst = const_cast<AttributedObject*>(foundObject);			
-			objList->push_front(*dynamic_cast<T>(foundObjectNoConst));
-			objWasRef = true;
-			return dynamic_cast<T>(foundObjectNoConst);
-			
-		} else {
-			//The object wasn't a reference, meaning it was the original.
-			objWasRef = false;
-			return dynamic_cast<T>(obj);
-		}
-	}
-
-	//this version does not try to make a reference.
+	//Fixes a single XML Link (not for lists).
 	template<typename T> T findNonRefObj(Metadata* md, AttributedObject* obj)
 	{
 		if(obj->IsReference())
@@ -163,60 +123,82 @@ class GNSSReader {
 		}
 	}
 
+	//gets rid of referenced objects for all XML.
+	void fixAllRefdObjs(){
+		File singleFile = md.Files().front();
+		Lane* singleLane = findNonRefObj<Lane*>(&md,&singleFile.Lane());
+
+		fixRefdObjs<Block,Block*>(&md,&singleLane->_blocklist);
+
+		for(std::list<Block>::iterator block = singleLane->Blocks().begin();
+			block != singleLane->Blocks().end(); block++)
+		{
+			fixRefdObjs<Chunk,Chunk*>(&md,&block->_chunklist); 
+
+			for(std::list<Chunk>::iterator chunkiter = block->_chunklist.begin();
+			chunkiter != block->_chunklist.end(); chunkiter++)
+			{
+				fixRefdObjs<Lump,Lump*>(&md,&chunkiter->_lumplist); 
+
+				for(std::list<Lump>::iterator lumpiter = chunkiter->_lumplist.begin();
+				lumpiter != chunkiter->_lumplist.end(); lumpiter++)
+				{
+					fixRefdObjs<Stream,Stream*>(&md,&lumpiter->_streamlist); 
+				}
+			}
+		}
+	}
+							
 	//Helper method that reads chunks from a block.
 	void readChunkCycles(Metadata md, Block * block, BlockAnalytics* ba, uint32_t cycles, FILE *sdrfile)
 	{
-		//fix the chunklist before messing with it.
-		fixRefdObjs<Chunk,Chunk*>(&md,&block->_chunklist); 
-
 		for(;cycles != 0; cycles--)
 		{
 			for(std::list<Chunk>::iterator chunkiter = block->_chunklist.begin();
 			chunkiter != block->_chunklist.end(); chunkiter++)
 			{
+				Chunk* chunk = &*chunkiter;
 
-				uint8_t sizeWord = chunkiter->SizeWord();
-				uint8_t countWord = chunkiter->CountWords();
+				uint8_t sizeWord = chunk->SizeWord();
+				uint8_t countWord = chunk->CountWords();
 	
+				//Is it faster to read a whole block of data than just a bit? Maybe?
 				ChunkBuffer cb = ChunkBuffer(sizeWord,countWord,sdrfile);
 					//chunk->Endian(),chunk->Padding(),chunk->Shift());
 
-				fixRefdObjs<Lump,Lump*>(&md,&chunkiter->_lumplist); 
 				//TODO What if lump runs out of words?
-				//TODO does not account for padding or shift
+				//TODO does not account for padding or shift (though that is chunkbuffers job)
 				while(!cb.chunkFullyRead())
 				{					
 					//for each lump
-					for(std::list<Lump>::iterator lumpiter = chunkiter->_lumplist.begin();
-					lumpiter != chunkiter->_lumplist.end(); lumpiter++)
+					for(std::list<Lump>::iterator lumpiter = chunk->_lumplist.begin();
+					lumpiter != chunk->_lumplist.end(); lumpiter++)
 					{
-
-										
-						fixRefdObjs<Stream,Stream*>(&md,&lumpiter->_streamlist); 
-						
+						Lump* lump = &*lumpiter;
 						//for each stream
-						for(std::list<Stream>::iterator streamiter = lumpiter->_streamlist.begin();
-							streamiter != lumpiter->_streamlist.end(); streamiter++)
+						for(std::list<Stream>::iterator streamiter = lump->_streamlist.begin();
+							streamiter != lump->_streamlist.end(); streamiter++)
 							{
+								
+							Stream* stream = &*streamiter;
 
 							//TODO get storage type
-							int8_t packedBitCount = streamiter->Packedbits();
+							int8_t packedBitCount = stream->Packedbits();
+
 							//stream has multiple encodings?
 							//why doesn't the author use enums instead of chars? oh well whatever.
-
-							char *encoding = &streamiter->Encoding().front();
+							char *encoding = &stream->Encoding().front();
 							//For getting average.
 							int8_t read= cb.readBits(packedBitCount,encoding);
-						//	std::cout << read;
-							//for the multi-stream test.
 
+							//	std::cout << read;
+							//for the multi-stream test.
 							//if(stream->Id().compare("fooStream0") == 0)
 							//{
 							//	ba->putValue(read == 0 ? 1 : -1);
 							//} 
-
-
 							//for single stream
+							
 							if(ba != NULL)
 								ba->putValue(read);
 							//TODO: Put it in a band somewhere using bandSrc.
@@ -275,7 +257,7 @@ public:
 		//Every file has just one lane.
 		Lane* singleLane = findNonRefObj<Lane*>(&md,&singleFile.Lane());
 
-		fixRefdObjs<Block,Block*>(&md,&singleLane->_blocklist);
+		fixAllRefdObjs();
 
 		for(std::list<Block>::iterator iter = singleLane->Blocks().begin(), next;
 			iter != singleLane->Blocks().end(); iter++)
@@ -302,6 +284,7 @@ public:
 			if(ba != NULL)
 				ba->printMeanAndVar();
 		}
+
 		fclose(sdrfile);
 	}
 };
@@ -309,6 +292,7 @@ public:
 
 int main(int argc, char** argv)
 {
+	
 	clock_t tStart = clock();
 	try{
 		GNSSReader test("../../../Tests/singlestream","test.xml"); 
@@ -320,6 +304,8 @@ int main(int argc, char** argv)
 
 	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 	std::cin.get();
+
+	
 	return 0;
 }
 
