@@ -51,9 +51,6 @@ public:
 class GNSSReader {
 	Metadata md;
 
-	//TODO: remove this flag. find better way to fix bad references.
-	bool objWasRef;
-
 	//helper funtion to read XML. returns a metadata object.
 	Metadata ReadXmlFile(const char* pszFilename)
 	{
@@ -65,6 +62,42 @@ class GNSSReader {
 			return md;
 		}
 	}
+
+	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList){
+		for(std::list<T>::iterator iter = objList->begin();
+			iter !=objList->end();)
+		{
+			//The object is a reference, so we are going to need to search to find the original object.
+			if(iter->IsReference())
+			{
+				AttributedObject::SearchItem::List returnList;
+				int objectsFound = md->FindObject(returnList,iter->Id(),*md);
+				if(objectsFound == 0)
+				{
+					//no matching object found!
+					BadID e ;
+					std::string badIDName = iter->Id().c_str();
+					char * badIdc = new char[badIDName.size() + 1];
+					std::copy(badIDName.begin(), badIDName.end(), badIdc);
+					badIdc[badIDName.size()] = '\0'; 
+					e.setBadIDName(badIdc);
+					throw e;
+				}
+				//Got an non-referenced object! now, put it on the list.
+				const AttributedObject* foundObject = (returnList.front().pObject);
+				AttributedObject* foundObjectNoConst = const_cast<AttributedObject*>(foundObject);			
+				objList->push_front(*dynamic_cast<PT>(foundObjectNoConst));
+				iter = objList->erase(iter);
+			} else {
+				iter++;
+			}
+		}
+	}
+
+	//void fixAllRefdObj(){
+
+
+
 
 	//Given a reference in a list, search through all XML items for the original object.
 	//sets the 'objwasref' flag to true if it was a reference and it was repaired.
@@ -133,63 +166,48 @@ class GNSSReader {
 	//Helper method that reads chunks from a block.
 	void readChunkCycles(Metadata md, Block * block, BlockAnalytics* ba, uint32_t cycles, FILE *sdrfile)
 	{
+		//fix the chunklist before messing with it.
+		fixRefdObjs<Chunk,Chunk*>(&md,&block->_chunklist); 
+
 		for(;cycles != 0; cycles--)
 		{
-			for(std::list<Chunk>::iterator chunkiter = block->Chunks().begin(), chunknext;
-			chunkiter != block->Chunks().end(); chunkiter = chunknext)
+			for(std::list<Chunk>::iterator chunkiter = block->_chunklist.begin();
+			chunkiter != block->_chunklist.end(); chunkiter++)
 			{
-				chunknext = chunkiter;
-				++chunknext;
 
-				Chunk* chunk = findNonRefObj<Chunk*,Chunk>(&md,&*chunkiter,&block->_chunklist);  
-		
-				if(objWasRef)
-					block->_chunklist.erase(chunkiter);
-
-				uint8_t sizeWord = chunk->SizeWord();
-				uint8_t countWord = chunk->CountWords();
+				uint8_t sizeWord = chunkiter->SizeWord();
+				uint8_t countWord = chunkiter->CountWords();
 	
 				ChunkBuffer cb = ChunkBuffer(sizeWord,countWord,sdrfile);
 					//chunk->Endian(),chunk->Padding(),chunk->Shift());
 
+				fixRefdObjs<Lump,Lump*>(&md,&chunkiter->_lumplist); 
 				//TODO What if lump runs out of words?
 				//TODO does not account for padding or shift
 				while(!cb.chunkFullyRead())
 				{					
-					
 					//for each lump
-					for(std::list<Lump>::iterator lumpiter = chunk->Lumps().begin(), lumpnext;
-					lumpiter != chunk->Lumps().end(); lumpiter = lumpnext)
+					for(std::list<Lump>::iterator lumpiter = chunkiter->_lumplist.begin();
+					lumpiter != chunkiter->_lumplist.end(); lumpiter++)
 					{
-						lumpnext = lumpiter;
-						++lumpnext;
 
-						Lump* lump = findNonRefObj<Lump*,Lump>(&md,&*lumpiter,&chunk->_lumplist);  
-					
-						if(objWasRef)
-							chunk->_lumplist.erase(lumpiter);
-
-						//for each stream
-						for(std::list<Stream>::iterator streamiter = lump->Streams().begin(), streamnext;
-							streamiter != lump->Streams().end(); streamiter = streamnext)
-							{
-							streamnext = streamiter;
-							++streamnext;
-							
-							Stream* stream = findNonRefObj<Stream*,Stream>(&md,&*streamiter,&lump->_streamlist);
+										
+						fixRefdObjs<Stream,Stream*>(&md,&lumpiter->_streamlist); 
 						
-							if(objWasRef)
-								lump->_streamlist.erase(streamiter);
+						//for each stream
+						for(std::list<Stream>::iterator streamiter = lumpiter->_streamlist.begin();
+							streamiter != lumpiter->_streamlist.end(); streamiter++)
+							{
 
 							//TODO get storage type
-							int8_t packedBitCount = stream->Packedbits();
+							int8_t packedBitCount = streamiter->Packedbits();
 							//stream has multiple encodings?
 							//why doesn't the author use enums instead of chars? oh well whatever.
 
-							char *encoding = &stream->Encoding().front();
+							char *encoding = &streamiter->Encoding().front();
 							//For getting average.
 							int8_t read= cb.readBits(packedBitCount,encoding);
-
+						//	std::cout << read;
 							//for the multi-stream test.
 
 							//if(stream->Id().compare("fooStream0") == 0)
@@ -257,16 +275,11 @@ public:
 		//Every file has just one lane.
 		Lane* singleLane = findNonRefObj<Lane*>(&md,&singleFile.Lane());
 
+		fixRefdObjs<Block,Block*>(&md,&singleLane->_blocklist);
 
 		for(std::list<Block>::iterator iter = singleLane->Blocks().begin(), next;
-			iter != singleLane->Blocks().end(); iter = next)
+			iter != singleLane->Blocks().end(); iter++)
 		{
-			next = iter;
-			++next;
-			
-			Block* block = findNonRefObj<Block*,Block>(&md,&*iter,&singleLane->Blocks());  
-			if(objWasRef)
-				singleLane->_blocklist.erase(iter);
 			
 
 			BlockAnalytics* ba = NULL;
@@ -275,15 +288,15 @@ public:
 
 			
 			//how many chunk cycles are there?
-			uint32_t cycles = block->Cycles();
+			uint32_t cycles = iter->Cycles();
 			//is there a header or footer we need to skip?
-			uint32_t headerSize = block->SizeHeader();
-			uint32_t footerSize = block->SizeFooter();
+			uint32_t headerSize = iter->SizeHeader();
+			uint32_t footerSize = iter->SizeFooter();
 			
 	
 			//skip Header
 			fseek(sdrfile,headerSize,SEEK_CUR);
-			readChunkCycles(md, block, ba, cycles, sdrfile);
+			readChunkCycles(md, &*iter, ba, cycles, sdrfile);
 			//skip Footer
 			fseek(sdrfile,footerSize,SEEK_CUR);
 			if(ba != NULL)
