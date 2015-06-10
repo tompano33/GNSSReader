@@ -27,6 +27,7 @@ public:
 	void calcVar();
 	double getMean();
 	double getVar();
+	int getBufferPointer();
 	void printMeanAndVar();
 };
 

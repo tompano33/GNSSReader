@@ -48,6 +48,10 @@
 		return mean;
 	};
 
+	int BlockAnalytics::getBufferPointer(){
+		return bufferPointer;
+	};
+
 	void BlockAnalytics::printMeanAndVar(){
 		calcMean();
 		calcVar();

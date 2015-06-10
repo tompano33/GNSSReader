@@ -59,21 +59,10 @@ class GNSSReader {
 	{
 		Metadata md;
 		XmlProcessor xproc;
-		try
+		if( xproc.Load( pszFilename, false, md) )
 		{
-			if( xproc.Load( pszFilename, false, md) )
-			{
-				printf("Xml Processed successfully. \n");
-				return md;
-			}
-		}
-		catch( ApiException& e)
-		{
-			printf("An error occurred while saving the xml file: %s\n", e.what() );
-		}
-		catch( std::exception& ge)
-		{
-			printf("Unknown Exception Occured: %s\n", ge.what() );
+			printf("Xml Processed successfully. \n");
+			return md;
 		}
 	}
 
@@ -200,6 +189,16 @@ class GNSSReader {
 							char *encoding = &stream->Encoding().front();
 							//For getting average.
 							int8_t read= cb.readBits(packedBitCount,encoding);
+
+							//for the multi-stream test.
+
+							//if(stream->Id().compare("fooStream0") == 0)
+							//{
+							//	ba->putValue(read == 0 ? 1 : -1);
+							//} 
+
+
+							//for single stream
 							if(ba != NULL)
 								ba->putValue(read);
 							//TODO: Put it in a band somewhere using bandSrc.
