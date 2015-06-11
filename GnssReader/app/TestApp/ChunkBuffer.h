@@ -20,7 +20,6 @@ public:
 	ChunkBuffer::ChunkBuffer(uint8_t sizeWord, uint8_t countWord, FILE* sdrFile);
 	uint64_t readBits(int bitsToRead, char* encoding);
 	bool chunkFullyRead();
-	void freeBuffer();
 };
 
 

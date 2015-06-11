@@ -83,9 +83,3 @@ using namespace GnssMetadata;
 		return ((int)bufferBytePointer == (int)sizeOfBuffer);
 	};
 
-	//There must be a better way to do this. Destructor perhaps?
-	void ChunkBuffer::freeBuffer()
-	{
-		delete [] chunkInputBuffer;
-	};
-

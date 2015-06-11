@@ -1,4 +1,4 @@
-﻿Build started 6/11/2015 11:34:42 AM.
+﻿Build started 6/11/2015 12:12:28 PM.
      1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\TestApp.vcxproj" on node 2 (build target(s)).
      1>C:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1422,5): warning : The referenced project '..\..\lib\tinyxml2Vs8\tinyxml2.vcxproj' does not exist.
      1>InitializeBuildStatus:
@@ -45,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.43
+Time Elapsed 00:00:01.52

@@ -156,7 +156,7 @@ class GNSSReader {
 					for(int i = 0; i != chunk->lumpCount; i++)
 					{
 					Lump* lump = chunk->lumpArray[i];
-					lump->streamCount = chunk->Lumps().size();
+					lump->streamCount = lump->Streams().size();
 					lump->streamArray = new Stream*[lump->streamCount];
 					//finally, streams
 					fixRefdObjs<Stream,Stream*>(&md,&lump->Streams(),lump->streamArray); 
@@ -203,16 +203,16 @@ class GNSSReader {
 							//For getting average.
 							int8_t read= cb.readBits(packedBitCount,encoding);
 
-							//	std::cout << read;
-							//for the multi-stream test.
-							//if(stream->Id().compare("fooStream0") == 0)
-							//{
-							//	ba->putValue(read == 0 ? 1 : -1);
-							//} 
+							
+
+							if(stream->Id().compare("fooStream0") == 0)
+							{
+								ba->putValue(read == 0 ? 1 : -1);
+							} 
 							//for single stream
 							
-							if(ba != NULL)
-								ba->putValue(read);
+							//if(ba != NULL)
+							//	ba->putValue(read);
 							//TODO: Put it in a band somewhere using bandSrc.
 						}
 					}
@@ -308,7 +308,7 @@ int main(int argc, char** argv)
 	
 	clock_t tStart = clock();
 	try{
-		GNSSReader test("../../../Tests/singlestream","test.xml"); 
+		GNSSReader test("../../../Tests/multistream","test.xml"); 
 		test.printSamples();
 		std::cout << "Done!" << std::endl;
 	} catch (std::exception& e) {
