@@ -156,12 +156,14 @@ namespace GnssMetadata
 		 */
 		virtual size_t FindObject( SearchItem::List& listResults, 
 			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
+			
+		GnssMetadata::Block** blockArray;		
+		int blockCount;
 
-	
-		GnssMetadata::BlockList _blocklist;	
 	private:
 		GnssMetadata::SessionList _sessionlist;		
 		GnssMetadata::SystemList _systemlist;		
+		GnssMetadata::BlockList _blocklist;		
 		BandSourceList _bandsources;
 	};
 

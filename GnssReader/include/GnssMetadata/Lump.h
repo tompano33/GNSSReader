@@ -80,6 +80,11 @@ namespace GnssMetadata
 		virtual size_t FindObject( SearchItem::List& listResults, 
 			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
 
+		//TODO: Privatize and write a method.
+		GnssMetadata::Stream** streamArray;
+		int streamCount;
+
+	private:
 		GnssMetadata::StreamList _streamlist;		
 	};
 

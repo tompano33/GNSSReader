@@ -63,10 +63,13 @@ class GNSSReader {
 		}
 	}
 
-	//helper Function for fixAllRefdObj
-	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList){
+	//Converts lists contaning referenced objects to an array without referenced objects. Run this before doing any XML operations!
+	//It fixes references and increases speed.
+	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList, T** objArray){
+
+		int i = 0;
 		for(std::list<T>::iterator iter = objList->begin();
-			iter !=objList->end();)
+			iter !=objList->end();iter++)
 		{
 			//The object is a reference, so we are going to need to search to find the original object.
 			if(iter->IsReference())
@@ -84,14 +87,14 @@ class GNSSReader {
 					e.setBadIDName(badIdc);
 					throw e;
 				}
-				//Got an non-referenced object! now, put it on the list.
+				//Got an non-referenced object! now, put it in the array.
 				const AttributedObject* foundObject = (returnList.front().pObject);
-				AttributedObject* foundObjectNoConst = const_cast<AttributedObject*>(foundObject);			
-				objList->push_front(*dynamic_cast<PT>(foundObjectNoConst));
-				iter = objList->erase(iter);
+				AttributedObject* foundObjectNoConst = const_cast<AttributedObject*>(foundObject);	
+				objArray[i] = dynamic_cast<PT>(foundObjectNoConst);
 			} else {
-				iter++;
+				objArray[i] = &*iter;
 			}
+			i++;
 		}
 	}
 
@@ -128,22 +131,35 @@ class GNSSReader {
 		File singleFile = md.Files().front();
 		Lane* singleLane = findNonRefObj<Lane*>(&md,&singleFile.Lane());
 
-		fixRefdObjs<Block,Block*>(&md,&singleLane->_blocklist);
+		//first thing: init block array.
+		singleLane->blockCount = singleLane->Blocks().size();
+		singleLane->blockArray = new Block*[singleLane->blockCount];
 
-		for(std::list<Block>::iterator block = singleLane->Blocks().begin();
-			block != singleLane->Blocks().end(); block++)
+		fixRefdObjs<Block,Block*>(&md,&singleLane->Blocks(),singleLane->blockArray);
+
+		for(int i = 0; i != singleLane->blockCount; i++)
 		{
-			fixRefdObjs<Chunk,Chunk*>(&md,&block->_chunklist); 
+			Block* block = singleLane->blockArray[i];
+			//init this block's chunks.
+			block->chunkCount = block->Chunks().size();
+			block->chunkArray = new Chunk*[block->chunkCount];
+			fixRefdObjs<Chunk,Chunk*>(&md,&block->Chunks(),block->chunkArray); 
 
-			for(std::list<Chunk>::iterator chunkiter = block->_chunklist.begin();
-			chunkiter != block->_chunklist.end(); chunkiter++)
-			{
-				fixRefdObjs<Lump,Lump*>(&md,&chunkiter->_lumplist); 
+			for(int i = 0; i != block->chunkCount; i++){
+				Chunk* chunk = block->chunkArray[i];
+				//init this chunk's lumps.
+				chunk->lumpCount = chunk->Lumps().size();
+				chunk->lumpArray = new Lump*[chunk->lumpCount];
+				//then lump array...
+				fixRefdObjs<Lump,Lump*>(&md,&chunk->Lumps(),chunk->lumpArray); 
 
-				for(std::list<Lump>::iterator lumpiter = chunkiter->_lumplist.begin();
-				lumpiter != chunkiter->_lumplist.end(); lumpiter++)
-				{
-					fixRefdObjs<Stream,Stream*>(&md,&lumpiter->_streamlist); 
+					for(int i = 0; i != chunk->lumpCount; i++)
+					{
+					Lump* lump = chunk->lumpArray[i];
+					lump->streamCount = chunk->Lumps().size();
+					lump->streamArray = new Stream*[lump->streamCount];
+					//finally, streams
+					fixRefdObjs<Stream,Stream*>(&md,&lump->Streams(),lump->streamArray); 
 				}
 			}
 		}
@@ -154,10 +170,8 @@ class GNSSReader {
 	{
 		for(;cycles != 0; cycles--)
 		{
-			for(std::list<Chunk>::iterator chunkiter = block->_chunklist.begin();
-			chunkiter != block->_chunklist.end(); chunkiter++)
-			{
-				Chunk* chunk = &*chunkiter;
+			for(int i = 0; i != block->chunkCount; i++){
+				Chunk* chunk = block->chunkArray[i];
 
 				uint8_t sizeWord = chunk->SizeWord();
 				uint8_t countWord = chunk->CountWords();
@@ -171,16 +185,14 @@ class GNSSReader {
 				while(!cb.chunkFullyRead())
 				{					
 					//for each lump
-					for(std::list<Lump>::iterator lumpiter = chunk->_lumplist.begin();
-					lumpiter != chunk->_lumplist.end(); lumpiter++)
+					for(int i = 0; i != chunk->lumpCount; i++)
 					{
-						Lump* lump = &*lumpiter;
+					Lump* lump = chunk->lumpArray[i];
+
 						//for each stream
-						for(std::list<Stream>::iterator streamiter = lump->_streamlist.begin();
-							streamiter != lump->_streamlist.end(); streamiter++)
-							{
-								
-							Stream* stream = &*streamiter;
+						for(int i = 0; i != lump->streamCount; i++)
+						{
+							Stream* stream = lump->streamArray[i];
 
 							//TODO get storage type
 							int8_t packedBitCount = stream->Packedbits();
@@ -259,9 +271,10 @@ public:
 
 		fixAllRefdObjs();
 
-		for(std::list<Block>::iterator iter = singleLane->Blocks().begin(), next;
-			iter != singleLane->Blocks().end(); iter++)
+		//for each lump
+		for(int i = 0; i != singleLane->blockCount; i++)
 		{
+			Block* block = singleLane->blockArray[i];
 			
 
 			BlockAnalytics* ba = NULL;
@@ -270,15 +283,15 @@ public:
 
 			
 			//how many chunk cycles are there?
-			uint32_t cycles = iter->Cycles();
+			uint32_t cycles = block->Cycles();
 			//is there a header or footer we need to skip?
-			uint32_t headerSize = iter->SizeHeader();
-			uint32_t footerSize = iter->SizeFooter();
+			uint32_t headerSize = block->SizeHeader();
+			uint32_t footerSize = block->SizeFooter();
 			
 	
 			//skip Header
 			fseek(sdrfile,headerSize,SEEK_CUR);
-			readChunkCycles(md, &*iter, ba, cycles, sdrfile);
+			readChunkCycles(md, block, ba, cycles, sdrfile);
 			//skip Footer
 			fseek(sdrfile,footerSize,SEEK_CUR);
 			if(ba != NULL)

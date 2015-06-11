@@ -147,15 +147,17 @@ namespace GnssMetadata
 		 */
 		virtual size_t FindObject( SearchItem::List& listResults, 
 			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
-
+				
+		//TODO: Privatize and write a method.
+		GnssMetadata::Chunk** chunkArray;
+		int chunkCount;
 		
-		GnssMetadata::ChunkList _chunklist;
-
 	private:
 		size_t _cycles;
 		size_t _sizeHeader;
 		size_t _sizeFooter;
 		
+		GnssMetadata::ChunkList _chunklist;
 	};
 	
 	typedef std::list<Block> BlockList;

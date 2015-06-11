@@ -192,9 +192,10 @@ namespace GnssMetadata
 		virtual size_t FindObject( SearchItem::List& listResults, 
 			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
 
+		//TODO: Privatize and write a method.
+		GnssMetadata::Lump** lumpArray;
+		int lumpCount;
 
-	
-		GnssMetadata::LumpList _lumplist;
 
 	private:
 		size_t		_countWords;
@@ -202,6 +203,7 @@ namespace GnssMetadata
 		WordEndian	_endian;
 		WordPadding _padding;
 		WordShift	_shift;
+		GnssMetadata::LumpList _lumplist;
 	};
 	
 	typedef std::list<Chunk> ChunkList;
