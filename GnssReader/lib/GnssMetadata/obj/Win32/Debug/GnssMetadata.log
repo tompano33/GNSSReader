@@ -1,6 +1,5 @@
-﻿Build started 6/11/2015 12:12:36 PM.
+﻿Build started 6/11/2015 6:05:09 PM.
      1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\lib\GnssMetadata\GnssMetadata.vcxproj" on node 2 (build target(s)).
-     1>C:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1422,5): warning : The referenced project '..\tinyxml2Vs8\tinyxml2.vcxproj' does not exist.
      1>InitializeBuildStatus:
          Creating "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\lib\GnssMetadata\\obj\Win32\Debug\GnssMetadata.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -15,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.06
+Time Elapsed 00:00:00.05

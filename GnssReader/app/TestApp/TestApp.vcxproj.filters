@@ -32,5 +32,8 @@
     <ClInclude Include="BlockAnalytics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="XMLtoMeta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

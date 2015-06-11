@@ -178,14 +178,11 @@
       <Project>{7063ed65-8d65-44f0-af2d-b1555601bd0b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\..\lib\tinyxml2Vs8\tinyxml2.vcxproj">
-      <Project>{71b67dc8-20c2-4b08-bf86-18f79f4775d1}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlockAnalytics.h" />
     <ClInclude Include="ChunkBuffer.h" />
+    <ClInclude Include="XMLtoMeta.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

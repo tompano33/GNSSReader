@@ -183,6 +183,8 @@ namespace GnssMetadata
 		virtual size_t FindObject( SearchItem::List& listResults, 
 			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
 
+		 
+		GnssMetadata::Lane* _nLane;
 
 	private:
 		/**
@@ -227,6 +229,7 @@ namespace GnssMetadata
 	{
 		
 	public:
+
 		FileSet( const String& id) : AttributedObject( id){}
 		FileSet() {}
 		FileSet(const FileSet& rhs) 
@@ -258,7 +261,9 @@ namespace GnssMetadata
 		 *  
 		 */
 		virtual String toString( const String & sFormat = DefaultFormat ) const;
-		
+
+	
+
 	private:
 		AnyUriList _files;
 

@@ -224,10 +224,6 @@
     <ClInclude Include="..\..\include\GnssMetadata\Xml\XmlProcessor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\tinyxml2Vs8\tinyxml2.vcxproj">
-      <Project>{71b67dc8-20c2-4b08-bf86-18f79f4775d1}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
