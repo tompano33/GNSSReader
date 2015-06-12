@@ -23,8 +23,9 @@
 using namespace GnssMetadata;
 
 class GNSSReader {
+	//Current metadata and lane object being worked on.
 	Metadata md;
-	Lane* l;
+	Lane* lane;
 
 	//Helper method that reads chunks from a block. Soon to be removed and replaced with readBlock.
 	void readChunkCycles(Metadata md, Block * block, BlockAnalytics* ba, uint32_t cycles, FILE *sdrfile)
@@ -96,7 +97,7 @@ public:
 		{
 			XMLtoMeta x2m(metadataFile);
 			md = x2m.getNonRefdMetadata();
-			l = x2m.mlane;
+			lane = x2m.getNonRefdLane();
 			printSamples();
 		} catch (TranslationException e){
 			std::cout << "Could not read xml: " <<  e.what();
@@ -112,7 +113,6 @@ public:
 		if(md.FileSets().size() > 0 || md.Files().size() != 1)
 		{
 			printf("Unsupported Format: Spatial/Temporal File");
-			std::cin.get();
 			//throw exception
 		}
 	
@@ -126,11 +126,10 @@ public:
 		if ((sdrfile = fopen(singleFile.Url().Value().c_str(), "rb")) == NULL) // Open the file in binary mode using the "rb" format string
 		{
 			std::cout << "Error: Could not open data file: "  << singleFile.Url().Value() << std::endl; 
-			std::cin.get();
 			//throw Exception
 		}
 
-		Lane* singleLane = l;
+		Lane* singleLane = lane;
 
 		//for each lump
 		for(int i = 0; i != singleLane->blockCount; i++)

@@ -23,6 +23,7 @@ public:
 class XMLtoMeta
 {
 	Metadata md;
+	Lane* lane;
 
 	//Converts lists contaning referenced objects to an array without referenced objects. Run this before doing any XML operations!
 	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList, T** objArray){
@@ -87,15 +88,13 @@ class XMLtoMeta
 	}
 
 	//gets rid of referenced objects for all XML and converts to arrays.
-	Lane* fixAllRefdObjs(){
+	void fixAllRefdObjs(){
 		File* singleFile = &md.Files().front();
 		Lane* singleLane = findNonRefObj<Lane*>(&md,&singleFile->Lane());
 		singleFile->_nLane = singleLane;
 		//first thing: init block array.
 		singleLane->blockCount = singleLane->Blocks().size();
 		singleLane->blockArray = new Block*[singleLane->blockCount];
-				mlane = singleLane;
-
 		fixRefdObjs<Block,Block*>(&md,&singleLane->Blocks(),singleLane->blockArray);
 
 		for(int i = 0; i != singleLane->blockCount; i++)
@@ -124,7 +123,7 @@ class XMLtoMeta
 				}
 			}
 		}
-		return singleLane;
+		lane = singleLane;
 	}
 
 public:
@@ -138,8 +137,13 @@ public:
 	Metadata getNonRefdMetadata(){
 		return md;
 	}
+
+	Lane* getNonRefdLane(){
+		return lane;
+	}
+
 	
-	Lane* mlane;
+	
 
 
 		
