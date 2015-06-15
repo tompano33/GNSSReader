@@ -1,0 +1,26 @@
+﻿Build started 6/15/2015 2:41:05 PM.
+     1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\ThreadTest\ThreadTest\ThreadTest.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\ThreadTest.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt FileReader.cpp
+         FileReader.cpp
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\ThreadTest.exe.embed.manifest.res" Debug\ThreadTest_manifest.rc 
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ANTadmin\Desktop\GNSSReader\ThreadTest\Debug\ThreadTest.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\ThreadTest.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ANTadmin\Desktop\GNSSReader\ThreadTest\Debug\ThreadTest.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ANTadmin\Desktop\GNSSReader\ThreadTest\Debug\ThreadTest.lib" /MACHINE:X86 Debug\ThreadTest.exe.embed.manifest.res
+         Debug\FileReader.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\ThreadTest.exe.embed.manifest" /manifest Debug\ThreadTest.exe.intermediate.manifest
+         All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         ThreadTest.vcxproj -> C:\Users\ANTadmin\Desktop\GNSSReader\ThreadTest\Debug\ThreadTest.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\ThreadTest.unsuccessfulbuild".
+         Touching "Debug\ThreadTest.lastbuildstate".
+     1>Done Building Project "C:\Users\ANTadmin\Desktop\GNSSReader\ThreadTest\ThreadTest\ThreadTest.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.14
