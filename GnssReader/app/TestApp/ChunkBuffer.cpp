@@ -78,6 +78,9 @@ using namespace GnssMetadata;
 		return sampleValue;
 	};
 
+	ChunkBuffer::~ChunkBuffer(){
+		delete [] chunkInputBuffer;
+	}
 	//returns true if the chunk is out of bytes to read.
 	bool ChunkBuffer::chunkFullyRead(){
 		return ((int)bufferBytePointer == (int)sizeOfBuffer);

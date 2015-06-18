@@ -169,9 +169,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BlockAnalytics.cpp" />
+    <ClCompile Include="DecStream.cpp" />
+    <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="IBuffer.cpp" />
+    <ClCompile Include="StreamAnalytics.cpp" />
     <ClCompile Include="ChunkBuffer.cpp" />
     <ClCompile Include="Reader.cpp" />
+    <ClCompile Include="XMLtoMeta.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\GnssMetadata\GnssMetadata.vcxproj">
@@ -180,8 +184,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BlockAnalytics.h" />
+    <ClInclude Include="FileReader.h" />
+    <ClInclude Include="IBuffer.h" />
+    <ClInclude Include="Reader.h" />
+    <ClInclude Include="StreamAnalytics.h" />
     <ClInclude Include="ChunkBuffer.h" />
+    <ClInclude Include="DecStream.h" />
     <ClInclude Include="XMLtoMeta.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

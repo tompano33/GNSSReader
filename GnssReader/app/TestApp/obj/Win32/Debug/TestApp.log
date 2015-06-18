@@ -1,37 +1,20 @@
-﻿Build started 6/12/2015 2:56:58 PM.
+﻿Build started 6/18/2015 3:06:31 PM.
      1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\TestApp.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.unsuccessfulbuild".
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\lib\TinyXml2 /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\\" /Fd"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Reader.cpp
-         Reader.cpp
-     1>c:\users\antadmin\desktop\gnssreader\gnssreader\app\testapp\reader.cpp(66): warning C4244: 'initializing' : conversion from 'uint64_t' to 'int8_t', possible loss of data
-     1>c:\users\antadmin\desktop\gnssreader\gnssreader\app\testapp\reader.cpp(94): warning C4996: 'chdir': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _chdir. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\direct.h(123) : see declaration of 'chdir'
-     1>c:\users\antadmin\desktop\gnssreader\gnssreader\app\testapp\reader.cpp(126): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(234) : see declaration of 'fopen'
-     1>c:\program files (x86)\microsoft visual studio 10.0\vc\include\xutility(2227): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\xutility(2212) : see declaration of 'std::_Copy_impl'
-                 c:\users\antadmin\desktop\gnssreader\gnssreader\app\testapp\xmltometa.h(75) : see reference to function template instantiation '_OutIt std::copy<std::_String_iterator<_Elem,_Traits,_Alloc>,char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=char *,
-                     _Elem=char,
-                     _Traits=std::char_traits<char>,
-                     _Alloc=std::allocator<char>,
-                     _InIt=std::_String_iterator<char,std::char_traits<char>,std::allocator<char>>
-                 ]
-                 c:\users\antadmin\desktop\gnssreader\gnssreader\app\testapp\xmltometa.h(93) : see reference to function template instantiation 'T XMLtoMeta::findNonRefObj<GnssMetadata::Lane*>(GnssMetadata::Metadata *,GnssMetadata::AttributedObject *)' being compiled
-                 with
-                 [
-                     T=GnssMetadata::Lane *
-                 ]
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\lib\TinyXml2 /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\\" /Fd"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt FileReader.cpp
+         FileReader.cpp
        Link:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\lib\Win32\Debug GnssMetadata.lib TinyXml2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\bin\Win32\Debug\GNSSReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.lib" /MACHINE:X86 C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\BlockAnalytics.obj
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\lib\Win32\Debug GnssMetadata.lib TinyXml2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\bin\Win32\Debug\GNSSReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.lib" /MACHINE:X86 C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\DecStream.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\FileReader.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\IBuffer.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\StreamAnalytics.obj
          C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\ChunkBuffer.obj
          C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\Reader.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\XMLtoMeta.obj
          C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\lib\Win32\Debug\GnssMetadata.lib
-     1>BlockAnalytics.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+     1>DecStream.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
      1>TinyXml2.lib(tinyxml2.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'TinyXml2.lib(tinyxml2.obj)' or at 'C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\bin\Win32\Debug\vc100.pdb'; linking object as if no debug info
          TestApp.vcxproj -> C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.exe
        Manifest:
@@ -43,4 +26,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.19
+Time Elapsed 00:00:01.30
