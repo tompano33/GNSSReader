@@ -42,6 +42,7 @@ public:
 	void start();
 	void makeDecStreams();
 	int getDecStreamCount();
+	~GNSSReader();
 };
 
 

@@ -22,6 +22,10 @@
 #include "DecStream.h"
 #include "Reader.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 using namespace GnssMetadata;
 	
 //Helper method that reads chunks from a block. Soon to be removed and replaced with readBlock.
@@ -128,7 +132,6 @@ using namespace GnssMetadata;
 
 		Lane* singleLane = lane;
 
-		//for each lump
 		for(int i = 0; i != singleLane->blockCount; i++)
 		{
 
@@ -154,6 +157,13 @@ using namespace GnssMetadata;
 			//	decStreamArray[i]->clear();
 			}
 
+		}
+
+		//done! see if there are any bytes in the DecStream. If there are, print a warning but kill the process anyhow.
+		if(!fr->hasReadWholeFile())
+		{
+			std::cout << "Warning: Some samples did not get read! In Buffer: " << fr->numBytesLeftInBuffer() << " In File: " << fr->numBytesLeftToReadFromFile() << "\n" ;
+			fr->killReadThread();
 		}
 	}
 
@@ -201,23 +211,37 @@ using namespace GnssMetadata;
 		return decStreamCount;
 	}
 
+	GNSSReader::~GNSSReader(){
+		delete fr;
+		for(int i = 0; i != decStreamCount; i++)
+		{
+			delete decStreamArray[i];
+		}
+		delete [] decStreamArray;
+		//how do  delete metadata?
+		//Metadata md;
+		//Lane* lane;
+	}
 
 
 int main(int argc, char** argv)
 {
-	
-	clock_t tStart = clock();
-	try{
-		//prepare the file 'singlestream' for reading'
-		GNSSReader test ("C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.xml",L"C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.dat",50000L,100000L,10000000L);
-		test.makeDecStreams();
-		test.start();
-		std::cout << "Done!" << std::endl;
-	} catch (std::exception& e) {
-		printf(e.what());
+	{
+		clock_t tStart = clock();
+		try{
+			//prepare the file 'singlestream' for reading'
+			GNSSReader test ("C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.xml",L"C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.dat",50000L,100000L,10000000L);
+			test.makeDecStreams();
+			test.start();
+			std::cout << "Done!" << std::endl;
+		} catch (std::exception& e) {
+			printf(e.what());
+		}
+
+		printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 	}
 
-	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+	_CrtDumpMemoryLeaks();
 	std::cin.get();
 
 	

@@ -20,6 +20,7 @@ class FileReader{
 	//Count of total bytes in the file
 	LARGE_INTEGER fileSize;
 	IBuffer* ib;
+	bool killThreadFlag;
 
 	//starts a thread
 	static void ThreadEntry(void *p);
@@ -38,6 +39,15 @@ public:
 
 	void close();
 
+	bool hasReadWholeFile();
+
+	long numBytesLeftToReadFromFile();
+
+	long numBytesLeftInBuffer();
+
+	void killReadThread();
+
+	~FileReader();
 };
 #endif
 

@@ -13,6 +13,7 @@
 		ib = new IBuffer(intermediateBufferSize);
 		buff = new char[readBufferSize];
 		bytesRead = 0;
+		killThreadFlag = false;
 
 		sdrFile = CreateFile(fname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
@@ -28,21 +29,24 @@
 		//Tries to populate intermediate buffer with samples. To be called as a thread.
 	void FileReader::readFile()
 	{
-		while(bytesRead < fileSize.QuadPart)
+		//More elegant way to kill thread?
+		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
 		{
 			DWORD i;
 			int readFile = ReadFile(sdrFile, buff, readBufferSize, &i, NULL);
 
 			if(!readFile && GetLastError() != ERROR_IO_PENDING)
 					printf ("ReadFile failed with error %d.\n", GetLastError());
+
 			if(readFile){
-				while(!ib->write(buff,readBufferSize)){;}
+				while(!ib->write(buff,readBufferSize) && !killThreadFlag){;}
 				bytesRead = bytesRead + readBufferSize;
 			//	std::cout << "Read All! " << bytesRead << " / " << fileSize.QuadPart << std::endl;
 			} else {
 				std::cout << "Error, Not a full read"   << std::endl;
 			}
 		}
+		std::cout << "Reading Ended!" << std::endl;
 	};
 
 	//returns true if bytes were put in buffer, false otherwise
@@ -65,6 +69,29 @@
 	{
 		((FileReader *) p)->readFile();   
 		_endthread();
+	}
+
+	bool FileReader::hasReadWholeFile(){
+		return (bytesRead == fileSize.QuadPart && ib->getNumBytesStored() == 0);
+	}
+
+	long FileReader::numBytesLeftToReadFromFile(){
+		return fileSize.QuadPart - bytesRead;
+	}
+
+	long FileReader::numBytesLeftInBuffer(){
+		return  ib->getNumBytesStored();
+	}
+
+	void FileReader::killReadThread()
+	{
+		killThreadFlag = true;
+	}
+
+	FileReader::~FileReader(){
+		delete [] buff;
+		delete ib;
+		CloseHandle(sdrFile);
 	}
 
 int main2(void)

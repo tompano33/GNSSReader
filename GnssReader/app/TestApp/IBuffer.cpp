@@ -58,6 +58,13 @@
 			return true;
 		}
 	}
+
+	int IBuffer::getNumBytesStored()
+	{
+		return numBytesStored;
+	}
+
+
 	IBuffer::~IBuffer(){
 		delete [] ibuf;
 	}

@@ -26,6 +26,9 @@ public:
 	//returns true if read was successful
 	bool read(int size, char* buf);
 	~IBuffer();
+
+	int getNumBytesStored();
+
 };
 #endif
 

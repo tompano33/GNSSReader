@@ -12,6 +12,12 @@
 
 	DecStream::DecStream()
 	{
+	
+	};
+
+	DecStream::~DecStream()
+	{
+		delete [] sampleBuf;
 	};
 
 

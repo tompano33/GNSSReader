@@ -27,6 +27,7 @@ public:
 	void clear();
 	void* getCorrespondingStream();
 	int getBufSize();
+	~DecStream();
 };
 
 #endif
