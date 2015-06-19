@@ -17,6 +17,7 @@ class XMLtoMeta
 	//Retrives a single XML Link (not for lists).
 	template<typename T> T findNonRefObj(Metadata* md, AttributedObject* obj);
 	void fixAllRefdObjs();
+	void deallocAllRefdObjs();
 
 public:
 
@@ -24,7 +25,6 @@ public:
 	XMLtoMeta::XMLtoMeta();
 	Metadata getNonRefdMetadata();
 	Lane* getNonRefdLane();
-	XMLtoMeta::~XMLtoMeta();
 		
 };
 #endif

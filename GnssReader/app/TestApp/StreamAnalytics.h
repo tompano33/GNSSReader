@@ -13,6 +13,7 @@
 
 class StreamAnalytics{
 
+	//This will get destroyed by Reader. no need to kill it.
 	DecStream* s;
 	double mean;
 	double variance;

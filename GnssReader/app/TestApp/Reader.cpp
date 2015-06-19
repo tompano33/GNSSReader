@@ -218,6 +218,7 @@ using namespace GnssMetadata;
 			delete decStreamArray[i];
 		}
 		delete [] decStreamArray;
+		delete x2m;
 		//how do  delete metadata?
 		//Metadata md;
 		//Lane* lane;
