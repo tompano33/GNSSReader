@@ -25,7 +25,7 @@
 using namespace GnssMetadata;
 	
 //Helper method that reads chunks from a block. Soon to be removed and replaced with readBlock.
-	void GNSSReader::readChunkCycles(Metadata md, Block * block, uint32_t cycles, FILE *sdrfile)
+	void GNSSReader::readChunkCycles(Block * block, uint32_t cycles)
 	{
 		for(;cycles != 0; cycles--)
 		{
@@ -36,7 +36,12 @@ using namespace GnssMetadata;
 				uint8_t countWord = chunk->CountWords();
 	
 				//Is it faster to read a whole block of data than just a bit? Maybe?
-				ChunkBuffer cb = ChunkBuffer(sizeWord,countWord,sdrfile);
+				int chunkBufferSize = sizeWord*countWord;
+				char* buf = new char[chunkBufferSize];
+				while(!(fr->getBufferedBytes(buf,chunkBufferSize))){;}
+				//std::cout << "Loaded a chunk of size " << chunkBufferSize << "\n";
+
+				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
 					//chunk->Endian(),chunk->Padding(),chunk->Shift());
 
 				//TODO What if lump runs out of words?
@@ -78,9 +83,6 @@ using namespace GnssMetadata;
 						}
 					}
 				}
-				
-			//cb.freeBuffer();
-		
 			}
 		}
 	}
@@ -123,15 +125,7 @@ using namespace GnssMetadata;
 		File singleFile = md.Files().front();
 		std::cout << "The file holding the SDR data is called '" << singleFile.Url().toString() << "'\n";
 
-		FILE *sdrfile = NULL;
-
-		//Convert to WINAPI handle
-		//fopen_s?
-		if ((sdrfile = fopen(singleFile.Url().Value().c_str(), "rb")) == NULL) // Open the file in binary mode using the "rb" format string
-		{
-			std::cout << "Error: Could not open data file: "  << singleFile.Url().Value() << std::endl; 
-			//throw Exception
-		}
+		//TODO open the windows handle here
 
 		Lane* singleLane = lane;
 
@@ -148,11 +142,10 @@ using namespace GnssMetadata;
 			uint32_t footerSize = block->SizeFooter();
 			
 	
-			//skip Header
-			fseek(sdrfile,headerSize,SEEK_CUR);
-			readChunkCycles(md, block, cycles, sdrfile);
-			//skip Footer
-			fseek(sdrfile,footerSize,SEEK_CUR);
+			//TODO: skip Header
+			//fseek(sdrfile,headerSize,SEEK_CUR);
+			readChunkCycles(block, cycles);
+			//TODO: skip Footer
 
 			StreamAnalytics sa;
 			for(int i = 0; i != decStreamCount; i++)
@@ -163,11 +156,6 @@ using namespace GnssMetadata;
 			}
 
 		}
-
-		//do stream anaylitics if we are testing.
-
-
-		fclose(sdrfile);
 	}
 
 	//TODO Improve arbitrary array to vector.
@@ -222,7 +210,7 @@ int main(int argc, char** argv)
 	clock_t tStart = clock();
 	try{
 		//prepare the file 'singlestream' for reading'
-		GNSSReader test ("../../../Tests/singleStream","test.xml",L"C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\ThreadTest.txt",10L,20L,10000000L);
+		GNSSReader test ("../../../Tests/singleStream","test.xml",L"C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.dat",50000L,100000L,10000000L);
 		test.makeDecStreams();
 		test.start();
 		std::cout << "Done!" << std::endl;

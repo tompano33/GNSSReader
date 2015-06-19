@@ -14,11 +14,10 @@
 
 using namespace GnssMetadata;
 //Immediately allocates a buffer and puts data in it.
-	ChunkBuffer::ChunkBuffer(uint8_t sizeWord, uint8_t countWord, FILE* sdrFile) 
+	ChunkBuffer::ChunkBuffer(uint32_t size, char* buffer) 
 	{
-		sizeOfBuffer = sizeWord*countWord;
-		chunkInputBuffer = new uint8_t[sizeOfBuffer];
-		fread(chunkInputBuffer, sizeWord, countWord, sdrFile);
+		sizeOfBuffer = size;
+		chunkInputBuffer = buffer;
 		bufferBytePointer = 0;
 		bufferBitPointer = 0;
 	};

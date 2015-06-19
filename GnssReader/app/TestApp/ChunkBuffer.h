@@ -7,7 +7,7 @@
 
 class ChunkBuffer{
 	//The buffer holding the chunk.
-	uint8_t* chunkInputBuffer;
+	char* chunkInputBuffer;
 	//The byte our "cursor" is at in the buffer
 	uint16_t bufferBytePointer;
 	//The bit our "cursor" is at.
@@ -17,7 +17,7 @@ class ChunkBuffer{
 
 
 public:
-	ChunkBuffer::ChunkBuffer(uint8_t sizeWord, uint8_t countWord, FILE* sdrFile);
+	ChunkBuffer::ChunkBuffer(uint32_t size, char* buf);
 	uint64_t readBits(int bitsToRead, char* encoding);
 	bool chunkFullyRead();
 	ChunkBuffer::~ChunkBuffer();

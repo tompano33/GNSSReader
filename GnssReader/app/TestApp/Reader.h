@@ -31,7 +31,7 @@ class GNSSReader {
 	int decStreamCount;
 	long streamSize;
 	FileReader* fr;
-	void readChunkCycles(Metadata md, Block * block, uint32_t cycles, FILE *sdrfile);
+	void readChunkCycles(Block * block, uint32_t cycles);
 
 public:
 

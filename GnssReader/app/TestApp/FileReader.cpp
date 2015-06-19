@@ -38,7 +38,7 @@
 			if(readFile){
 				while(!ib->write(buff,readBufferSize)){;}
 				bytesRead = bytesRead + readBufferSize;
-				std::cout << "Read All! " << bytesRead << " / " << fileSize.QuadPart << std::endl;
+			//	std::cout << "Read All! " << bytesRead << " / " << fileSize.QuadPart << std::endl;
 			} else {
 				std::cout << "Error, Not a full read"   << std::endl;
 			}

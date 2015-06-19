@@ -33,7 +33,6 @@ public:
 
 	void readAll();
 
-
 	//returns true if bytes were put in buffer, false otherwise
 	bool getBufferedBytes(char* b, int count);
 
