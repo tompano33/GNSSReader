@@ -7,7 +7,7 @@
 //Puts values in a stream.
 class DecStream{
 	//Buffer full of samples
-	char* sampleBuf;
+	double* sampleBuf;
 	uint32_t sampleCapacity;
 	uint32_t samplePtr;
 	//Name of Buffer
@@ -15,14 +15,15 @@ class DecStream{
 	//Pointer to the XMLID of the stream.
 	void* correspondingStream;
 
+
 public:
 	
 	DecStream::DecStream(uint32_t sampleCap, std::string id,void * corStream);
 	DecStream::DecStream();
-	void putSample(char sample);
+	void putSample(double sample);
 	std::string getID();
 	int getSamplePtr();
-	char* getBuf();
+	double* getBuf();
 	void clear();
 	void* getCorrespondingStream();
 	int getBufSize();

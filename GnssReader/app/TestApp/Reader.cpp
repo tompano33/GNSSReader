@@ -94,14 +94,13 @@ using namespace GnssMetadata;
 
 	//takes the metadata file given and parses it's XML. Does not yet work with filesets.
 	//TODO clean up this constructor.
-	GNSSReader::GNSSReader(const char* directory, const char* metadataFile, LPCWSTR fname, long readSize, long buffSize, long streamSize)
+	GNSSReader::GNSSReader(const char* pathToFile, LPCWSTR fname, long readSize, long buffSize, long streamSize)
 	{
-		chdir(directory);
 		this->streamSize = streamSize;
 		//TODO check if file exists.
 		try
 		{
-			x2m = new XMLtoMeta(metadataFile);
+			x2m = new XMLtoMeta(pathToFile);
 			md = x2m->getNonRefdMetadata();
 			lane = x2m->getNonRefdLane();
 
@@ -152,7 +151,7 @@ using namespace GnssMetadata;
 			{
 				sa.setStream(decStreamArray[i]);
 				sa.printMeanAndVar();
-				decStreamArray[i]->clear();
+			//	decStreamArray[i]->clear();
 			}
 
 		}
@@ -210,7 +209,7 @@ int main(int argc, char** argv)
 	clock_t tStart = clock();
 	try{
 		//prepare the file 'singlestream' for reading'
-		GNSSReader test ("../../../Tests/singleStream","test.xml",L"C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.dat",50000L,100000L,10000000L);
+		GNSSReader test ("C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.xml",L"C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.dat",50000L,100000L,10000000L);
 		test.makeDecStreams();
 		test.start();
 		std::cout << "Done!" << std::endl;

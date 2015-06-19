@@ -4,7 +4,7 @@
 	DecStream::DecStream(uint32_t sampleCap, std::string id,void * corStream)
 	{
 		sampleCapacity = sampleCap;
-		sampleBuf = new char[sampleCapacity];
+		sampleBuf = new double[sampleCapacity];
 		samplePtr = 0;
 		this->id = id;
 		this->correspondingStream = corStream;
@@ -15,7 +15,7 @@
 	};
 
 
-	void DecStream::putSample(char sample){
+	void DecStream::putSample(double sample){
 		sampleBuf[samplePtr] = sample;
 		samplePtr++;
 	};
@@ -28,7 +28,7 @@
 		return samplePtr;
 	};
 
-	char* DecStream::getBuf(){
+	double* DecStream::getBuf(){
 		return DecStream::sampleBuf;
 	};
 
