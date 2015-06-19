@@ -18,6 +18,7 @@
 #include "StreamAnalytics.h"
 #include "XMLtoMeta.h"
 #include "DecStream.h"
+#include "FileReader.h"
 
 using namespace GnssMetadata;
 
@@ -28,6 +29,8 @@ class GNSSReader {
 	XMLtoMeta* x2m;
 	DecStream** decStreamArray;
 	int decStreamCount;
+	long streamSize;
+	FileReader* fr;
 	void readChunkCycles(Metadata md, Block * block, uint32_t cycles, FILE *sdrfile);
 
 public:
@@ -35,7 +38,7 @@ public:
 	//Returns Decoded Streams.
 	DecStream** getDecStreamArray();
 	//takes the metadata file given and parses it's XML. Does not yet work with filesets.
-	GNSSReader::GNSSReader(const char* directory, const char* metadataFile);
+	GNSSReader::GNSSReader(const char* directory, const char* metadataFile,LPCWSTR fname,long readSize, long buffSize, long streamSize);
 	void start();
 	void makeDecStreams();
 	int getDecStreamCount();

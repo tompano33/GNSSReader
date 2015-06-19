@@ -28,19 +28,20 @@
 		//Tries to populate intermediate buffer with samples. To be called as a thread.
 	void FileReader::readFile()
 	{
-		DWORD i;
-		int readFile = ReadFile(sdrFile, buff, readBufferSize, &i, NULL);
+		while(bytesRead < fileSize.QuadPart)
+		{
+			DWORD i;
+			int readFile = ReadFile(sdrFile, buff, readBufferSize, &i, NULL);
 
-		if(!readFile && GetLastError() != ERROR_IO_PENDING)
-				printf ("ReadFile failed with error %d.\n", GetLastError());
-			
-		if(readFile){
-			while(!ib->write(buff,readBufferSize)){;}
-			
-			bytesRead = bytesRead + readBufferSize;
-			std::cout << "Read All! " << bytesRead << " / " << fileSize.QuadPart << std::endl;
-		} else {
-			std::cout << "Not a full read"   << std::endl;
+			if(!readFile && GetLastError() != ERROR_IO_PENDING)
+					printf ("ReadFile failed with error %d.\n", GetLastError());
+			if(readFile){
+				while(!ib->write(buff,readBufferSize)){;}
+				bytesRead = bytesRead + readBufferSize;
+				std::cout << "Read All! " << bytesRead << " / " << fileSize.QuadPart << std::endl;
+			} else {
+				std::cout << "Error, Not a full read"   << std::endl;
+			}
 		}
 	};
 
@@ -53,13 +54,23 @@
 	//close file
 		if(CloseHandle(sdrFile) != 0)
 			printf("file handle closed successfully!\n");
-	}
+	};
 
+	void FileReader::readAll()
+	{
+		_beginthread(FileReader::ThreadEntry, 0, this);
+	};
+
+	void FileReader::ThreadEntry(void *p)
+	{
+		((FileReader *) p)->readFile();   
+		_endthread();
+	}
 
 int main2(void)
 {
 	FileReader* fr = new FileReader(L"C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\ThreadTest.txt",6L,16L);
-	fr->readFile();
+	//fr->readFile();
 	char* d = new char[5];
 	fr->getBufferedBytes(d,5);
 	std::cout << d[0] << d[1] << d[2] << d[3] << d[4] << d[5];

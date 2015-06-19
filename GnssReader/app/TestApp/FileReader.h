@@ -16,19 +16,23 @@ class FileReader{
 	//Buffer for reading the file,
 	char* buff;
 	//Count of total bytes read from file
-	volatile int bytesRead;
+	volatile long bytesRead;
 	//Count of total bytes in the file
 	LARGE_INTEGER fileSize;
 	IBuffer* ib;
 
-
+	//starts a thread
+	static void ThreadEntry(void *p);
+	//Populates samples as a thread until there are none left.
+	//Tries to populate intermediate buffer with samples. 
+	void readFile();
 
 public:
 	//Needs the name of the file and a count of how many bytes to load from the file. Also needs the size of intermediate buffer. Puts file handle in memory. Inits buffer.
 	FileReader::FileReader(LPCWSTR fname,long readBufferSize, long intermediateBufferSize);
 
-	//Tries to populate intermediate buffer with samples. To be called as a thread.
-	void readFile();
+	void readAll();
+
 
 	//returns true if bytes were put in buffer, false otherwise
 	bool getBufferedBytes(char* b, int count);

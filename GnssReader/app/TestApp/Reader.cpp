@@ -3,7 +3,6 @@
  * Author: W.J. Liddy
  * Given a Gnss Metadata file, decodes the streams and outputs them in a DecStreamBuffer.
  */
-
 #include<GnssMetadata/Metadata.h>
 #include<list>
 #include<cstdint>
@@ -24,7 +23,8 @@
 #include "Reader.h"
 
 using namespace GnssMetadata;
-	//Helper method that reads chunks from a block. Soon to be removed and replaced with readBlock.
+	
+//Helper method that reads chunks from a block. Soon to be removed and replaced with readBlock.
 	void GNSSReader::readChunkCycles(Metadata md, Block * block, uint32_t cycles, FILE *sdrfile)
 	{
 		for(;cycles != 0; cycles--)
@@ -91,29 +91,35 @@ using namespace GnssMetadata;
 	}
 
 	//takes the metadata file given and parses it's XML. Does not yet work with filesets.
-	GNSSReader::GNSSReader(const char* directory, const char* metadataFile)
+	//TODO clean up this constructor.
+	GNSSReader::GNSSReader(const char* directory, const char* metadataFile, LPCWSTR fname, long readSize, long buffSize, long streamSize)
 	{
 		chdir(directory);
+		this->streamSize = streamSize;
 		//TODO check if file exists.
 		try
 		{
 			x2m = new XMLtoMeta(metadataFile);
 			md = x2m->getNonRefdMetadata();
 			lane = x2m->getNonRefdLane();
+
+			//Windows filereader
+			fr = new FileReader(fname,readSize,buffSize);
 		} catch (TranslationException e){
 			std::cout << "Could not read xml: " <<  e.what();
-			//throw exception here
 		}
 	}
 
 	//Starts decoding the file into stream(s)
 	void GNSSReader::start(){
+		//start the file reader thread
+		fr->readAll();
 		//we don't do filesets yet.
 		if(md.FileSets().size() > 0 || md.Files().size() != 1)
 		{
 			printf("Unsupported Format: Spatial/Temporal File");
 		}
-
+		
 		File singleFile = md.Files().front();
 		std::cout << "The file holding the SDR data is called '" << singleFile.Url().toString() << "'\n";
 
@@ -164,7 +170,7 @@ using namespace GnssMetadata;
 		fclose(sdrfile);
 	}
 
-	//Full of magic numbers, improve arbitrary array to vector and decide how outputstreams will work.
+	//TODO Improve arbitrary array to vector.
 	//Prepares decoded streams.
 	void GNSSReader::makeDecStreams(){
 		//TODO use a vector or something
@@ -194,8 +200,7 @@ using namespace GnssMetadata;
 
 						if(newStream)
 						{
-							//more magic numbers
-							decStreamArray[decStreamCount] = new DecStream(100000,s->Id(),s);
+							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s);
 							decStreamCount++;
 						}
 					}
@@ -217,7 +222,7 @@ int main(int argc, char** argv)
 	clock_t tStart = clock();
 	try{
 		//prepare the file 'singlestream' for reading'
-		GNSSReader test ("../../../Tests/singlestream","test.xml");
+		GNSSReader test ("../../../Tests/singleStream","test.xml",L"C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\ThreadTest.txt",10L,20L,10000000L);
 		test.makeDecStreams();
 		test.start();
 		std::cout << "Done!" << std::endl;
