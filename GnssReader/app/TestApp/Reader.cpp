@@ -99,8 +99,21 @@ using namespace GnssMetadata;
 
 	//takes the metadata file given and parses it's XML. Does not yet work with filesets.
 	//TODO clean up this constructor.
-	GNSSReader::GNSSReader(const char* pathToFile, LPCWSTR fname, long readSize, long buffSize, long streamSize)
+	GNSSReader::GNSSReader(const char* pathToFile, long readSize, long buffSize, long streamSize)
 	{
+
+		std::string* fname = new std::string(pathToFile,strlen(pathToFile));
+		//get WD
+		std::string dir;
+		const size_t last_slash_idx = fname->rfind('\\');
+		if (std::string::npos != last_slash_idx)
+		{
+			 dir = fname->substr(0, last_slash_idx);
+		}
+		std::cout << "Wdir is now " << dir << std::endl;
+		chdir(dir.c_str());
+
+		//chdir();
 		this->streamSize = streamSize;
 		//TODO check if file exists.
 		try
@@ -108,9 +121,14 @@ using namespace GnssMetadata;
 			x2m = new XMLtoMeta(pathToFile);
 			md = x2m->getNonRefdMetadata();
 			lane = x2m->getNonRefdLane();
-
 			//Windows filereader
+			std::string s = md.Files().front().Url().toString();
+			std::cout << "Opening: " << s << "\n";
+
+			std::wstring stemp = std::wstring(s.begin(), s.end());
+			LPCWSTR fname = stemp.c_str();
 			fr = new FileReader(fname,readSize,buffSize);
+
 		} catch (TranslationException e){
 			//See if file even exists, since x2m does not throw this.
 			struct stat buf;
@@ -134,8 +152,6 @@ using namespace GnssMetadata;
 		}
 		
 		File singleFile = md.Files().front();
-		std::cout << "The file holding the SDR data is called '" << singleFile.Url().toString() << "'\n";
-
 		//TODO open the windows handle here
 
 		Lane* singleLane = lane;
@@ -240,7 +256,7 @@ int main(int argc, char** argv)
 		clock_t tStart = clock();
 		try{
 			//prepare the file 'singlestream' for reading'
-			GNSSReader test ("C:/Users/ANTadmin/Desktop/GNSSReader/Tests/header/test.xml",L"C:/Users/ANTadmin/Desktop/GNSSReader/Tests/header/test.dat",50000L,100000L,10000000L);
+			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",50000L,100000L,10000000L);
 			test.makeDecStreams();
 			test.start();
 			std::cout << "Done!" << std::endl;

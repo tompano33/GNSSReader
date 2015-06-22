@@ -38,7 +38,7 @@ public:
 	//Returns Decoded Streams.
 	DecStream** getDecStreamArray();
 	//takes the metadata file given and parses it's XML. Does not yet work with filesets.
-	GNSSReader::GNSSReader(const char* pathToFile,LPCWSTR fname,long readSize, long buffSize, long streamSize);
+	GNSSReader::GNSSReader(const char* pathToFile,long readSize, long buffSize, long streamSize);
 	void start();
 	void makeDecStreams();
 	int getDecStreamCount();
