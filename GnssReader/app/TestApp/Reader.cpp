@@ -40,11 +40,9 @@ using namespace GnssMetadata;
 				uint8_t sizeWord = chunk->SizeWord();
 				uint8_t countWord = chunk->CountWords();
 	
-				//Is it faster to read a whole block of data than just a bit? Maybe?
 				int chunkBufferSize = sizeWord*countWord;
 				char* buf = new char[chunkBufferSize];
 				fr->getBufferedBytes(buf,chunkBufferSize);
-				//std::cout << "Loaded a chunk of size " << chunkBufferSize << "\n";
 
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
 					//chunk->Endian(),chunk->Padding(),chunk->Shift());
@@ -69,15 +67,15 @@ using namespace GnssMetadata;
 							//stream has multiple encodings?
 							//why doesn't the author use enums instead of chars? oh well whatever.
 							char *encoding = &stream->Encoding().front();
-							int8_t read= cb.readBits(packedBitCount,encoding);
+							int64_t read= cb.readBits(packedBitCount,encoding);
 
 							//Use Function Pointers instead of if here.
 
 							for(int i = 0; i != decStreamCount; i++)
 							{
 								if(decStreamArray[i]->getCorrespondingStream() == stream){
-									//This is sloppy. I will need this to work for 'N' bits.
-									//but for 1 or 8 it will work. We need 'DecStreams' to decide.
+
+									//special case if one bit
 									if(packedBitCount == 1)
 										decStreamArray[i]->putSample(read == 0 ? 1 : -1);
 									else 
@@ -98,24 +96,20 @@ using namespace GnssMetadata;
 	}
 
 	//takes the metadata file given and parses it's XML. Does not yet work with filesets.
-	//TODO clean up this constructor.
 	GNSSReader::GNSSReader(const char* pathToFile, long readSize, long buffSize, long streamSize)
 	{
 
+		//changes working directory.
 		std::string* fname = new std::string(pathToFile,strlen(pathToFile));
-		//get WD
 		std::string dir;
 		const size_t last_slash_idx = fname->rfind('\\');
 		if (std::string::npos != last_slash_idx)
 		{
 			 dir = fname->substr(0, last_slash_idx);
 		}
-		//std::cout << "Wdir is now " << dir << std::endl;
 		chdir(dir.c_str());
 
-		//chdir();
 		this->streamSize = streamSize;
-		//TODO check if file exists.
 		try
 		{
 			x2m = new XMLtoMeta(pathToFile);
@@ -176,7 +170,7 @@ using namespace GnssMetadata;
 			for(int i = 0; i != decStreamCount; i++)
 			{
 				sa.setStream(decStreamArray[i]);
-				sa.printAllSamples();
+			//	sa.printAllSamples();
 			//	sa.printMeanAndVar();
 				decStreamArray[i]->clear();
 			}
@@ -253,7 +247,8 @@ int main(int argc, char** argv)
 		clock_t tStart = clock();
 		try{
 			//prepare the file 'singlestream' for reading'
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",10L,20L,30L);
+			//Input size, intermediate buffer size, output size
+			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",100000L,200000L,1000000L);
 			test.makeDecStreams();
 			test.start();
 			std::cout << "Done!" << std::endl;

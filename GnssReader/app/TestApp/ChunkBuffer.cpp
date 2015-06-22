@@ -24,9 +24,9 @@ using namespace GnssMetadata;
 
 	//Reads a sample from the chunkbuffer.
 	//TODO throw error if out of bytes to read.
-	uint64_t ChunkBuffer::readBits(int bitsToRead, char* encoding)
+	int64_t ChunkBuffer::readBits(int bitsToRead, char* encoding)
 	{
-
+		int totalBitCount = bitsToRead;
 		uint64_t sampleValue = 0;
 		while(bitsToRead > 0)
 		{
@@ -73,6 +73,8 @@ using namespace GnssMetadata;
 				}
 			}
 		}
+
+		//ok. Now, our samplevalue is all full. We now need to cast 
 
 		return sampleValue;
 	};

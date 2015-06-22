@@ -18,7 +18,7 @@ class ChunkBuffer{
 
 public:
 	ChunkBuffer::ChunkBuffer(uint32_t size, char* buf);
-	uint64_t readBits(int bitsToRead, char* encoding);
+	int64_t readBits(int bitsToRead, char* encoding);
 	bool chunkFullyRead();
 	ChunkBuffer::~ChunkBuffer();
 };
