@@ -32,6 +32,8 @@
 		//More elegant way to kill thread?
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
 		{
+			if(readBufferSize > fileSize.QuadPart - bytesRead)
+				readBufferSize = fileSize.QuadPart - bytesRead;
 			DWORD i;
 			int readFile = ReadFile(sdrFile, buff, readBufferSize, &i, NULL);
 
@@ -46,7 +48,7 @@
 				std::cout << "Error, Not a full read"   << std::endl;
 			}
 		}
-		std::cout << "Reading Ended!" << std::endl;
+		std::cout << "Reading Ended.\n";
 	};
 
 	//returns true if bytes were put in buffer, false otherwise
@@ -86,6 +88,11 @@
 	void FileReader::killReadThread()
 	{
 		killThreadFlag = true;
+	}
+
+	void FileReader::skipBufferedBytes(int count)
+	{
+		ib->skip(count);
 	}
 
 	FileReader::~FileReader(){

@@ -62,8 +62,28 @@
 	int IBuffer::getNumBytesStored()
 	{
 		return numBytesStored;
-	}
+	};
 
+	bool IBuffer::skip(int size)
+	{
+	if(size > numBytesStored)
+		{
+			return false;
+		} else
+		{
+			if(size < (BUFFERSIZE - oldPtr))
+			{
+				oldPtr+= size;
+			} else 
+			{
+				int spaceLeftAtEnd = (BUFFERSIZE - oldPtr);
+				oldPtr=size-spaceLeftAtEnd;
+			}
+			
+			numBytesStored -=size;
+
+	};
+	}
 
 	IBuffer::~IBuffer(){
 		delete [] ibuf;

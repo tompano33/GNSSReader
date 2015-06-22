@@ -28,6 +28,7 @@ public:
 	~IBuffer();
 
 	int getNumBytesStored();
+	bool skip(int count);
 
 };
 #endif

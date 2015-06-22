@@ -25,6 +25,7 @@ public:
 	double getMean();
 	double getVar();
 	void printMeanAndVar();
+	void printAllSamples();
 };
 
 

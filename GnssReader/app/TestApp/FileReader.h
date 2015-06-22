@@ -21,6 +21,7 @@ class FileReader{
 	LARGE_INTEGER fileSize;
 	IBuffer* ib;
 	bool killThreadFlag;
+	bool xmlWasValid;
 
 	//starts a thread
 	static void ThreadEntry(void *p);
@@ -47,7 +48,11 @@ public:
 
 	void killReadThread();
 
+	void skipBufferedBytes(int count);
+
 	~FileReader();
+
+	bool parseSuccess();
 };
 #endif
 

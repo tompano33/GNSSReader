@@ -123,6 +123,7 @@ public:
 
 	XMLtoMeta::XMLtoMeta(const char* metadataFile){
 		XmlProcessor xproc;
+		//checkAPI
 		xproc.Load(metadataFile, false, md); 
 		fixAllRefdObjs();
 	}

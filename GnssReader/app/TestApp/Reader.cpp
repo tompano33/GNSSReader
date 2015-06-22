@@ -7,6 +7,7 @@
 #include<list>
 #include<cstdint>
 #include<stdio.h>
+#include <sys/stat.h>
 
 //ChDir
 //#include <unistd.h>
@@ -111,7 +112,14 @@ using namespace GnssMetadata;
 			//Windows filereader
 			fr = new FileReader(fname,readSize,buffSize);
 		} catch (TranslationException e){
-			std::cout << "Could not read xml: " <<  e.what();
+			//See if file even exists, since x2m does not throw this.
+			struct stat buf;
+			if(stat(pathToFile, &buf) == -1)
+				std::cout<< "Specified metadata file does not exist.\n";
+			else
+				std::cout << "XML error: " <<  e.what() << "\n";
+
+			throw std::exception("File was not read\n");
 		}
 	}
 
@@ -141,20 +149,23 @@ using namespace GnssMetadata;
 			uint32_t cycles = block->Cycles();
 			//is there a header or footer we need to skip?
 			uint32_t headerSize = block->SizeHeader();
+			std::cout << "\n" << headerSize << "\n";
 			uint32_t footerSize = block->SizeFooter();
 			
 	
 			//TODO: skip Header
-			//fseek(sdrfile,headerSize,SEEK_CUR);
+			fr->skipBufferedBytes(headerSize);
 			readChunkCycles(block, cycles);
+			fr->skipBufferedBytes(footerSize);
 			//TODO: skip Footer
 
 			StreamAnalytics sa;
 			for(int i = 0; i != decStreamCount; i++)
 			{
 				sa.setStream(decStreamArray[i]);
-				sa.printMeanAndVar();
-			//	decStreamArray[i]->clear();
+				sa.printAllSamples();
+				//sa.printMeanAndVar();
+				decStreamArray[i]->clear();
 			}
 
 		}
@@ -219,19 +230,17 @@ using namespace GnssMetadata;
 		}
 		delete [] decStreamArray;
 		delete x2m;
-		//how do  delete metadata?
-		//Metadata md;
-		//Lane* lane;
 	}
 
 
 int main(int argc, char** argv)
 {
 	{
+
 		clock_t tStart = clock();
 		try{
 			//prepare the file 'singlestream' for reading'
-			GNSSReader test ("C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.xml",L"C:/Users/ANTadmin/Desktop/GNSSReader/Tests/singleStream/test.dat",50000L,100000L,10000000L);
+			GNSSReader test ("C:/Users/ANTadmin/Desktop/GNSSReader/Tests/header/test.xml",L"C:/Users/ANTadmin/Desktop/GNSSReader/Tests/header/test.dat",50000L,100000L,10000000L);
 			test.makeDecStreams();
 			test.start();
 			std::cout << "Done!" << std::endl;

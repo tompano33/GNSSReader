@@ -56,5 +56,13 @@
 		printf(" Block has mean %f and variance %f\n",mean, variance);
 	};
 
+	void StreamAnalytics::printAllSamples()
+	{
+	
+		for(int i = 0; i != s->getSamplePtr(); i++)
+		{
+			std::cout << s->getBuf()[i] <<  " " << (char)s->getBuf()[i]<< std::endl;
+		}
 
+	}
 
