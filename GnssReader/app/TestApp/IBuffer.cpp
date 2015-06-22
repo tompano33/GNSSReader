@@ -35,55 +35,46 @@
 		}
 	}
 
-	//returns true if read was successful
-	bool IBuffer::read(int size, char* buf){
-		if(size > numBytesStored)
+	//TODO throw error if overreading
+	void IBuffer::read(int size, char* buf)
+	{
+		while(size > numBytesStored){;}
+
+		if(size < (BUFFERSIZE - oldPtr))
 		{
-			return false;
-		} else
+			memcpy(buf,ibuf+oldPtr,size);
+			oldPtr+= size;
+		} else 
 		{
-			if(size < (BUFFERSIZE - oldPtr))
-			{
-				memcpy(buf,ibuf+oldPtr,size);
-				oldPtr+= size;
-			} else 
-			{
-				int spaceLeftAtEnd = (BUFFERSIZE - oldPtr);
-				memcpy(buf,ibuf+oldPtr,spaceLeftAtEnd);
-				memcpy(buf+spaceLeftAtEnd,ibuf,size-spaceLeftAtEnd);
-				oldPtr=size-spaceLeftAtEnd;
-			}
+			int spaceLeftAtEnd = (BUFFERSIZE - oldPtr);
+			memcpy(buf,ibuf+oldPtr,spaceLeftAtEnd);
+			memcpy(buf+spaceLeftAtEnd,ibuf,size-spaceLeftAtEnd);
+			oldPtr=size-spaceLeftAtEnd;
+		}	
 			
-			numBytesStored -=size;
-			return true;
-		}
-	}
+		numBytesStored -=size;
+	};
 
 	int IBuffer::getNumBytesStored()
 	{
 		return numBytesStored;
 	};
 
-	bool IBuffer::skip(int size)
+	void IBuffer::skip(int size)
 	{
-	if(size > numBytesStored)
-		{
-			return false;
-		} else
-		{
-			if(size < (BUFFERSIZE - oldPtr))
-			{
-				oldPtr+= size;
-			} else 
-			{
-				int spaceLeftAtEnd = (BUFFERSIZE - oldPtr);
-				oldPtr=size-spaceLeftAtEnd;
-			}
+		while(size > numBytesStored){;}
 			
-			numBytesStored -=size;
-
+		if(size < (BUFFERSIZE - oldPtr))
+		{
+				oldPtr+= size;
+		} else 
+		{
+			int spaceLeftAtEnd = (BUFFERSIZE - oldPtr);
+			oldPtr=size-spaceLeftAtEnd;
+		}
+			
+		numBytesStored -=size;
 	};
-	}
 
 	IBuffer::~IBuffer(){
 		delete [] ibuf;

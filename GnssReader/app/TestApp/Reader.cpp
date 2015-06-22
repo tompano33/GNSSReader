@@ -43,7 +43,7 @@ using namespace GnssMetadata;
 				//Is it faster to read a whole block of data than just a bit? Maybe?
 				int chunkBufferSize = sizeWord*countWord;
 				char* buf = new char[chunkBufferSize];
-				while(!(fr->getBufferedBytes(buf,chunkBufferSize))){;}
+				fr->getBufferedBytes(buf,chunkBufferSize);
 				//std::cout << "Loaded a chunk of size " << chunkBufferSize << "\n";
 
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
@@ -110,7 +110,7 @@ using namespace GnssMetadata;
 		{
 			 dir = fname->substr(0, last_slash_idx);
 		}
-		std::cout << "Wdir is now " << dir << std::endl;
+		//std::cout << "Wdir is now " << dir << std::endl;
 		chdir(dir.c_str());
 
 		//chdir();
@@ -165,22 +165,19 @@ using namespace GnssMetadata;
 			uint32_t cycles = block->Cycles();
 			//is there a header or footer we need to skip?
 			uint32_t headerSize = block->SizeHeader();
-			std::cout << "\n" << headerSize << "\n";
+			//std::cout << "\n" << headerSize << "\n";
 			uint32_t footerSize = block->SizeFooter();
 			
-	
-			//TODO: skip Header
 			fr->skipBufferedBytes(headerSize);
 			readChunkCycles(block, cycles);
 			fr->skipBufferedBytes(footerSize);
-			//TODO: skip Footer
 
 			StreamAnalytics sa;
 			for(int i = 0; i != decStreamCount; i++)
 			{
 				sa.setStream(decStreamArray[i]);
 				sa.printAllSamples();
-				//sa.printMeanAndVar();
+			//	sa.printMeanAndVar();
 				decStreamArray[i]->clear();
 			}
 
@@ -256,7 +253,7 @@ int main(int argc, char** argv)
 		clock_t tStart = clock();
 		try{
 			//prepare the file 'singlestream' for reading'
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",50000L,100000L,10000000L);
+			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",10L,20L,30L);
 			test.makeDecStreams();
 			test.start();
 			std::cout << "Done!" << std::endl;

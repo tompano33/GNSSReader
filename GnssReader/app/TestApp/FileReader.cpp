@@ -52,9 +52,9 @@
 	};
 
 	//returns true if bytes were put in buffer, false otherwise
-	bool FileReader::getBufferedBytes(char* b, int count)
+	void FileReader::getBufferedBytes(char* b, int count)
 	{
-		return ib->read(count,b);
+		ib->read(count,b);
 	}
 	void FileReader::close(){
 	//close file

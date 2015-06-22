@@ -24,11 +24,11 @@ public:
 	bool write(char* bytes, int count);
 
 	//returns true if read was successful
-	bool read(int size, char* buf);
+	void read(int size, char* buf);
 	~IBuffer();
 
 	int getNumBytesStored();
-	bool skip(int count);
+	void skip(int count);
 
 };
 #endif
