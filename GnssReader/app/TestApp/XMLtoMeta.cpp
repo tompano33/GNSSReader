@@ -67,7 +67,7 @@ public:
 				std::string badIDName = obj->Id().c_str();
 				char * badIdc = new char[badIDName.size() + 1];
 				std::copy(badIDName.begin(), badIDName.end(), badIdc);
-				badIdc[badIDName.size()] = '\0'; // don't forget the terminating 
+				badIdc[badIDName.size()] = '\0'; 
 				e.setBadIDName(badIdc);
 				throw e;
 			}

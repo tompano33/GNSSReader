@@ -96,10 +96,14 @@ using namespace GnssMetadata;
 	}
 
 	//takes the metadata file given and parses it's XML. Does not yet work with filesets.
-	GNSSReader::GNSSReader(const char* pathToFile, long readSize, long buffSize, long streamSize)
+	GNSSReader::GNSSReader(const char* pathToFile, long readSize, long buffSize, long streamSize,const char** addlPaths, int blockTotal)
 	{
+		//total amout of blocks to read, -1 means read all.
+		blocksLeftToRead = blockTotal;
+		printStats = false;
+		printSamples = false;
 
-		//changes working directory.
+		//changes working directory so we can access the first file.
 		std::string* fname = new std::string(pathToFile,strlen(pathToFile));
 		std::string dir;
 		const size_t last_slash_idx = fname->rfind('\\');
@@ -109,10 +113,13 @@ using namespace GnssMetadata;
 		}
 		chdir(dir.c_str());
 
+		//sets outputstream size
 		this->streamSize = streamSize;
+		
 		try
 		{
-			x2m = new XMLtoMeta(pathToFile);
+			//mm.. filereader needs to go to a list. XML does too.
+			XMLtoMeta* x2m = new XMLtoMeta(pathToFile);
 			md = x2m->getNonRefdMetadata();
 			lane = x2m->getNonRefdLane();
 			//Windows filereader
@@ -120,8 +127,10 @@ using namespace GnssMetadata;
 			std::cout << "Opening: " << s << "\n";
 
 			std::wstring stemp = std::wstring(s.begin(), s.end());
-			LPCWSTR fname = stemp.c_str();
-			fr = new FileReader(fname,readSize,buffSize);
+			LPCWSTR wfname = stemp.c_str();
+			fr = new FileReader(wfname,readSize,buffSize);
+
+			makeFileList(fname);
 
 		} catch (TranslationException e){
 			//See if file even exists, since x2m does not throw this.
@@ -135,9 +144,33 @@ using namespace GnssMetadata;
 		}
 	}
 
-	//Starts decoding the file into stream(s)
+	void GNSSReader::makeFileList(std::string* pathToFile)
+	{
+		int totalBlocksDiscovered = 0;
+		mdList = new std::vector<Metadata*>;
+
+		//get the metadata of first file.
+		XMLtoMeta* x2m = new XMLtoMeta(pathToFile->c_str());
+		Metadata nextMeta = x2m->getNonRefdMetadata();
+ 
+		while(nextMeta.Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
+		{
+			std::cout << "Adding File to list: " << nextMeta.Files().front().Next().Value() << std::endl;
+			
+			x2m = new XMLtoMeta((&(nextMeta.Files().front().Next().toString()))->c_str());
+			nextMeta = x2m->getNonRefdMetadata();
+			
+			int bc = x2m->getNonRefdLane()->blockCount;
+			totalBlocksDiscovered += bc;
+			std::cout << "It has " << bc << " Block(s)" << std::endl;
+			mdList->push_back(&nextMeta);
+			std::cin.get();
+		}
+	}
+
+	//Start decoding the file into stream(s)
 	void GNSSReader::start(){
-		//start the file reader thread
+		//start the file reader thread. 
 		fr->readAll();
 		//we don't do filesets yet.
 		if(md.FileSets().size() > 0 || md.Files().size() != 1)
@@ -146,12 +179,13 @@ using namespace GnssMetadata;
 		}
 		
 		File singleFile = md.Files().front();
-		//TODO open the windows handle here
 
 		Lane* singleLane = lane;
 
-		for(int i = 0; i != singleLane->blockCount; i++)
+		for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
 		{
+			if(blocksLeftToRead > 0)
+				blocksLeftToRead--;
 
 			Block* block = singleLane->blockArray[i];
 			
@@ -170,8 +204,12 @@ using namespace GnssMetadata;
 			for(int i = 0; i != decStreamCount; i++)
 			{
 				sa.setStream(decStreamArray[i]);
-			//	sa.printAllSamples();
-			//	sa.printMeanAndVar();
+
+				if(printSamples)
+					sa.printAllSamples();
+				if(printStats)
+					sa.printMeanAndVar();
+
 				decStreamArray[i]->clear();
 			}
 
@@ -236,14 +274,56 @@ using namespace GnssMetadata;
 			delete decStreamArray[i];
 		}
 		delete [] decStreamArray;
-		delete x2m;
 	}
 
+
+//tests everything by flooding the console. yay.
+void testSuite()
+{
+	/**
+	try{
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\exception\\test.xml",100000L,200000L,1000000L);
+		test.makeDecStreams();
+		test.start();
+	} catch (std::exception& e) {
+		printf(e.what());
+	}
+	*/
+
+	try{
+		
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",100000L,200000L,1000000L,NULL,1);
+		test.makeDecStreams();
+		test.printSamples = true;
+		test.start();
+		
+		GNSSReader test2 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\temporalforeach\\test.xml",100000L,200000L,1000000L);
+		test2.makeDecStreams();
+		test2.printSamples = true;
+		test2.start();
+		/**
+		GNSSReader test3 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",100000L,200000L,1000000L);
+		test3.makeDecStreams();
+		test3.printStats = true;
+		test3.start();
+
+		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L);
+		test4.makeDecStreams();
+		test4.printStats = true;
+		test4.start();
+		*/
+	} catch (std::exception& e) {
+			printf(e.what());
+	}
+
+
+}
 
 int main(int argc, char** argv)
 {
 	{
-
+		testSuite();
+		/**
 		clock_t tStart = clock();
 		try{
 			//prepare the file 'singlestream' for reading'
@@ -257,6 +337,7 @@ int main(int argc, char** argv)
 		}
 
 		printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+		*/
 	}
 
 	_CrtDumpMemoryLeaks();

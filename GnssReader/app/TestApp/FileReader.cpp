@@ -5,9 +5,10 @@
 #include <process.h>
 #include "IBuffer.h"
 
-//Reads an SDR File. Puts the file contents in it's intermediateBuffer
+	//Reads an SDR File. Puts the file contents in it's intermediateBuffer
 
-	//Needs the name of the file and a count of how many bytes to load from the file. Also needs the size of intermediate buffer. Puts file handle in memory. Inits buffer.
+	//Needs the name of the file. Needs to know the amount of bytes to load at once. 
+	//Also needs the size of intermediate buffer. Puts file handle in memory. Inits buffer.
 	FileReader::FileReader(LPCWSTR fname,long readBufferSize, long intermediateBufferSize){
 		this->readBufferSize = readBufferSize;
 		ib = new IBuffer(intermediateBufferSize);
@@ -26,7 +27,7 @@
 		GetFileSizeEx(sdrFile,&fileSize);
 	}
 
-		//Tries to populate intermediate buffer with samples. To be called as a thread.
+	//Tries to populate intermediate buffer with samples. To be called as a thread.
 	void FileReader::readFile()
 	{
 		//More elegant way to kill thread?
@@ -43,7 +44,6 @@
 			if(readFile){
 				while(!ib->write(buff,readBufferSize) && !killThreadFlag){;}
 				bytesRead = bytesRead + readBufferSize;
-			//	std::cout << "Read All! " << bytesRead << " / " << fileSize.QuadPart << std::endl;
 			} else {
 				std::cout << "Error, Not a full read"   << std::endl;
 			}
@@ -51,11 +51,11 @@
 		std::cout << "Reading Ended.\n";
 	};
 
-	//returns true if bytes were put in buffer, false otherwise
 	void FileReader::getBufferedBytes(char* b, int count)
 	{
 		ib->read(count,b);
 	}
+
 	void FileReader::close(){
 	//close file
 		if(CloseHandle(sdrFile) != 0)
@@ -100,16 +100,5 @@
 		delete ib;
 		CloseHandle(sdrFile);
 	}
-
-int main2(void)
-{
-	FileReader* fr = new FileReader(L"C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\ThreadTest.txt",6L,16L);
-	//fr->readFile();
-	char* d = new char[5];
-	fr->getBufferedBytes(d,5);
-	std::cout << d[0] << d[1] << d[2] << d[3] << d[4] << d[5];
-	std::cin.get();
-	return -1;
-}
 
 
