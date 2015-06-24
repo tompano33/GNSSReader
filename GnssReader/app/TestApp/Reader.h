@@ -26,6 +26,7 @@ class GNSSReader {
 	//Current metadata and lane object being worked on.
 	Metadata* md;
 	std::vector<Metadata*>* mdList;
+	int mdPtr;
 	std::vector<std::string>* sdrFileNames;
 	DecStream** decStreamArray;
 	int decStreamCount;

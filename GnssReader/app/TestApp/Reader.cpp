@@ -102,7 +102,7 @@ using namespace GnssMetadata;
 		blocksLeftToRead = blockTotal;
 		printStats = false;
 		printSamples = false;
-
+		mdPtr = 0;
 		//changes working directory so we can access the first file.
 		std::string* fname = new std::string(pathToFile,strlen(pathToFile));
 		std::string dir;
@@ -119,18 +119,8 @@ using namespace GnssMetadata;
 		try
 		{
 			//mm.. filereader needs to go to a list. XML does too.
-			XMLtoMeta* x2m = new XMLtoMeta(pathToFile);
-			md = x2m->getNonRefdMetadata();
-
-
-
-
-			//Windows filereader
-			std::string s = md->Files().front().Url().toString();
-			std::cout << "Opening: " << s << "\n";
-
-			std::wstring stemp = std::wstring(s.begin(), s.end());
-			LPCWSTR wfname = stemp.c_str();
+			//XMLtoMeta* x2m = new XMLtoMeta(pathToFile);
+			//md = x2m->getNonRefdMetadata();
 			
 			makeFileList(fname);
 			fr = new FileReader(*sdrFileNames,readSize,buffSize);
@@ -151,6 +141,7 @@ using namespace GnssMetadata;
 
 	void GNSSReader::makeFileList(std::string* pathToFile)
 	{
+
 		int totalBlocksDiscovered = 0;
 		mdList = new std::vector<Metadata*>;
 		sdrFileNames = new std::vector<std::string>;
@@ -158,7 +149,8 @@ using namespace GnssMetadata;
 		//get the metadata of first file.
 		XMLtoMeta* x2m = new XMLtoMeta(pathToFile->c_str());
 		Metadata* nextMeta = x2m->getNonRefdMetadata();
-
+		
+		mdList->push_back(nextMeta);
 		sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
  
 		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
@@ -171,6 +163,7 @@ using namespace GnssMetadata;
 			int bc = nextMeta->Files().front().nLane->blockCount;
 			totalBlocksDiscovered += bc;
 			mdList->push_back(nextMeta);
+			sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
 
 		}
 
@@ -182,45 +175,57 @@ using namespace GnssMetadata;
 	void GNSSReader::start(){
 		//start the file reader thread. 
 		fr->readAll();
-		//we don't do filesets yet.
-		if(md->FileSets().size() > 0 || md->Files().size() != 1)
-		{
-			printf("Unsupported Format: Spatial/Temporal File");
-		}
+
+		//std::cout << "S" << mdList->at(0)->Files().front().nLane->blockCount << std::endl;
 	
-		Lane* singleLane =  md->Files().front().nLane;
-
-		for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
+		while(mdPtr < mdList->size())
 		{
-			if(blocksLeftToRead > 0)
-				blocksLeftToRead--;
+			md =  mdList->at(mdPtr++);
+			//you know what
+			//I bet the DecStreams are different!!!!!
 
-			Block* block = singleLane->blockArray[i];
-			
-			//how many chunk cycles are there?
-			uint32_t cycles = block->Cycles();
-			//is there a header or footer we need to skip?
-			uint32_t headerSize = block->SizeHeader();
-			//std::cout << "\n" << headerSize << "\n";
-			uint32_t footerSize = block->SizeFooter();
-			
-			fr->skipBufferedBytes(headerSize);
-			readChunkCycles(block, cycles);
-			fr->skipBufferedBytes(footerSize);
 
-			StreamAnalytics sa;
-			for(int i = 0; i != decStreamCount; i++)
+
+			//we don't do filesets yet, but almost
+			if(md->FileSets().size() > 0 || md->Files().size() != 1)
 			{
-				sa.setStream(decStreamArray[i]);
-
-				if(printSamples)
-					sa.printAllSamples();
-				if(printStats)
-					sa.printMeanAndVar();
-
-				decStreamArray[i]->clear();
+				printf("Unsupported Format: Spatial/Temporal File");
 			}
+	
+			Lane* singleLane =  md->Files().front().nLane;
 
+			for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
+			{
+				if(blocksLeftToRead > 0)
+					blocksLeftToRead--;
+
+				Block* block = singleLane->blockArray[i];
+			
+				//how many chunk cycles are there?
+				uint32_t cycles = block->Cycles();
+				//is there a header or footer we need to skip?
+				uint32_t headerSize = block->SizeHeader();
+				//std::cout << "\n" << headerSize << "\n";
+				uint32_t footerSize = block->SizeFooter();
+			
+				fr->skipBufferedBytes(headerSize);
+				readChunkCycles(block, cycles);
+				fr->skipBufferedBytes(footerSize);
+
+				StreamAnalytics sa;
+				for(int i = 0; i != decStreamCount; i++)
+				{
+					sa.setStream(decStreamArray[i]);
+				
+					if(printSamples)
+						sa.printAllSamples();
+					if(printStats)
+						sa.printMeanAndVar();
+
+					decStreamArray[i]->clear();
+				}
+
+			}
 		}
 
 		//done! see if there are any bytes in the DecStream. If there are, print a warning but kill the process anyhow.
@@ -246,7 +251,7 @@ using namespace GnssMetadata;
 		//Fun fact: this returns a shallow instance of lane
 		//does not have correct reference
 		//so we use nLane.
-		Lane* singleLane = md->Files().front().nLane;
+		Lane* singleLane = mdList->at(0)->Files().front().nLane;
 
 
 		for(int i = 0; i != singleLane->blockCount; i++){
@@ -311,11 +316,12 @@ void testSuite()
 		test.makeDecStreams();
 		test.printSamples = true;
 		test.start();
-		
+		/**
 		GNSSReader test2 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\temporalforeach\\test.xml",100000L,200000L,1000000L);
 		test2.makeDecStreams();
 		test2.printSamples = true;
 		test2.start();
+		
 		/**
 		GNSSReader test3 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",100000L,200000L,1000000L);
 		test3.makeDecStreams();

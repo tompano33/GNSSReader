@@ -23,6 +23,8 @@ class FileReader{
 	IBuffer* ib;
 	bool killThreadFlag;
 	bool xmlWasValid;
+	std::vector<std::string> fnames;
+	int filePtr;
 
 	//starts a thread
 	static void ThreadEntry(void *p);
@@ -50,6 +52,8 @@ public:
 	void killReadThread();
 
 	void skipBufferedBytes(int count);
+
+	void prepareHandle();
 
 	~FileReader();
 
