@@ -151,6 +151,9 @@ namespace GnssMetadata
 		{
 			return _lane;
 		}
+
+		//THIS RETURNS A SHALLOW COPY
+		//DO NOT WANT
 		GnssMetadata::Lane& Lane( ) 
 		{
 			return _lane;
@@ -184,7 +187,7 @@ namespace GnssMetadata
 			const String& sid, const AttributedObject& rparent, bool bExcludeReference=true, int nDepth =-1) const;
 
 		 
-		GnssMetadata::Lane* _nLane;
+		GnssMetadata::Lane* nLane;
 
 	private:
 		/**
@@ -229,7 +232,8 @@ namespace GnssMetadata
 	{
 		
 	public:
-
+		
+		GnssMetadata::Lane * nLane;
 		FileSet( const String& id) : AttributedObject( id){}
 		FileSet() {}
 		FileSet(const FileSet& rhs) 
@@ -262,7 +266,6 @@ namespace GnssMetadata
 		 */
 		virtual String toString( const String & sFormat = DefaultFormat ) const;
 
-	
 
 	private:
 		AnyUriList _files;

@@ -1,7 +1,7 @@
-﻿Build started 6/23/2015 3:34:30 PM.
+﻿Build started 6/24/2015 1:51:54 PM.
      1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\TestApp.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Touching "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.unsuccessfulbuild".
+         Creating "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\lib\TinyXml2 /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\\" /Fd"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Reader.cpp
          Reader.cpp
@@ -29,4 +29,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.94
+Time Elapsed 00:00:01.49

@@ -10,7 +10,6 @@ using namespace GnssMetadata;
 class XMLtoMeta
 {
 	Metadata md;
-	Lane* lane;
 
 	//Converts lists contaning referenced objects to an array without referenced objects. Run this before doing any XML operations!
 	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList, T** objArray);
@@ -23,8 +22,7 @@ public:
 
 	XMLtoMeta::XMLtoMeta(const char* metadataFile);
 	XMLtoMeta::XMLtoMeta();
-	Metadata getNonRefdMetadata();
-	Lane* getNonRefdLane();
+	Metadata* getNonRefdMetadata();
 		
 };
 #endif

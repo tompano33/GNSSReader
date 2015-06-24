@@ -1,5 +1,6 @@
 #include<GnssMetadata/Xml/XmlProcessor.h>
 #include "XMLtoMeta.h"
+#include<iostream>
 
 using namespace GnssMetadata;
 //If there are zero declarations of an XML AttributedObject, this error is to be thrown.
@@ -83,11 +84,16 @@ public:
 
 	//gets rid of referenced objects for all XML and converts to arrays.
 	void XMLtoMeta::fixAllRefdObjs(){
+
 		File* singleFile = &md.Files().front();
-		Lane* singleLane = findNonRefObj<Lane*>(&md,&singleFile->Lane());
-		singleFile->_nLane = singleLane;
+		singleFile->Lane(*findNonRefObj<Lane*>(&md,&singleFile->Lane()));
 		//first thing: init block array.
+		Lane* singleLane = &singleFile->Lane();
+		singleFile->nLane = singleLane;
 		singleLane->blockCount = singleLane->Blocks().size();
+		
+
+
 		singleLane->blockArray = new Block*[singleLane->blockCount];
 		fixRefdObjs<Block,Block*>(&md,&singleLane->Blocks(),singleLane->blockArray);
 
@@ -117,27 +123,23 @@ public:
 				}
 			}
 		}
-		lane = singleLane;
 	};
-
 
 	XMLtoMeta::XMLtoMeta(const char* metadataFile){
 		XmlProcessor xproc;
 		//checkAPI
 		xproc.Load(metadataFile, false, md); 
-		fixAllRefdObjs();
+		fixAllRefdObjs();		
+		std::cin.get();
 	}
 
 	XMLtoMeta::XMLtoMeta(){
 	}
 
 
-	Metadata XMLtoMeta::getNonRefdMetadata(){
-		return md;
-	}
+	Metadata* XMLtoMeta::getNonRefdMetadata(){
 
-	Lane* XMLtoMeta::getNonRefdLane(){
-		return lane;
+		return &md;
 	}
 
 		

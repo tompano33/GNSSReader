@@ -24,9 +24,8 @@ using namespace GnssMetadata;
 
 class GNSSReader {
 	//Current metadata and lane object being worked on.
-	Metadata md;
+	Metadata* md;
 	std::vector<Metadata*>* mdList;
-	Lane* lane;
 	DecStream** decStreamArray;
 	int decStreamCount;
 	long streamSize;

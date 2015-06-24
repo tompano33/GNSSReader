@@ -121,16 +121,20 @@ using namespace GnssMetadata;
 			//mm.. filereader needs to go to a list. XML does too.
 			XMLtoMeta* x2m = new XMLtoMeta(pathToFile);
 			md = x2m->getNonRefdMetadata();
-			lane = x2m->getNonRefdLane();
+
+
+			std::cout << "@ " << md->Files().front().Lane().blockCount << std::endl;
+			std::cin.get();
+
 			//Windows filereader
-			std::string s = md.Files().front().Url().toString();
+			std::string s = md->Files().front().Url().toString();
 			std::cout << "Opening: " << s << "\n";
 
 			std::wstring stemp = std::wstring(s.begin(), s.end());
 			LPCWSTR wfname = stemp.c_str();
 			fr = new FileReader(wfname,readSize,buffSize);
 
-			makeFileList(fname);
+			//makeFileList(fname);
 
 		} catch (TranslationException e){
 			//See if file even exists, since x2m does not throw this.
@@ -142,6 +146,9 @@ using namespace GnssMetadata;
 
 			throw std::exception("File was not read\n");
 		}
+
+			std::cout << "!!!" << md->Files().front().Lane().blockCount << std::endl;
+			std::cin.get();
 	}
 
 	void GNSSReader::makeFileList(std::string* pathToFile)
@@ -151,18 +158,17 @@ using namespace GnssMetadata;
 
 		//get the metadata of first file.
 		XMLtoMeta* x2m = new XMLtoMeta(pathToFile->c_str());
-		Metadata nextMeta = x2m->getNonRefdMetadata();
+		Metadata nextMeta = *x2m->getNonRefdMetadata();
  
 		while(nextMeta.Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
 		{
 			std::cout << "Adding File to list: " << nextMeta.Files().front().Next().Value() << std::endl;
 			
 			x2m = new XMLtoMeta((&(nextMeta.Files().front().Next().toString()))->c_str());
-			nextMeta = x2m->getNonRefdMetadata();
+			nextMeta = *x2m->getNonRefdMetadata();
 			
-			int bc = x2m->getNonRefdLane()->blockCount;
+			int bc = nextMeta.Files().front().Lane().blockCount;
 			totalBlocksDiscovered += bc;
-			std::cout << "It has " << bc << " Block(s)" << std::endl;
 			mdList->push_back(&nextMeta);
 			std::cin.get();
 		}
@@ -173,14 +179,12 @@ using namespace GnssMetadata;
 		//start the file reader thread. 
 		fr->readAll();
 		//we don't do filesets yet.
-		if(md.FileSets().size() > 0 || md.Files().size() != 1)
+		if(md->FileSets().size() > 0 || md->Files().size() != 1)
 		{
 			printf("Unsupported Format: Spatial/Temporal File");
 		}
-		
-		File singleFile = md.Files().front();
-
-		Lane* singleLane = lane;
+	
+		Lane* singleLane =  md->Files().front().nLane;
 
 		for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
 		{
@@ -234,8 +238,19 @@ using namespace GnssMetadata;
 		//how can I get that?
 		//well, I need to iterate through every xml element and count the num of streams there are
 		//I need to be careful to avoid duplicates...
-		for(int i = 0; i != lane->blockCount; i++){
-			Block* b = lane->blockArray[i];
+
+		//Fun fact: this returns a shallow instance of lane
+		//does not have correct reference
+		//so we use nLane.
+		Lane* singleLane = md->Files().front().nLane;
+		std::cout << singleLane->blockCount;
+		std::cin.get();
+		
+		std::cout << "@ " << md->Files().front().Lane().blockCount << std::endl;
+		std::cin.get();
+
+		for(int i = 0; i != singleLane->blockCount; i++){
+			Block* b = singleLane->blockArray[i];
 			for(int j = 0; j != b->chunkCount;j++){
 				Chunk* c = b->chunkArray[j];
 				for(int k = 0; k!= c->lumpCount;k++){
@@ -340,10 +355,10 @@ int main(int argc, char** argv)
 		*/
 	}
 
+
 	_CrtDumpMemoryLeaks();
 	std::cin.get();
 
-	
 	return 0;
 }
 
