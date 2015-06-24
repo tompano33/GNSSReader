@@ -130,7 +130,6 @@ public:
 		//checkAPI
 		xproc.Load(metadataFile, false, md); 
 		fixAllRefdObjs();		
-		std::cin.get();
 	}
 
 	XMLtoMeta::XMLtoMeta(){

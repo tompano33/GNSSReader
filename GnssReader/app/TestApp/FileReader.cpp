@@ -4,23 +4,27 @@
 #include "FileReader.h"
 #include <process.h>
 #include "IBuffer.h"
+#include <vector>
 
 	//Reads an SDR File. Puts the file contents in it's intermediateBuffer
 
 	//Needs the name of the file. Needs to know the amount of bytes to load at once. 
 	//Also needs the size of intermediate buffer. Puts file handle in memory. Inits buffer.
-	FileReader::FileReader(LPCWSTR fname,long readBufferSize, long intermediateBufferSize){
+	FileReader::FileReader(std::vector<std::string> fnames,long readBufferSize, long intermediateBufferSize){
 		this->readBufferSize = readBufferSize;
 		ib = new IBuffer(intermediateBufferSize);
 		buff = new char[readBufferSize];
 		bytesRead = 0;
 		killThreadFlag = false;
+		
+			std::wstring stemp = std::wstring(fnames.front().begin(), fnames.front().end());
+			LPCWSTR wfname = stemp.c_str();
 
-		sdrFile = CreateFile(fname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
+		sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
 		if(sdrFile == INVALID_HANDLE_VALUE)
 		{
-			printf("Could not open %S.\n", fname);
+			printf("Could not open %S.\n", fnames.front().c_str());
 			CloseHandle(sdrFile);
 			std::cin.get();
 		}	

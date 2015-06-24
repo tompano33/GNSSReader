@@ -77,7 +77,7 @@ using namespace GnssMetadata;
 
 									//special case if one bit
 									if(packedBitCount == 1)
-										decStreamArray[i]->putSample(read == 0 ? 1 : -1);
+										decStreamArray[i]->putSample(read == 0 ? 1.0 : -1.0);
 									else 
 										decStreamArray[i]->putSample(read);
 									break;
@@ -123,8 +123,7 @@ using namespace GnssMetadata;
 			md = x2m->getNonRefdMetadata();
 
 
-			std::cout << "@ " << md->Files().front().Lane().blockCount << std::endl;
-			std::cin.get();
+
 
 			//Windows filereader
 			std::string s = md->Files().front().Url().toString();
@@ -132,9 +131,10 @@ using namespace GnssMetadata;
 
 			std::wstring stemp = std::wstring(s.begin(), s.end());
 			LPCWSTR wfname = stemp.c_str();
-			fr = new FileReader(wfname,readSize,buffSize);
+			
+			makeFileList(fname);
+			fr = new FileReader(*sdrFileNames,readSize,buffSize);
 
-			//makeFileList(fname);
 
 		} catch (TranslationException e){
 			//See if file even exists, since x2m does not throw this.
@@ -147,31 +147,35 @@ using namespace GnssMetadata;
 			throw std::exception("File was not read\n");
 		}
 
-			std::cout << "!!!" << md->Files().front().Lane().blockCount << std::endl;
-			std::cin.get();
 	}
 
 	void GNSSReader::makeFileList(std::string* pathToFile)
 	{
 		int totalBlocksDiscovered = 0;
 		mdList = new std::vector<Metadata*>;
+		sdrFileNames = new std::vector<std::string>;
 
 		//get the metadata of first file.
 		XMLtoMeta* x2m = new XMLtoMeta(pathToFile->c_str());
-		Metadata nextMeta = *x2m->getNonRefdMetadata();
+		Metadata* nextMeta = x2m->getNonRefdMetadata();
+
+		sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
  
-		while(nextMeta.Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
+		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
 		{
-			std::cout << "Adding File to list: " << nextMeta.Files().front().Next().Value() << std::endl;
+			std::cout << "Adding File to list: " << nextMeta->Files().front().Next().Value() << std::endl;
 			
-			x2m = new XMLtoMeta((&(nextMeta.Files().front().Next().toString()))->c_str());
-			nextMeta = *x2m->getNonRefdMetadata();
+			x2m = new XMLtoMeta((&(nextMeta->Files().front().Next().toString()))->c_str());
+			nextMeta = x2m->getNonRefdMetadata();
 			
-			int bc = nextMeta.Files().front().Lane().blockCount;
+			int bc = nextMeta->Files().front().nLane->blockCount;
 			totalBlocksDiscovered += bc;
-			mdList->push_back(&nextMeta);
-			std::cin.get();
+			mdList->push_back(nextMeta);
+
 		}
+
+
+
 	}
 
 	//Start decoding the file into stream(s)
@@ -243,11 +247,7 @@ using namespace GnssMetadata;
 		//does not have correct reference
 		//so we use nLane.
 		Lane* singleLane = md->Files().front().nLane;
-		std::cout << singleLane->blockCount;
-		std::cin.get();
-		
-		std::cout << "@ " << md->Files().front().Lane().blockCount << std::endl;
-		std::cin.get();
+
 
 		for(int i = 0; i != singleLane->blockCount; i++){
 			Block* b = singleLane->blockArray[i];
@@ -307,7 +307,7 @@ void testSuite()
 
 	try{
 		
-		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",100000L,200000L,1000000L,NULL,1);
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",100000L,200000L,1000000L,NULL);
 		test.makeDecStreams();
 		test.printSamples = true;
 		test.start();
@@ -336,29 +336,11 @@ void testSuite()
 
 int main(int argc, char** argv)
 {
-	{
-		testSuite();
-		/**
-		clock_t tStart = clock();
-		try{
-			//prepare the file 'singlestream' for reading'
-			//Input size, intermediate buffer size, output size
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",100000L,200000L,1000000L);
-			test.makeDecStreams();
-			test.start();
-			std::cout << "Done!" << std::endl;
-		} catch (std::exception& e) {
-			printf(e.what());
-		}
-
-		printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
-		*/
-	}
-
-
+	clock_t tStart = clock();
+	testSuite();
+	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 	_CrtDumpMemoryLeaks();
 	std::cin.get();
-
 	return 0;
 }
 

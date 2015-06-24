@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <process.h>
+#include <vector>
 #include "IBuffer.h"
 
 //Reads an SDR File. Puts the file contents in it's intermediateBuffer
@@ -31,7 +32,7 @@ class FileReader{
 
 public:
 	//Needs the name of the file and a count of how many bytes to load from the file. Also needs the size of intermediate buffer. Puts file handle in memory. Inits buffer.
-	FileReader::FileReader(LPCWSTR fname,long readBufferSize, long intermediateBufferSize);
+	FileReader::FileReader(std::vector<std::string> fname,long readBufferSize, long intermediateBufferSize);
 
 	void readAll();
 
