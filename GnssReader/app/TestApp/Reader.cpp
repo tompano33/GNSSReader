@@ -178,14 +178,11 @@ using namespace GnssMetadata;
 
 		//std::cout << "S" << mdList->at(0)->Files().front().nLane->blockCount << std::endl;
 	
+		//for all metadata sheets
 		while(mdPtr < mdList->size())
 		{
 			md =  mdList->at(mdPtr++);
-			//you know what
-			//I bet the DecStreams are different!!!!!
-
-
-
+	
 			//we don't do filesets yet, but almost
 			if(md->FileSets().size() > 0 || md->Files().size() != 1)
 			{
@@ -311,12 +308,12 @@ void testSuite()
 	*/
 
 	try{
-		
+		/**
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",100000L,200000L,1000000L,NULL);
 		test.makeDecStreams();
 		test.printSamples = true;
 		test.start();
-		/**
+		*/
 		GNSSReader test2 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\temporalforeach\\test.xml",100000L,200000L,1000000L);
 		test2.makeDecStreams();
 		test2.printSamples = true;
@@ -343,7 +340,20 @@ void testSuite()
 int main(int argc, char** argv)
 {
 	clock_t tStart = clock();
-	testSuite();
+	//testSuite();
+
+	//what can splice do for me?
+	
+		XmlProcessor xproc;
+		//checkAPI
+		Metadata md1, md2;
+		xproc.Load("C://Users//ANTadmin//Desktop//GNSSReader//Tests//temporalforeach//test.xml", false, md1); 
+		xproc.Load("C://Users//ANTadmin//Desktop//GNSSReader//Tests//temporalforeach//test2.xml", false, md2);
+		//here goes 
+		md1.Splice(md2);
+		//It worked! md1 has now been spliced with md2.
+
+
 	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 	_CrtDumpMemoryLeaks();
 	std::cin.get();
