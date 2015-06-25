@@ -13,19 +13,20 @@ class DecStream{
 	//Name of Buffer
 	std::string id;
 	//Pointer to the XMLID of the stream.
-	void* correspondingStream;
+	GnssMetadata::Stream* correspondingStream;
 
 
 public:
 	
-	DecStream::DecStream(uint32_t sampleCap, std::string id,void * corStream);
+	DecStream::DecStream(uint32_t sampleCap, std::string id,GnssMetadata::Stream* corStream);
 	DecStream::DecStream();
 	void putSample(double sample);
 	std::string getID();
 	int getSamplePtr();
 	double* getBuf();
 	void clear();
-	void* getCorrespondingStream();
+	GnssMetadata::Stream* getCorrespondingStream();
+	void setCorrespondingStream(GnssMetadata::Stream* s);
 	int getBufSize();
 	~DecStream();
 };

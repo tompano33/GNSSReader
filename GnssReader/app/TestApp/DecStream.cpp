@@ -1,7 +1,8 @@
 #include "DecStream.h"
+#include "GnssMetadata\Stream.h"
 #include <stdint.h>
 
-	DecStream::DecStream(uint32_t sampleCap, std::string id,void * corStream)
+	DecStream::DecStream(uint32_t sampleCap, std::string id,GnssMetadata::Stream * corStream)
 	{
 		sampleCapacity = sampleCap;
 		sampleBuf = new double[sampleCapacity];
@@ -45,6 +46,11 @@
 		samplePtr = 0;
 	};
 
-	void* DecStream::getCorrespondingStream(){
+	GnssMetadata::Stream* DecStream::getCorrespondingStream(){
 		return correspondingStream;
 	};
+
+	void DecStream::setCorrespondingStream(GnssMetadata::Stream* s)
+	{
+		correspondingStream = s;
+	}

@@ -44,6 +44,7 @@ public:
 	GNSSReader::GNSSReader(const char* pathToFile,long readSize, long buffSize, long streamSize,const char** addlPaths = NULL, int blockTotal = -1);
 	void start();
 	void makeDecStreams();
+	void repairDecStreams();
 	int getDecStreamCount();
 	void makeFileList(std::string* first);
 	~GNSSReader();

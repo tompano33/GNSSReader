@@ -1,4 +1,4 @@
-﻿Build started 6/25/2015 1:35:03 PM.
+﻿Build started 6/25/2015 2:33:06 PM.
      1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\lib\GnssMetadata\GnssMetadata.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\lib\GnssMetadata\\obj\Win32\Debug\GnssMetadata.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -14,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.04
+Time Elapsed 00:00:00.05
