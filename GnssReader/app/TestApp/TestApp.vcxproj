@@ -174,7 +174,8 @@
     <ClCompile Include="IBuffer.cpp" />
     <ClCompile Include="StreamAnalytics.cpp" />
     <ClCompile Include="ChunkBuffer.cpp" />
-    <ClCompile Include="Reader.cpp" />
+    <ClCompile Include="GnssReader.cpp" />
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="XMLtoMeta.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +187,7 @@
   <ItemGroup>
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="IBuffer.h" />
-    <ClInclude Include="Reader.h" />
+    <ClInclude Include="GnssReader.h" />
     <ClInclude Include="StreamAnalytics.h" />
     <ClInclude Include="ChunkBuffer.h" />
     <ClInclude Include="DecStream.h" />

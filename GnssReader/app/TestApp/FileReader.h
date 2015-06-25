@@ -1,19 +1,28 @@
+/**
+ * File: FileReader.h
+ * Author: WJLIDDY
+ * Description: From a vector of SDR data files, puts them into a buffer based on several parameters.
+ */
 #ifndef FILEREADER_H_H
 #define FILEREADER_H_H
 
+
+#include <vector>
 #include <windows.h>
 #include <stdio.h>
-#include <iostream>
 #include <process.h>
-#include <vector>
+#include <stdint.h>
+
 #include "IBuffer.h"
 
-//Reads an SDR File. Puts the file contents in it's intermediateBuffer
 class FileReader{
-	//File Handle
+
+	//Handle to the file that is currently being read. TODO: probably obsolete due to the fnames
 	HANDLE sdrFile;
+
 	//How many bytes to read at once?
-	long readBufferSize;
+	uint64_t readBufferSize;
+
 	//Buffer for reading the file,
 	char* buff;
 	//Count of total bytes read from file

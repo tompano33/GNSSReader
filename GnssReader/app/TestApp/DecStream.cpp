@@ -1,19 +1,19 @@
-#include "DecStream.h"
-#include "GnssMetadata\Stream.h"
-#include <stdint.h>
+/**
+ * File: DecStream.cpp
+ * Author: WJLIDDY
+ */
 
-	DecStream::DecStream(uint32_t sampleCap, std::string id,GnssMetadata::Stream * corStream)
+#include "DecStream.h"
+#include <stdint.h>
+#include "GnssMetadata\Stream.h"
+
+	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream * corStream)
 	{
 		sampleCapacity = sampleCap;
 		sampleBuf = new double[sampleCapacity];
 		samplePtr = 0;
 		this->id = id;
 		this->correspondingStream = corStream;
-	};
-
-	DecStream::DecStream()
-	{
-	
 	};
 
 	DecStream::~DecStream()
@@ -31,7 +31,7 @@
 		return id;
 	};
 
-	int DecStream::getSamplePtr(){
+	uint64_t DecStream::getSamplePtr(){
 		return samplePtr;
 	};
 
@@ -39,7 +39,7 @@
 		return DecStream::sampleBuf;
 	};
 
-	int DecStream::getBufSize(){
+	uint64_t DecStream::getBufSize(){
 		return samplePtr;
 	}
 	void DecStream::clear(){

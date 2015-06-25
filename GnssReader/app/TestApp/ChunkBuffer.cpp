@@ -1,20 +1,21 @@
 /**
  * File: ChunkBuffer.cpp
- * Author: W.J. Liddy
- * Allocates a buffer for a chunk and allows pulling samples of various sizes out.
+ * Author: WJLIDDY
  */
+#include "ChunkBuffer.h"
+
+#include<cstdint>
+#include<iostream>
+#include<list>
+#include<stdio.h>
 
 #include<GnssMetadata/Metadata.h>
 #include<GnssMetadata/Xml/XmlProcessor.h>
-#include<iostream>
-#include<list>
-#include<cstdint>
-#include<stdio.h>
-#include "ChunkBuffer.h"
+
 
 using namespace GnssMetadata;
-//Immediately allocates a buffer and puts data in it.
-	ChunkBuffer::ChunkBuffer(uint32_t size, char* buffer) 
+
+	ChunkBuffer::ChunkBuffer(uint64_t size, char* buffer) 
 	{
 		sizeOfBuffer = size;
 		chunkInputBuffer = buffer;
@@ -22,38 +23,43 @@ using namespace GnssMetadata;
 		bufferBitPointer = 0;
 	};
 
-	//Reads a sample from the chunkbuffer.
-	//TODO throw error if out of bytes to read.
-	int64_t ChunkBuffer::readBits(int bitsToRead, char* encoding)
+
+	int64_t ChunkBuffer::readBits(uint8_t bitsToRead, char* encoding)
 	{
-		int totalBitCount = bitsToRead;
-		uint64_t sampleValue = 0;
+		uint8_t totalBitCount = bitsToRead;
+		uint64_t sampleValue = 0;	//value that will be returned
 		while(bitsToRead > 0)
 		{
 			if(bufferBitPointer == 0)
 			{
 				if(bitsToRead >=8)
 				{
-					//just write a whole byte.
+					//Since our buffer pointer is at 0, and we have at least 8 bytes to read, 
+					//we can just shift the return value left by 8 and add.
 					sampleValue = sampleValue << 8;
 					sampleValue = sampleValue + chunkInputBuffer[bufferBytePointer];
 					bufferBytePointer++;
 					bitsToRead = bitsToRead - 8;
-				} else {
-					//there are less than 8 bits
-					//make room in the sample value for some new bits
+				} else 
+				{
+					//There are less than 8 bits, but our pointer is still at zero.
+					//make room in the sample value for some new bits.
 					sampleValue = sampleValue << bitsToRead;
-					//The bits will be at the beginning, simply shift them right.
+					//The bits will be at the beginning of the buffer, so we can simply shift them right.
 					sampleValue = sampleValue + (chunkInputBuffer[bufferBytePointer] >> (8-bitsToRead));
 					bufferBitPointer = bufferBitPointer + bitsToRead;
 					bitsToRead = 0;
 				}
 			} else
 			{
+				//Here, the buffer-bit-pointer is not at zero. 
+				//So, we cannot take any shortcuts.
 				int remainingBits = 8 - bufferBitPointer;
+
 				if(bitsToRead >= remainingBits)
 				{
-					//read the whole rest of byte! 
+					//Here, we have more bits to read than there are in the buffer.
+					//So, take the rest of the sample, put it in return value.
 					sampleValue = sampleValue << remainingBits;
 					sampleValue = sampleValue + (chunkInputBuffer[bufferBytePointer] & (0xFF >> bufferBitPointer));
 					bufferBytePointer++;
@@ -61,7 +67,8 @@ using namespace GnssMetadata;
 					bitsToRead -= (remainingBits);
 				} else 
 				{
-					//we are offset and can't just read a whole byte
+					//The bit pointer is zero, and we don't want to read the bit twice. 
+					//So we will have to shift both ways to remove undesired bits from the buffer.
 					sampleValue = sampleValue << bitsToRead;
 					//gets rid of "used" part of byte.
 					uint8_t bitsToMask = chunkInputBuffer[bufferBytePointer] ;
@@ -74,15 +81,15 @@ using namespace GnssMetadata;
 			}
 		}
 
-		//ok. Now, our samplevalue is all full. We now need to cast 
-
+		//Now our sample value has the correct # bits and we can return it. 
+		//int64_t will be just have to be cast.
 		return sampleValue;
 	};
 
 	ChunkBuffer::~ChunkBuffer(){
 		delete [] chunkInputBuffer;
 	}
-	//returns true if the chunk is out of bytes to read.
+
 	bool ChunkBuffer::chunkFullyRead(){
 		return ((int)bufferBytePointer == (int)sizeOfBuffer);
 	};
