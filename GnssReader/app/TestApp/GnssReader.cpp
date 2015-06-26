@@ -55,6 +55,26 @@ using namespace GnssMetadata;
 					{
 					Lump* lump = chunk->lumpArray[i];
 
+					//skip header padding here!
+					if(chunk->Padding() == chunk->Head)
+					{
+						/** TODO assign lump sizes
+
+						//so we need to know how much padding there is on the head.
+						//in order to do that we need to know the size of this lump.
+						//Ideally I can attach this to lump when I preparse.
+						int streamSize = 0;						
+						
+						for(int i = 0; i != lump->streamCount; i++)
+						{
+							Stream* stream = lump->streamArray[i];
+							streamSize += stream->Packedbits();
+						}
+						*/
+
+
+					}
+
 						//for each stream
 						for(int i = 0; i != lump->streamCount; i++)
 						{
@@ -309,7 +329,6 @@ using namespace GnssMetadata;
 	void GNSSReader::changeWD(const char* pathToFile)
 	{
 		
-
 		std::string fname = std::string(pathToFile,strlen(pathToFile));
 		std::string dir;
 		const size_t last_slash_idx = fname.rfind('\\');

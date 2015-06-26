@@ -29,7 +29,7 @@ public:
 
 	//Puts a sample in the buffer. Only supports doubles for now
 	void putSample(double sample);
-	//???
+	//returns ID of stream
 	std::string getID();
 	//Points to the next open spot in the decoded stream.
 	uint64_t getSamplePtr();

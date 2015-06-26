@@ -41,6 +41,11 @@ void testSuite()
 		test6.setPrintOptions(false,true);
 		test6.start();
 
+		GNSSReader test7 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padding\\test.xml",100000L,200000L,1000000L);
+		test7.makeDecStreams();
+		test7.setPrintOptions(false,true);
+		test7.start();
+
 	} catch (std::exception& e) {
 			printf(e.what());
 	}
