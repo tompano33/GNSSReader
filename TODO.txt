@@ -1,4 +1,4 @@
-Throw error if chunkbuffer (blockbuffer?) is requested to read more bytes than it has in it.
+ChunkBuffer vs BlockBuffer.
 Encodings not supported other than two's complement.
 Shifting, Padding not supported whatsoever.
 Investigate ID parameter of decstream.

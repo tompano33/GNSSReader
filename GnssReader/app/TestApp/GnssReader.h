@@ -32,14 +32,16 @@ class GNSSReader {
 	//given the name of the first XML file, crawls through all the other XML files to build a list of data files
 	void makeFileList(std::string first);
 
-	//changes Working Directory.
-	void changeWD(const char* pathToFile);
+
 public:
+
+	//changes Working Directory.
+	static void changeWD(const char* pathToFile);
 
 	//Returns Decoded Streams as an array
 	DecStream** getDecStreamArray();
 	//Takes a path to an XML file, the size of the readbuffer, the size of the intermediate buffer, the output streamsize, any additional paths to search, and count of blocks to read.
-	GNSSReader::GNSSReader(const char* pathToFile,uint64_t readSize,uint64_t buffSize,uint64_t streamSize,const char** addlPaths = NULL, uint64_t blockTotal = -1);
+	GNSSReader::GNSSReader(const char* pathToFile,uint64_t readSize,uint64_t buffSize,uint64_t streamSize, uint64_t blockTotal = -1,const char** addlPaths = NULL, uint64_t pathCount = 0);
 	//Starts decoding a file and puts it in outputstream
 	void start();
 	//Instantiates the decoded streams.

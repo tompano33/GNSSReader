@@ -26,6 +26,8 @@ class FileReader{
 	bool killThreadFlag;				//A Flag that can kill all file reading operations if need be.
 	std::vector<std::string> fnames;	//Holds all the SDR files in consecutive order.
 	int filePtr;						//points to which file we are on in the vector.
+	char** pathNames;
+	uint64_t pathNameCount;
 
 	//Helper function to start a thread of a class method at runtime.
 	static void ThreadEntry(void *p);
@@ -36,7 +38,7 @@ class FileReader{
 public:
 
 	//Needs a list of sdr data file names, the count of how many bytes to read a time, and the size of the buffer to store the bytes. 
-	FileReader::FileReader(std::vector<std::string> fname,uint64_t readBufferSize, uint64_t intermediateBufferSize);
+	FileReader::FileReader(std::vector<std::string> fname,uint64_t readBufferSize, uint64_t intermediateBufferSize, const char *origPath, const char** paths, uint64_t pathCount);
 
 	//Starts a thread that populates intermediatebuffer.
 	void readAll();

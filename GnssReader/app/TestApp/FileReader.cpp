@@ -10,15 +10,26 @@
 
 #include "FileReader.h"
 #include "IBuffer.h"
+#include "GnssReader.h"
 
-
-	FileReader::FileReader(std::vector<std::string> fnames,uint64_t readBufferSize, uint64_t intermediateBufferSize){
+	FileReader::FileReader(std::vector<std::string> fnames,uint64_t readBufferSize, uint64_t intermediateBufferSize,const char* origPath,const char** addlPaths,uint64_t pathCount){
 		this->readBufferSize = readBufferSize;
 		ib = new IBuffer(intermediateBufferSize);
 		buff = new char[readBufferSize];
 		killThreadFlag = false;
 		this->fnames = fnames;
 		filePtr = 0;
+
+		//copy const strings to something that wont go out of scope.
+		pathNames = new char*[pathCount+1];
+		pathNames[0] = strdup(origPath);
+
+		for(int i = 1 ; i < pathCount; i++)
+		{
+			pathNames[i] = strdup(addlPaths[i-1]);
+		}
+
+		pathNameCount = pathCount+1;
 		prepareHandle();
 	}
 
@@ -102,18 +113,33 @@
 
 	void FileReader::prepareHandle()
 	{
+		
 		bytesRead = 0;
 		std::wstring stemp = std::wstring(fnames.at(filePtr).begin(), fnames.at(filePtr).end());
 		LPCWSTR wfname = stemp.c_str();
-		sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
-		if(sdrFile == INVALID_HANDLE_VALUE)
+		boolean fileFound = false;
+		
+		for(int i = 0; i < pathNameCount; i++)
+		{			
+			GNSSReader::changeWD(pathNames[i]);
+			sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
+
+			if(sdrFile == INVALID_HANDLE_VALUE)
+			{
+				continue;
+			}	
+
+			GetFileSizeEx(sdrFile,&fileSize);
+			filePtr++;
+			fileFound = true;
+			break;
+		}
+
+		if(!fileFound)
 		{
-			printf("Could not open %S.\n", fnames.front().c_str());
-			CloseHandle(sdrFile);
+			printf("Data file could not be found");
 			std::cin.get();
-		}	
-		GetFileSizeEx(sdrFile,&fileSize);
-		filePtr++;
+		}
 	}
 
 	FileReader::~FileReader(){

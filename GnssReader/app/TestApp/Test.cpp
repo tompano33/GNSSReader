@@ -6,7 +6,7 @@ void testSuite()
 {
 	try{
 		
-		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",5L,10L,1000L,NULL,1);
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",5L,10L,1000L,1,NULL,0);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.start();
@@ -21,16 +21,20 @@ void testSuite()
 		test3.setPrintOptions(true,false);
 		test3.start();
 
-		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L, NULL,5);
+		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L,5,NULL,0);
 		test4.makeDecStreams();
 		test4.setPrintOptions(true,false);
 		test4.start();
 
-		
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",100000L,200000L,1000000L);
 		test5.makeDecStreams();
 		test5.setPrintOptions(true,false);
 		test5.start();
+
+		GNSSReader test6 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",100000L,200000L,1000000L);
+		test6.makeDecStreams();
+		test6.setPrintOptions(false,false);
+		test6.start();
 
 	} catch (std::exception& e) {
 			printf(e.what());

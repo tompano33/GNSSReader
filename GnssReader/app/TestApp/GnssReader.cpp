@@ -88,13 +88,14 @@ using namespace GnssMetadata;
 		return decStreamArray;
 	}
 
-	GNSSReader::GNSSReader(const char* pathToFile, uint64_t readSize, uint64_t buffSize, uint64_t streamSize,const char** addlPaths, uint64_t blockTotal)
+	GNSSReader::GNSSReader(const char* pathToFile, uint64_t readSize, uint64_t buffSize, uint64_t streamSize, uint64_t blockTotal, const char** addlPaths, uint64_t pathCount)
 	{
 		//total amout of blocks to read, -1 means read all.
 		blocksLeftToRead = blockTotal;
 		printStats = false;
 		printSamples = false;
 		mdPtr = 0;
+		//to parse XML.
 		changeWD(pathToFile);
 		std::string fname = std::string(pathToFile,strlen(pathToFile));
 		this->streamSize = streamSize;
@@ -103,7 +104,7 @@ using namespace GnssMetadata;
 		{
 
 			makeFileList(fname);
-			fr = new FileReader(*sdrFileNames,readSize,buffSize);
+			fr = new FileReader(*sdrFileNames,readSize,buffSize,pathToFile,addlPaths,pathCount);
 
 		} catch (TranslationException e)
 		{
@@ -307,6 +308,8 @@ using namespace GnssMetadata;
 
 	void GNSSReader::changeWD(const char* pathToFile)
 	{
+		
+
 		std::string fname = std::string(pathToFile,strlen(pathToFile));
 		std::string dir;
 		const size_t last_slash_idx = fname.rfind('\\');
