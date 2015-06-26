@@ -1,0 +1,17 @@
+Throw error if chunkbuffer (blockbuffer?) is requested to read more bytes than it has in it.
+Encodings not supported other than two's complement.
+Shifting, Padding not supported whatsoever.
+Investigate ID parameter of decstream.
+Support more data types in decStream than just doubles.
+Make DecStream threadSafe.
+Throw Error if DecStream has no more space for items.
+Make IntermediateBuffer a friendclass of FileReader.
+What is FileReader.HANDLE.
+What is FileReader.XmlWasValid.
+Assure readfile is synchronous
+Complex values
+stream has multiple encodings?
+PathSearching
+Fix one metadata/multiple files
+Ibuffer.write and Ibuffer.read inconsistent
+xproc.Load(metadataFile, false, md); 

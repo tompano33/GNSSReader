@@ -20,10 +20,10 @@ public:
 };
 
 
-	//Converts lists contaning referenced objects to an array without referenced objects. Run this before doing any XML operations!
 	template<typename T, typename PT> void XMLtoMeta::fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList, T** objArray){
 
 		int i = 0;
+		//for every object in the list.
 		for(std::list<T>::iterator iter = objList->begin();
 			iter !=objList->end();iter++)
 		{
@@ -127,12 +127,9 @@ public:
 
 	XMLtoMeta::XMLtoMeta(const char* metadataFile){
 		XmlProcessor xproc;
-		//checkAPI
+		//checkAPI to see if this can cause trouble
 		xproc.Load(metadataFile, false, md); 
 		fixAllRefdObjs();		
-	}
-
-	XMLtoMeta::XMLtoMeta(){
 	}
 
 
