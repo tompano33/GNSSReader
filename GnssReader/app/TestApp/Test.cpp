@@ -31,9 +31,14 @@ void testSuite()
 		test5.setPrintOptions(true,false);
 		test5.start();
 
-		GNSSReader test6 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",100000L,200000L,1000000L);
+		char** paths = new char*[3];
+		paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\";
+		paths[1] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\";
+		paths[2] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\extremestorage\\";
+
+		GNSSReader test6 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",100000L,200000L,1000000L,-1,(const char**)paths,3);
 		test6.makeDecStreams();
-		test6.setPrintOptions(false,false);
+		test6.setPrintOptions(false,true);
 		test6.start();
 
 	} catch (std::exception& e) {

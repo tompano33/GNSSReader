@@ -24,7 +24,7 @@
 		pathNames = new char*[pathCount+1];
 		pathNames[0] = strdup(origPath);
 
-		for(int i = 1 ; i < pathCount; i++)
+		for(int i = 1 ; i < pathCount+1; i++)
 		{
 			pathNames[i] = strdup(addlPaths[i-1]);
 		}
