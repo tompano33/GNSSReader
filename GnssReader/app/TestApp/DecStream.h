@@ -11,10 +11,10 @@
 
 class DecStream{
 
-	double* sampleBuf; //A buffer for samples
-	uint64_t sampleCapacity; //Maximum capacity of buffer (it's size)
-	uint64_t samplePtr; //Where we are pointing in the buffer.
-	std::string id; //Name of this buffer's stream. TODO: Do I need this?
+	double* sampleBuf;			//A buffer for samples
+	uint64_t sampleCapacity;	//Maximum capacity of buffer (it's size)
+	uint64_t samplePtr;			//Where we are pointing in the buffer.
+	std::string id;				//Name of this buffer's stream. TODO: Do I need this?
 	
 	//Pointer to the XML object this stream represents.
 	//This is important, because when I am ready to put a sample in a stream, 

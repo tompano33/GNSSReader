@@ -1,31 +1,32 @@
 #include <windows.h>
 #include "IBuffer.h"
 
-//Intermediate Buffer. Stores raw SDR data from file before it gets read.
-	IBuffer::IBuffer(long BUFFERSIZE){
-		this->BUFFERSIZE = BUFFERSIZE;
-		ibuf = new char[BUFFERSIZE];
+	IBuffer::IBuffer(uint64_t bufSize){
+		this->bufferSize = bufSize;
+		ibuf = new char[bufSize];
 		bufPtr = 0;
 		oldPtr = 0;
 		numBytesStored = 0;
 	}
 
 	//returns true if write was successful
-	bool IBuffer::write(char* bytes, int count)
+	bool IBuffer::write(char* bytes, uint64_t count)
 	{
 		//Not enough room to put bytes!
-		if((BUFFERSIZE-numBytesStored) < count){
+		if((bufferSize-numBytesStored) < count){
 			return false;
 		} else
 		{
-			if(count < (BUFFERSIZE - bufPtr) ) 
+			//the buffer has space, and we aren't going to wrap around, we can just memcpy
+			if(count < (bufferSize- bufPtr) ) 
 			{
 				memcpy(ibuf+bufPtr, bytes, count);
 				bufPtr += count;
 			}
 			else
 			{
-				int spaceLeftAtEnd = (BUFFERSIZE - bufPtr);
+				//we need to write twice, once before the end, one after
+				int spaceLeftAtEnd = (bufferSize - bufPtr);
 				memcpy(ibuf+bufPtr,bytes,spaceLeftAtEnd);
 				memcpy(ibuf,bytes+spaceLeftAtEnd,count-spaceLeftAtEnd);
 				bufPtr = count-spaceLeftAtEnd;
@@ -36,17 +37,17 @@
 	}
 
 	//TODO throw error if overreading
-	void IBuffer::read(int size, char* buf)
+	void IBuffer::read(uint64_t size, char* buf)
 	{
 		while(size > numBytesStored){;}
 
-		if(size < (BUFFERSIZE - oldPtr))
+		if(size < (bufferSize - oldPtr))
 		{
 			memcpy(buf,ibuf+oldPtr,size);
 			oldPtr+= size;
 		} else 
 		{
-			int spaceLeftAtEnd = (BUFFERSIZE - oldPtr);
+			int spaceLeftAtEnd = (bufferSize - oldPtr);
 			memcpy(buf,ibuf+oldPtr,spaceLeftAtEnd);
 			memcpy(buf+spaceLeftAtEnd,ibuf,size-spaceLeftAtEnd);
 			oldPtr=size-spaceLeftAtEnd;
@@ -55,21 +56,22 @@
 		numBytesStored -=size;
 	};
 
-	int IBuffer::getNumBytesStored()
+	uint64_t IBuffer::getNumBytesStored()
 	{
 		return numBytesStored;
 	};
 
-	void IBuffer::skip(int size)
+	void IBuffer::skip(uint64_t size)
 	{
+		//wait for there to be enough bytes to skip
 		while(size > numBytesStored){;}
 			
-		if(size < (BUFFERSIZE - oldPtr))
+		if(size < (bufferSize - oldPtr))
 		{
 				oldPtr+= size;
 		} else 
 		{
-			int spaceLeftAtEnd = (BUFFERSIZE - oldPtr);
+			uint64_t spaceLeftAtEnd = (bufferSize - oldPtr);
 			oldPtr=size-spaceLeftAtEnd;
 		}
 			

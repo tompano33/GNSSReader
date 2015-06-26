@@ -1,17 +1,14 @@
-//Used to find the mean and variance of a block.
 /**
- * File: BlockAnalytics.cpp
+ * File: StreamAnalytics.cpp
  * Author: WJLIDDY
- * Given some values (of a block), finds the mean and variance
  */
 
 #include<cstdint>
-#include<stdio.h>
 #include<iostream>
+#include<stdio.h>
 #include<GnssMetadata/Metadata.h>
 #include "StreamAnalytics.h"
 #include "DecStream.h"
-
 
 	void StreamAnalytics::setStream(DecStream* s)
 	{
@@ -38,17 +35,6 @@
 		variance = sum / (s->getSamplePtr()-1);
 	};
 
-	double StreamAnalytics::getVar(){
-	//	return variance;
-		return -1;
-	};
-
-	double StreamAnalytics::getMean(){
-	//	return mean;
-		return -1;
-	};
-
-
 	void StreamAnalytics::printMeanAndVar(){
 		calcMean();
 		calcVar();
@@ -58,7 +44,6 @@
 
 	void StreamAnalytics::printAllSamples()
 	{
-	
 		for(int i = 0; i != s->getSamplePtr(); i++)
 		{
 			std::cout << s->getBuf()[i] <<  " " << (char)s->getBuf()[i]<< std::endl;

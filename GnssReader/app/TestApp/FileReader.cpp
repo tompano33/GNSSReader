@@ -1,16 +1,18 @@
+/**
+ * File: FileReader.cpp
+ * Author: WJLIDDY
+ */
+#include <iostream>
+#include <vector>
 #include <windows.h>
 #include <stdio.h>
-#include <iostream>
-#include "FileReader.h"
 #include <process.h>
+
+#include "FileReader.h"
 #include "IBuffer.h"
-#include <vector>
 
-	//Reads an SDR File. Puts the file contents in it's intermediateBuffer
 
-	//Needs the name of the file. Needs to know the amount of bytes to load at once. 
-	//Also needs the size of intermediate buffer. Puts file handle in memory. Inits buffer.
-	FileReader::FileReader(std::vector<std::string> fnames,long readBufferSize, long intermediateBufferSize){
+	FileReader::FileReader(std::vector<std::string> fnames,uint64_t readBufferSize, uint64_t intermediateBufferSize){
 		this->readBufferSize = readBufferSize;
 		ib = new IBuffer(intermediateBufferSize);
 		buff = new char[readBufferSize];
@@ -20,22 +22,25 @@
 		prepareHandle();
 	}
 
-	//Tries to populate intermediate buffer with samples. To be called as a thread.
+	//Assumes that sdrFile, buff both defined.
 	void FileReader::readFile()
 	{
-		//More elegant way to kill thread?
+		//Perhaps there is a more elegant way to run and kill the thread, but this works
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
 		{
 			//don't overread
 			if(readBufferSize > fileSize.QuadPart - bytesRead)
 				readBufferSize = fileSize.QuadPart - bytesRead;
 
-			//read operation
+			//Does all the reading
 			DWORD i;
 			int readFile = ReadFile(sdrFile, buff, readBufferSize, &i, NULL);
+
 			if(!readFile && GetLastError() != ERROR_IO_PENDING)
-					printf ("ReadFile failed with error %d.\n", GetLastError());
+				printf ("ReadFile failed with error %d.\n", GetLastError());
+
 			if(readFile){
+				//Todo: find out how to abandon this thead for a while.
 				while(!ib->write(buff,readBufferSize) && !killThreadFlag){;}
 				bytesRead = bytesRead + readBufferSize;
 			} else {
@@ -43,6 +48,7 @@
 			}
 
 			//load in next file
+			//(that is, file is done reading and there are more files).
 			if(bytesRead == fileSize.QuadPart && filePtr < fnames.size())
 			{
 				CloseHandle(sdrFile);
@@ -53,7 +59,6 @@
 		}
 		CloseHandle(sdrFile);
 		std::cout << "Reading of File(s) Ended.\n";
-	
 	};
 
 	void FileReader::getBufferedBytes(char* b, int count)
@@ -61,11 +66,6 @@
 		ib->read(count,b);
 	}
 
-	void FileReader::close(){
-	//close file
-		if(CloseHandle(sdrFile) != 0)
-			printf("file handle closed successfully!\n");
-	};
 
 	void FileReader::readAll()
 	{
@@ -82,11 +82,11 @@
 		return (bytesRead == fileSize.QuadPart && ib->getNumBytesStored() == 0);
 	}
 
-	long FileReader::numBytesLeftToReadFromFile(){
+	uint64_t FileReader::numBytesLeftToReadFromFile(){
 		return fileSize.QuadPart - bytesRead;
 	}
 
-	long FileReader::numBytesLeftInBuffer(){
+	uint64_t FileReader::numBytesLeftInBuffer(){
 		return  ib->getNumBytesStored();
 	}
 
