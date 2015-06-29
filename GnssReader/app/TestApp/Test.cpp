@@ -20,12 +20,17 @@ void testSuite()
 		test3.makeDecStreams();
 		test3.setPrintOptions(true,false);
 		test3.start();
+		*/
+
 
 		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L,5,NULL,0);
 		test4.makeDecStreams();
 		test4.setPrintOptions(true,false);
+
 		test4.start();
 
+
+		/**
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",100000L,200000L,1000000L);
 		test5.makeDecStreams();
 		test5.setPrintOptions(true,false);
@@ -40,22 +45,12 @@ void testSuite()
 		test6.makeDecStreams();
 		test6.setPrintOptions(false,true);
 		test6.start();
-		*/
+	
 		GNSSReader test7 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\lshp.xml",100000L,200000L,1000000L);
 		test7.makeDecStreams();
 		test7.setPrintOptions(false,true);
 		test7.start();
-/**
-		GNSSReader test8 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\rshp.xml",100000L,200000L,1000000L);
-		test8.makeDecStreams();
-		test8.setPrintOptions(false,true);
-		test8.start();
-
-		GNSSReader test9 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\rstp.xml",100000L,200000L,1000000L);
-		test9.makeDecStreams();
-		test9.setPrintOptions(false,true);
-		test9.start();
-*/
+		*/
 	} catch (std::exception& e) {
 			printf(e.what());
 	}

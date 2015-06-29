@@ -32,6 +32,8 @@ class GNSSReader {
 	//given the name of the first XML file, crawls through all the other XML files to build a list of data files
 	void makeFileList(std::string first);
 
+	//Helper function to start a thread of a class method at runtime.
+	static void ThreadEntry(void *p);
 
 public:
 
@@ -51,6 +53,9 @@ public:
 	//Call this if you want to print block statisitics to the console
 	void setPrintOptions(bool printStats, bool printSamples);
 	~GNSSReader();
+
+	//Starts a thread that populates intermediatebuffer.
+	void startAsThread();
 };
 
 

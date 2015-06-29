@@ -353,4 +353,14 @@ using namespace GnssMetadata;
 		}
 		chdir(dir.c_str());
 	}
+	
+	void GNSSReader::ThreadEntry(void *p)
+	{
+		((GNSSReader *) p)->start(); 
+		_endthread();
+	}
 
+	void GNSSReader::startAsThread()
+	{
+		_beginthread(GNSSReader::ThreadEntry, 0, this);
+	};

@@ -90,6 +90,10 @@
 	}
 
 	bool FileReader::hasReadWholeFile(){
+		std::cout << bytesRead;
+		std::cout << fileSize.QuadPart;
+		std::cout << ib->getNumBytesStored();
+
 		return (bytesRead == fileSize.QuadPart && ib->getNumBytesStored() == 0);
 	}
 
