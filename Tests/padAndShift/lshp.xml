@@ -79,6 +79,7 @@
         <url>lshp.dat</url>
 		<!-- Required -->
         <timestamp>2014-12-30T22:38:54.905999999Z</timestamp>
+		<next>rshp.xml</next>
         <lane id="fooData"/>
     </file>
 </metadata>

@@ -9,8 +9,10 @@ Assure readfile is synchronous
 Complex values
 stream has multiple encodings?
 Fix one metadata/multiple files
+API wants 'Head' not 'H'
 
 Minor:
 Make IntermediateBuffer a friendclass of FileReader.
 xproc.Load(metadataFile, false, md); throws any errors?
 Ibuffer.write and Ibuffer.read inconsistent
+

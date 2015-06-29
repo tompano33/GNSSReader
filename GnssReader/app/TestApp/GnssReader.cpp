@@ -55,11 +55,13 @@ using namespace GnssMetadata;
 					{
 					Lump* lump = chunk->lumpArray[i];
 
-					//skip header padding here!
-					if(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Head ||
-						chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Tail)
+
+
+					if( (chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Head) ||
+						(chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Tail))
 					{
-						/** The Padding is at the start */
+						/** The Padding is at the start */	
+						//std::cout << "Skipping! H" << std::endl;
 						cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
 					}
 
@@ -93,10 +95,11 @@ using namespace GnssMetadata;
 						}
 
 					//skip tail padding here!
-					if(chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head ||
-						chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail)
+					if( (chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head) ||
+						(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail) )
 					{
 						/** The Padding is at the start */
+					//	std::cout << "Skipping!! T" << std::endl;
 						cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
 					}
 					}
@@ -304,9 +307,15 @@ using namespace GnssMetadata;
 				Chunk* c = b->chunkArray[j];
 				for(int k = 0; k!= c->lumpCount;k++){
 					Lump* l = c->lumpArray[k];
+
+					l->lumpSize = 0;
+
 					for(int i2  = 0; i2 != l->streamCount;i2++)
 					{
 						Stream* s = l->streamArray[i2];
+
+						
+						l->lumpSize += s->Packedbits();
 
 						bool streamReassigned = false;
 						//we got a stream! Match it with a predefined one, based on the ID.
