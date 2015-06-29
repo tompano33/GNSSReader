@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.ion.org/standards/sdrwg/schema/metadata.xsd">
+
+    <stream id="2stream">
+        <ratefactor>1</ratefactor>
+        <quantization>1</quantization>
+        <packedbits>2</packedbits>
+        <alignment>N</alignment>
+        <format>IF</format>
+		<!-- Encoding is 8bit -->
+        <encoding>INT8</encoding>
+        <band id="fooStreamExternal">
+			<!-- FCAR=CENTERFREQUENCY FIF="4092000.000000" --> 
+            <centerfreq format="MHz">1575420000</centerfreq>
+            <translatedfreq format="Hz">4092000</translatedfreq>
+        </band>
+    </stream>
+	
+	<stream id="4stream">
+        <ratefactor>1</ratefactor>
+        <quantization>1</quantization>
+        <packedbits>4</packedbits>
+        <alignment>N</alignment>
+        <format>IF</format>
+		<!-- Encoding is 8bit -->
+        <encoding>INT8</encoding>
+        <band id="fooStreamExternal">
+			<!-- FCAR=CENTERFREQUENCY FIF="4092000.000000" --> 
+            <centerfreq format="MHz">1575420000</centerfreq>
+            <translatedfreq format="Hz">4092000</translatedfreq>
+        </band>
+    </stream>
+	
+	    <stream id="1stream">
+        <ratefactor>1</ratefactor>
+        <quantization>1</quantization>
+        <packedbits>1</packedbits>
+        <alignment>N</alignment>
+        <format>IF</format>
+		<!-- Encoding is 8bit -->
+        <encoding>INT8</encoding>
+        <band id="fooStreamExternal">
+			<!-- FCAR=CENTERFREQUENCY FIF="4092000.000000" --> 
+            <centerfreq format="MHz">1575420000</centerfreq>
+            <translatedfreq format="Hz">4092000</translatedfreq>
+        </band>
+    </stream>
+	
+    <lane id="fooData">
+        <bandsrc idband="fooStream" idsrc="fooStreamExternal"/>
+        <session id="fooSession">
+            <contact>Me</contact>
+            <campaign>Lump Testing</campaign>
+            <scenario>Example n</scenario>
+        </session>
+        <system id="fooSystem"/>
+        <block id = "fooBlock">
+		<!--56320 samples.-->
+            <cycles>4</cycles>
+            <chunk>
+				<!-- Each word holds 1 samples, so 4*[4092] = 16368 samples  -->
+                <sizeword>1</sizeword>
+                <countwords>1</countwords>
+                <endian>Undefined</endian>
+                <padding>Head</padding>
+                <wordshift>Left</wordshift>
+                <lump>
+                    <stream id="2stream"/>
+					<stream id="4stream"/>           
+					<stream id="1stream"/>
+                </lump>
+            </chunk>
+        </block>
+    </lane>
+    <system id="fooSystem">
+         <freqbase format="Hz">16368000</freqbase>
+    </system>
+    <file>
+        <url>lshp.dat</url>
+		<!-- Required -->
+        <timestamp>2014-12-30T22:38:54.905999999Z</timestamp>
+        <lane id="fooData"/>
+    </file>
+</metadata>
