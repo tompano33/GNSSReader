@@ -56,29 +56,22 @@ using namespace GnssMetadata;
 					Lump* lump = chunk->lumpArray[i];
 
 					//skip header padding here!
-					if(chunk->Padding() == chunk->Head)
+					if(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Head ||
+						chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Tail)
 					{
-						/** TODO assign lump sizes
-
-						//so we need to know how much padding there is on the head.
-						//in order to do that we need to know the size of this lump.
-						//Ideally I can attach this to lump when I preparse.
-						int streamSize = 0;						
-						
-						for(int i = 0; i != lump->streamCount; i++)
-						{
-							Stream* stream = lump->streamArray[i];
-							streamSize += stream->Packedbits();
-						}
-						*/
-
-
+						/** The Padding is at the start */
+						cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
 					}
 
 						//for each stream
 						for(int i = 0; i != lump->streamCount; i++)
 						{
-							Stream* stream = lump->streamArray[i];
+							Stream* stream;
+							//If RIGHT-SHIFTED read the last stream first.
+							if(chunk->Shift() == chunk->Right)
+								stream = lump->streamArray[(lump->streamCount - 1) - i];
+							else
+								stream = lump->streamArray[i];
 
 							int8_t packedBitCount = stream->Packedbits();
 
@@ -98,6 +91,14 @@ using namespace GnssMetadata;
 								}
 							}
 						}
+
+					//skip tail padding here!
+					if(chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head ||
+						chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail)
+					{
+						/** The Padding is at the start */
+						cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
+					}
 					}
 				}
 			}
@@ -233,6 +234,7 @@ using namespace GnssMetadata;
 
 	//TODO Improve arbitrary array to vector.
 	//Prepares decoded streams.
+	//TODO If lumpsize changes things break
 	void GNSSReader::makeDecStreams(){
 
 		//TODO use a vector or something
@@ -252,10 +254,14 @@ using namespace GnssMetadata;
 				Chunk* c = b->chunkArray[j];
 				for(int k = 0; k!= c->lumpCount;k++){
 					Lump* l = c->lumpArray[k];
+					l->lumpSize = 0;
 					for(int i2  = 0; i2 != l->streamCount;i2++)
 					{
 						Stream* s = l->streamArray[i2];
 						//we got a stream! Make sure it's not a duplicate
+
+						l->lumpSize += s->Packedbits();
+
 						bool newStream = true;
 
 						for(int c = 0; newStream &&  c != decStreamCount; c++){	

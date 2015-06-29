@@ -25,6 +25,8 @@ public:
 	/** Returns true if every value in the chunkBuffer has been read */
 	bool chunkFullyRead();
 
+	void skipBits(uint8_t bitsToSkip);
+
 	/** Deallocates chunkInputBuffer */
 	ChunkBuffer::~ChunkBuffer();
 };

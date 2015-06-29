@@ -86,6 +86,40 @@ using namespace GnssMetadata;
 		return sampleValue;
 	};
 
+	void ChunkBuffer::skipBits(uint8_t bitsToRead)
+	{
+		uint8_t totalBitCount = bitsToRead;
+		while(bitsToRead > 0)
+		{
+			if(bufferBitPointer == 0)
+			{
+				if(bitsToRead >=8)
+				{
+					bufferBytePointer++;
+					bitsToRead = bitsToRead - 8;
+				} else 
+				{
+					bufferBitPointer = bufferBitPointer + bitsToRead;
+					bitsToRead = 0;
+				}
+			} else
+			{
+				int remainingBits = 8 - bufferBitPointer;
+
+				if(bitsToRead >= remainingBits)
+				{
+					bufferBytePointer++;
+					bufferBitPointer = 0;
+					bitsToRead -= (remainingBits);
+				} else 
+				{
+					bufferBitPointer += bitsToRead;
+					bitsToRead = 0;
+				}
+			}
+		}
+	};
+
 	ChunkBuffer::~ChunkBuffer(){
 		delete [] chunkInputBuffer;
 	}
