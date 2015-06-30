@@ -1,18 +1,16 @@
 Major:
 ChunkBuffer vs BlockBuffer.
 Encodings not supported other than two's complement.
-Shifting, Padding not supported whatsoever.
 Support more data types in decStream than just doubles.
-Make DecStream threadSafe.
 Throw Error if DecStream has no more space for items.
-Assure readfile is synchronous
 Complex values
 stream has multiple encodings?
 Fix one metadata/multiple files
-API wants 'Head' not 'H'
 
 Minor:
 Make IntermediateBuffer a friendclass of FileReader.
 xproc.Load(metadataFile, false, md); throws any errors?
 Ibuffer.write and Ibuffer.read inconsistent
+Assure readfile is synchronous
+API wants 'Head' not 'H'
 
