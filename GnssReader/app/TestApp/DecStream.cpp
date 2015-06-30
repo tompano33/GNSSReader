@@ -15,6 +15,7 @@
 		samplePtr = 0;
 		this->id = id;
 		this->correspondingStream = corStream;
+		InitializeCriticalSection(&crit);
 	};
 
 	DecStream::~DecStream()
@@ -24,8 +25,12 @@
 
 
 	void DecStream::putSample(double sample){
+		
+        EnterCriticalSection(&crit);
 		sampleBuf[samplePtr] = sample;
 		samplePtr++;
+        LeaveCriticalSection(&crit);
+
 	};
 
 	std::string DecStream::getID(){
@@ -56,3 +61,11 @@
 		correspondingStream = s;
 	}
 
+	void DecStream::flushOutputStream(double* d, uint64_t* byteCount)
+	{	
+        EnterCriticalSection(&crit);
+		memcpy(d,sampleBuf,sizeof(double)*samplePtr);
+		*byteCount = samplePtr;
+		samplePtr = 0;
+        LeaveCriticalSection(&crit);
+	}

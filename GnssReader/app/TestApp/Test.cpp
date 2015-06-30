@@ -23,13 +23,26 @@ void testSuite()
 		*/
 
 
-		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L,5,NULL,0);
-		test5.makeDecStreams();
-		test5.setPrintOptions(true,false);
+		//Initialize the GNSS Reader by providing an argument to it's metadata.
+		//Then the size of the read input, the size of the intermediate buffer, and the size of the output buffer
+		//Optionally, pass the number of blocks you want to read, and additional paths to look for files on
+		//Finally, pass the number of paths that you passed
+		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L,5,NULL,0);
 
-		test5.startAsThread();
+		//Makes test4.decStreamCount() decStreams
+		test4.makeDecStreams();
+		//Starts this as a thread.
+		test4.startAsThread();
+	
+		while(!test4.isDone()){
 
-		while(!test5.isDone()){;}
+			//TODO what if there is no space in the buffer?
+			//Once test4 finishes, you will still have to flush the stream one more time.
+			uint64_t byteCount;
+			double* d = new double[test4.getDecStreamArray()[0]->getBufSize()];
+			test4.getDecStreamArray()[0]->flushOutputStream(d,&byteCount);
+			std::cout << byteCount << std::endl;
+		}
 		
 		/**
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",100000L,200000L,1000000L);

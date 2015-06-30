@@ -26,6 +26,8 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
+
+
 using namespace GnssMetadata;
 	
 	void GNSSReader::readChunkCycles(Block * block, uint32_t cycles)
@@ -214,6 +216,7 @@ using namespace GnssMetadata;
 				readChunkCycles(block, cycles);
 				fr->skipBufferedBytes(footerSize);
 
+				/**
 				StreamAnalytics sa;
 				for(int i = 0; i != decStreamCount; i++)
 				{
@@ -226,6 +229,7 @@ using namespace GnssMetadata;
 
 					decStreamArray[i]->clear();
 				}
+				*/
 
 			}
 		}

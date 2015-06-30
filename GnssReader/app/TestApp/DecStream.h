@@ -7,7 +7,9 @@
 #define DECSTREAM_H_H
 
 #include<stdint.h>
+#include <windows.h>
 #include<GnssMetadata/Xml/XmlProcessor.h>
+
 
 class DecStream{
 
@@ -21,6 +23,10 @@ class DecStream{
 	//I compare the address of the XMLstream to this field in the DecStream 
 	//If they are the same I know this is the right buffer.
 	GnssMetadata::Stream* correspondingStream;
+
+	//do not write and read
+	CRITICAL_SECTION crit; 
+
 
 public:
 	
@@ -41,6 +47,8 @@ public:
 	GnssMetadata::Stream* getCorrespondingStream();
 	//Sets the corresponding XML stream. Needed when entering a new XML file and the reference to the old stream is lost.
 	void setCorrespondingStream(GnssMetadata::Stream* s);
+	//Flushes buffer to spec'd location
+	void flushOutputStream(double* buf, uint64_t* byteCount);
 	//returns buffer size
 	uint64_t getBufSize();
 	~DecStream();
