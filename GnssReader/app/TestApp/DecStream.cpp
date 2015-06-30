@@ -26,6 +26,8 @@
 
 	void DecStream::putSample(double sample){
 		
+		while(samplePtr >= sampleCapacity){;}
+		//wait for a withdraw
         EnterCriticalSection(&crit);
 		sampleBuf[samplePtr] = sample;
 		samplePtr++;
