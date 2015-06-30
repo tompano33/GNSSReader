@@ -15,6 +15,7 @@
 using namespace GnssMetadata;
 
 class GNSSReader {
+
 	std::vector<Metadata*>* mdList;	//List of all metadata objects.
 	uint64_t mdPtr; //Pointer to metadata object we are currently decoding.
 	std::vector<std::string>* sdrFileNames; //List of all SDR file names to decode, in order. This can be disposed of when i have some time
@@ -34,6 +35,8 @@ class GNSSReader {
 
 	//Helper function to start a thread of a class method at runtime.
 	static void ThreadEntry(void *p);
+
+	bool done;
 
 public:
 
@@ -56,6 +59,8 @@ public:
 
 	//Starts a thread that populates intermediatebuffer.
 	void startAsThread();
+
+	bool isDone();
 };
 
 

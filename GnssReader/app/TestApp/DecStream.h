@@ -15,7 +15,7 @@ class DecStream{
 	uint64_t sampleCapacity;	//Maximum capacity of buffer (it's size)
 	uint64_t samplePtr;			//Where we are pointing in the buffer.
 	std::string id;				//Name of this buffer's stream. TODO: Do I need this?
-	
+	bool done;
 	//Pointer to the XML object this stream represents.
 	//This is important, because when I am ready to put a sample in a stream, 
 	//I compare the address of the XMLstream to this field in the DecStream 

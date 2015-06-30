@@ -67,6 +67,7 @@ public:
 	
 	//Kills off all buffers
 	~FileReader();
+
 };
 #endif
 

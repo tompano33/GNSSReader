@@ -23,13 +23,14 @@ void testSuite()
 		*/
 
 
-		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L,5,NULL,0);
-		test4.makeDecStreams();
-		test4.setPrintOptions(true,false);
+		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",100000L,200000L,1000000L,5,NULL,0);
+		test5.makeDecStreams();
+		test5.setPrintOptions(true,false);
 
-		test4.start();
+		test5.startAsThread();
 
-
+		while(!test5.isDone()){;}
+		
 		/**
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",100000L,200000L,1000000L);
 		test5.makeDecStreams();

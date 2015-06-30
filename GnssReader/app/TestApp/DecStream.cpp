@@ -9,6 +9,7 @@
 
 	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream * corStream)
 	{
+		done = false;
 		sampleCapacity = sampleCap;
 		sampleBuf = new double[sampleCapacity];
 		samplePtr = 0;
@@ -54,3 +55,4 @@
 	{
 		correspondingStream = s;
 	}
+

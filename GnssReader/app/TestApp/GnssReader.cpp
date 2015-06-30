@@ -115,6 +115,7 @@ using namespace GnssMetadata;
 	GNSSReader::GNSSReader(const char* pathToFile, uint64_t readSize, uint64_t buffSize, uint64_t streamSize, uint64_t blockTotal, const char** addlPaths, uint64_t pathCount)
 	{
 		//total amout of blocks to read, -1 means read all.
+		done = false;
 		blocksLeftToRead = blockTotal;
 		printStats = false;
 		printSamples = false;
@@ -175,6 +176,7 @@ using namespace GnssMetadata;
 
 	//Start decoding the file into stream(s)
 	void GNSSReader::start(){
+
 		//start the file reader thread. 
 		fr->readAll();
 	
@@ -183,6 +185,7 @@ using namespace GnssMetadata;
 		while(mdPtr < mdList->size())
 		{
 			md =  mdList->at(mdPtr++);
+		
 			repairDecStreams(md);
 	
 			//we don't do filesets yet, but almost
@@ -233,6 +236,8 @@ using namespace GnssMetadata;
 			std::cout << "Warning: Some samples did not get read! In Buffer: " << fr->numBytesLeftInBuffer() << " In File: " << fr->numBytesLeftToReadFromFile() << "\n" ;
 			fr->killReadThread();
 		}
+
+		done = true;
 	}
 
 	//TODO Improve arbitrary array to vector.
@@ -292,6 +297,7 @@ using namespace GnssMetadata;
 		delete fr;
 		for(int i = 0; i != decStreamCount; i++)
 		{
+			
 			delete decStreamArray[i];
 		}
 		delete [] decStreamArray;
@@ -357,10 +363,16 @@ using namespace GnssMetadata;
 	void GNSSReader::ThreadEntry(void *p)
 	{
 		((GNSSReader *) p)->start(); 
-		_endthread();
+		//_endthread();
 	}
 
 	void GNSSReader::startAsThread()
 	{
 		_beginthread(GNSSReader::ThreadEntry, 0, this);
+	};
+
+	
+	bool GNSSReader::isDone()
+	{
+		return done;
 	};
