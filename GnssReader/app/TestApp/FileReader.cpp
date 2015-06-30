@@ -69,7 +69,6 @@
 
 		}
 		CloseHandle(sdrFile);
-		std::cout << "Reading of File(s) Ended.\n";
 	};
 
 	void FileReader::getBufferedBytes(char* b, int count)

@@ -5,33 +5,6 @@
 void testSuite()
 {
 	try{
-	
-		
-
-		{
-		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",5L,10L,1000L,1,NULL,0);
-		test.makeDecStreams();
-		test.setPrintOptions(false,true);
-		test.start();
-		}
-		printf("1");
-		
-		{
-		GNSSReader test2 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\temporalforeach\\test.xml",10000L,20000L,1000000L);
-		test2.makeDecStreams();
-		test2.setPrintOptions(false,true);
-		test2.start();
-		}
-		printf("2");
-		
-		{
-		GNSSReader test3 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);
-		test3.makeDecStreams();
-		test3.setPrintOptions(true,false);
-		test3.start();
-		}
-
-		printf("3");
 
 		{
 		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",10000L,20000L,1000000L);
@@ -39,7 +12,13 @@ void testSuite()
 		test4.setPrintOptions(false,true);
 		test4.start();
 		}
-		printf("4");
+
+		{
+		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sevenEight\\test.xml",10000L,20000L,1000000L);
+		test4.makeDecStreams();
+		test4.setPrintOptions(false,true);
+		test4.start();
+		}
 		
 		/**
 		{

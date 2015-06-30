@@ -27,26 +27,33 @@ using namespace GnssMetadata;
 	int64_t ChunkBuffer::readBits(uint8_t bitsToRead, char* encoding)
 	{
 		uint8_t totalBitCount = bitsToRead;
-		uint64_t sampleValue = 0;	//value that will be returned
+		int64_t sampleValue = 0;	//value that will be returned
+
+
+		
+		std::cout << "Starting" << std::endl;
 		while(bitsToRead > 0)
 		{
-			if(bufferBitPointer == 0)
+			
+			//points to next readable bit
+			if(bufferBitPointer == 0) 
 			{
 				if(bitsToRead >=8)
 				{
 					//Since our buffer pointer is at 0, and we have at least 8 bytes to read, 
 					//we can just shift the return value left by 8 and add.
 					sampleValue = sampleValue << 8;
-					sampleValue = sampleValue + chunkInputBuffer[bufferBytePointer];
+					sampleValue = sampleValue | ((uint8_t)chunkInputBuffer[bufferBytePointer]);
 					bufferBytePointer++;
 					bitsToRead = bitsToRead - 8;
 				} else 
 				{
+					std::cout << "(" << (int)bitsToRead << ")" << std::endl;
 					//There are less than 8 bits, but our pointer is still at zero.
 					//make room in the sample value for some new bits.
 					sampleValue = sampleValue << bitsToRead;
 					//The bits will be at the beginning of the buffer, so we can simply shift them right.
-					sampleValue = sampleValue + (chunkInputBuffer[bufferBytePointer] >> (8-bitsToRead));
+					sampleValue = sampleValue | ((uint8_t)((uint8_t)(chunkInputBuffer[bufferBytePointer]) >> (8 - bitsToRead)));
 					bufferBitPointer = bufferBitPointer + bitsToRead;
 					bitsToRead = 0;
 				}
@@ -54,13 +61,13 @@ using namespace GnssMetadata;
 			{
 				//Here, the buffer-bit-pointer is not at zero. 
 				//So, we cannot take any shortcuts.
-				int remainingBits = 8 - bufferBitPointer;
+				uint8_t remainingBits = 8 - bufferBitPointer;
 
 				if(bitsToRead >= remainingBits)
 				{
 					//Here, we have more bits to read than there are in the buffer.
 					//So, take the rest of the sample, put it in return value.
-					sampleValue = sampleValue << remainingBits;
+					sampleValue = sampleValue << (remainingBits);
 					sampleValue = sampleValue + (chunkInputBuffer[bufferBytePointer] & (0xFF >> bufferBitPointer));
 					bufferBytePointer++;
 					bufferBitPointer = 0;
@@ -69,7 +76,7 @@ using namespace GnssMetadata;
 				{
 					//The bit pointer is zero, and we don't want to read the bit twice. 
 					//So we will have to shift both ways to remove undesired bits from the buffer.
-					sampleValue = sampleValue << bitsToRead;
+					sampleValue = sampleValue << (bitsToRead);
 					//gets rid of "used" part of byte.
 					uint8_t bitsToMask = chunkInputBuffer[bufferBytePointer] ;
 					bitsToMask &= (0xFF >> bufferBitPointer);
@@ -79,10 +86,19 @@ using namespace GnssMetadata;
 					bitsToRead = 0;
 				}
 			}
+
+					for(int i = 63; i >= 0; i--)
+					{
+					std::cout << ((sampleValue >> i)  & 0x01);
+					}
+					std::cout << std::endl;
 		}
 
 		//Now our sample value has the correct # bits and we can return it. 
 		//int64_t will be just have to be cast.
+
+
+
 		return sampleValue;
 	};
 
