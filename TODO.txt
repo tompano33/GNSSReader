@@ -2,7 +2,6 @@ Major:
 ChunkBuffer vs BlockBuffer.
 Encodings not supported other than two's complement.
 Support more data types in decStream than just doubles.
-Throw Error if DecStream has no more space for items.
 Complex values
 stream has multiple encodings?
 Fix one metadata/multiple files

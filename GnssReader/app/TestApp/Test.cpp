@@ -6,6 +6,8 @@ void testSuite()
 {
 	try{
 	
+		
+
 		{
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",5L,10L,1000L,1,NULL,0);
 		test.makeDecStreams();
@@ -32,6 +34,16 @@ void testSuite()
 		printf("3");
 
 		{
+		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",10000L,20000L,1000000L);
+		test4.makeDecStreams();
+		test4.setPrintOptions(false,true);
+		test4.start();
+		}
+		printf("4");
+		
+		/**
+		{
+			
 		//Initialize the GNSS Reader by providing an argument to it's metadata.
 		//Then the size of the read input, the size of the intermediate buffer, and the size of the output buffer
 		//Optionally, pass the number of blocks you want to read, and additional paths to look for files on
@@ -54,9 +66,8 @@ void testSuite()
 		}
 		
 		}
-
 		printf("4");
-	
+		
 		{
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",10000L,20000L,1000000L);
 		test5.makeDecStreams();
@@ -65,7 +76,7 @@ void testSuite()
 		}
 
 		printf("5");
-
+		
 		{
 		char** paths = new char*[3];
 		paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\";
@@ -77,7 +88,7 @@ void testSuite()
 		test6.setPrintOptions(false,true);
 		test6.start();
 		}
-
+		
 		printf("6");
 	
 		{
@@ -88,6 +99,16 @@ void testSuite()
 		}
 
 		printf("7");
+		
+
+		{
+			GNSSReader test8 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\lshp.xml",10000L,20000L,1000000L);
+			test8.makeDecStreams();
+			test8.setPrintOptions(false,true);
+			test8.start();
+		}
+		
+		*/
 
 	} catch (std::exception& e) {
 			printf(e.what());

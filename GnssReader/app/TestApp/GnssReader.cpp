@@ -216,21 +216,22 @@ using namespace GnssMetadata;
 				readChunkCycles(block, cycles);
 				fr->skipBufferedBytes(footerSize);
 
-				/**
+				
 				StreamAnalytics sa;
 				for(int i = 0; i != decStreamCount; i++)
 				{
-					sa.setStream(decStreamArray[i]);
-				
-					if(printSamples)
-						sa.printAllSamples();
-					if(printStats)
-						sa.printMeanAndVar();
+					if(decStreamArray[i]->getSamplePtr() != 0)
+					{
+						sa.setStream(decStreamArray[i]);
+					
+						if(printSamples)
+							sa.printAllSamples();
+						if(printStats)
+							sa.printMeanAndVar();
 
-					decStreamArray[i]->clear();
+						decStreamArray[i]->clear();
+					}
 				}
-				*/
-
 			}
 		}
 
