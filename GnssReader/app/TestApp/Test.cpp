@@ -7,7 +7,7 @@ void testSuite()
 	try{
 
 		{
-		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\signMag\\test.xml",10000L,20000L,1000000L);
+		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\offsetBin\\test.xml",10000L,20000L,1000000L);
 		test4.makeDecStreams();
 		test4.setPrintOptions(false,true);
 		test4.start();

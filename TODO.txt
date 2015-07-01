@@ -1,3 +1,6 @@
+FIRST:
+Rerun ALL TESTS
+
 Major:
 ChunkBuffer vs BlockBuffer.
 Encodings not supported other than two's complement.
@@ -5,6 +8,7 @@ Support more data types in decStream than just doubles.
 Complex values
 stream has multiple encodings?
 Fix one metadata/multiple files
+Ascii-mode
 
 Minor:
 Make IntermediateBuffer a friendclass of FileReader.

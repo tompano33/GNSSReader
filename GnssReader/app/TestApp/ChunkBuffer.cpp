@@ -93,6 +93,9 @@ using namespace GnssMetadata;
 			}
 		}
 
+		//Time to convert the value based on encoding.
+		
+		//Prime territory for function pointers here:
 
 		//Signed bit?
 		if(totalBitCount == 1)
@@ -100,10 +103,15 @@ using namespace GnssMetadata;
 			return (sampleValue == 0 ? 1.0 : -1.0);
 		}
 
-		//Prime territory for function pointers here:
 
-		//Two's comp?
-		if(encoding.at(0) == 'I' || encoding.at(0) == 'i')
+		//Fun fact: Offset binary may be converted into two's complement by inverting the most significant bit. 
+		if(encoding.at(0) == 'B' || encoding.at(0) == 'b')
+		{
+			sampleValue ^= 1 << (totalBitCount-1);
+		}
+
+
+		if(encoding.at(0) == 'I' || encoding.at(0) == 'i' || encoding.at(0) == 'B' || encoding.at(0) == 'b')
 		{
 			if( ((sampleValue >> (totalBitCount-1)) & 0x01) == 1)
 			{
