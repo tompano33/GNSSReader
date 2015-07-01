@@ -79,7 +79,7 @@ using namespace GnssMetadata;
 
 							int8_t packedBitCount = stream->Packedbits();
 
-							char *encoding = &stream->Encoding().front();
+							std::string encoding = stream->Encoding();
 							int64_t read= cb.readBits(packedBitCount,encoding);
 
 							//find the correct decStream based on address
@@ -87,10 +87,7 @@ using namespace GnssMetadata;
 							{
 								if(decStreamArray[i]->getCorrespondingStream() == stream){
 									//special case if one bit
-									if(packedBitCount == 1)
-										decStreamArray[i]->putSample(read == 0 ? 1.0 : -1.0);
-									else 
-										decStreamArray[i]->putSample(read);
+									decStreamArray[i]->putSample(read);
 									break;
 								}
 							}

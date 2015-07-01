@@ -46,7 +46,7 @@
 	{
 		for(int i = 0; i != s->getSamplePtr(); i++)
 		{
-			std::cout << s->getBuf()[i] <<  " " << (char)s->getBuf()[i]<< std::endl;
+			std::cout << s->getBuf()[i] <<  " " <<  (uint8_t)s->getBuf()[i] << std::endl;
 		}
 
 	}

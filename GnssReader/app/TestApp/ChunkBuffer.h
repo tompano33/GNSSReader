@@ -6,6 +6,7 @@
 #ifndef CHUNKBUFFER_H_H
 #define CHUNKBUFFER_H_H
 #include <stdint.h>
+#include <string>
 
 class ChunkBuffer{
 
@@ -20,7 +21,7 @@ public:
 	ChunkBuffer::ChunkBuffer(uint64_t size, char* buf); 
 
 	/** Given a number of bitsToRead and an encoding, pops a sample from the buffer, formats it to the encoding, returns it */
-	int64_t readBits(uint8_t bitsToRead, char* encoding);
+	int64_t readBits(uint8_t bitsToRead, std::string  encoding);
 
 	/** Returns true if every value in the chunkBuffer has been read */
 	bool chunkFullyRead();

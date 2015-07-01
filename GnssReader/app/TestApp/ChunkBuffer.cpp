@@ -24,14 +24,15 @@ using namespace GnssMetadata;
 	};
 
 
-	int64_t ChunkBuffer::readBits(uint8_t bitsToRead, char* encoding)
+	//I need to test 64 bit values to make sure nothing breaks.
+	int64_t ChunkBuffer::readBits(uint8_t bitsToRead, std::string  encoding)
 	{
 		uint8_t totalBitCount = bitsToRead;
 		int64_t sampleValue = 0;	//value that will be returned
 
 
 		
-		std::cout << "Starting" << std::endl;
+		//std::cout << "Starting" << std::endl;
 		while(bitsToRead > 0)
 		{
 			
@@ -48,7 +49,7 @@ using namespace GnssMetadata;
 					bitsToRead = bitsToRead - 8;
 				} else 
 				{
-					std::cout << "(" << (int)bitsToRead << ")" << std::endl;
+					//std::cout << "(" << (int)bitsToRead << ")" << std::endl;
 					//There are less than 8 bits, but our pointer is still at zero.
 					//make room in the sample value for some new bits.
 					sampleValue = sampleValue << bitsToRead;
@@ -65,10 +66,14 @@ using namespace GnssMetadata;
 
 				if(bitsToRead >= remainingBits)
 				{
+					//Is plus dangerous with 64 bits?
 					//Here, we have more bits to read than there are in the buffer.
 					//So, take the rest of the sample, put it in return value.
 					sampleValue = sampleValue << (remainingBits);
+
+					//What if this is negative?
 					sampleValue = sampleValue + (chunkInputBuffer[bufferBytePointer] & (0xFF >> bufferBitPointer));
+
 					bufferBytePointer++;
 					bufferBitPointer = 0;
 					bitsToRead -= (remainingBits);
@@ -86,20 +91,40 @@ using namespace GnssMetadata;
 					bitsToRead = 0;
 				}
 			}
-
-					for(int i = 63; i >= 0; i--)
-					{
-					std::cout << ((sampleValue >> i)  & 0x01);
-					}
-					std::cout << std::endl;
 		}
 
-		//Now our sample value has the correct # bits and we can return it. 
-		//int64_t will be just have to be cast.
 
+		//Signed bit?
+		if(totalBitCount == 1)
+		{
+			return (sampleValue == 0 ? 1.0 : -1.0);
+		}
 
+		//Prime territory for function pointers here:
 
-		return sampleValue;
+		//Two's comp?
+		if(encoding.at(0) == 'I' || encoding.at(0) == 'i')
+		{
+			if( ((sampleValue >> (totalBitCount-1)) & 0x01) == 1)
+			{
+				sampleValue = sampleValue | (((int64_t)(-1)) << (totalBitCount));
+			}
+			return sampleValue;
+		}
+
+		//Sign-Mag? 
+		if(encoding.at(1) == 'M' || encoding.at(1) == 'm')
+		{
+			if( ((sampleValue >> (totalBitCount-1)) & 0x01) == 1)
+			{
+				//Because this number is signed, subtract the value of the signedbit and Negate.
+				sampleValue = -(sampleValue - (0x01 << (totalBitCount-1)));
+			}
+			return sampleValue;
+		}
+		//Error
+		std::cout << "Error: Encoding is bad:" << encoding << std::endl;
+		return 0;
 	};
 
 	void ChunkBuffer::skipBits(uint8_t bitsToRead)
