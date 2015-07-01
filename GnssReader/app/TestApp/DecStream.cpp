@@ -6,6 +6,7 @@
 #include "DecStream.h"
 #include <stdint.h>
 #include "GnssMetadata\Stream.h"
+#include <iostream>
 
 	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream * corStream)
 	{
@@ -48,8 +49,9 @@
 	};
 
 	uint64_t DecStream::getBufSize(){
-		return samplePtr;
+		return sampleCapacity;
 	}
+
 	void DecStream::clear(){
 		samplePtr = 0;
 	};
@@ -66,8 +68,10 @@
 	void DecStream::flushOutputStream(double* d, uint64_t* byteCount)
 	{	
         EnterCriticalSection(&crit);
-		memcpy(d,sampleBuf,sizeof(double)*samplePtr);
+
+		memcpy(d,sampleBuf,sizeof(double) * samplePtr);
 		*byteCount = samplePtr;
 		samplePtr = 0;
-        LeaveCriticalSection(&crit);
+
+		LeaveCriticalSection(&crit);
 	}

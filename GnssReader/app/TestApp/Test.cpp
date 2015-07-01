@@ -6,12 +6,33 @@ void testSuite()
 {
 	try{
 
-		{
-		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\offsetBin\\test.xml",10000L,20000L,1000000L);
-		test4.makeDecStreams();
-		test4.setPrintOptions(false,true);
-		test4.start();
-		}
+	//	{
+			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);
+			test4.makeDecStreams();
+			test4.setPrintOptions(false,true);
+			test4.startAsThread();
+	
+		
+			while(!test4.isDone())
+			{		
+				
+				double* inbuf = new double[test4.getDecStreamArray()[0]->getBufSize()];
+				uint64_t count = 0; 
+				test4.getDecStreamArray()[0]->flushOutputStream(inbuf, &count);
+				
+				std::cout << "Count is" << count << std::endl;
+			
+				for(int i = 0; i != count; i++)
+				{
+					std::cout << inbuf[i] << std::endl;
+				}
+
+				delete[] inbuf; //(crashes for some reason??!?)
+
+			}
+
+			//delete inbuf when you're done
+		
 
 		/**
 		{
@@ -66,9 +87,12 @@ void testSuite()
 
 int main(int argc, char** argv)
 {
-	clock_t tStart = clock();
-	testSuite();
-	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+	while(true)
+	{
+		clock_t tStart = clock();
+		testSuite();
+		printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+	}
 	_CrtDumpMemoryLeaks();
 	std::cin.get();
 	return 0;

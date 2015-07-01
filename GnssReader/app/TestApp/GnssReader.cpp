@@ -214,6 +214,7 @@ using namespace GnssMetadata;
 				fr->skipBufferedBytes(footerSize);
 
 				
+				/**
 				StreamAnalytics sa;
 				for(int i = 0; i != decStreamCount; i++)
 				{
@@ -229,6 +230,7 @@ using namespace GnssMetadata;
 						decStreamArray[i]->clear();
 					}
 				}
+				*/
 			}
 		}
 

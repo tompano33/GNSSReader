@@ -130,6 +130,16 @@ using namespace GnssMetadata;
 			}
 			return sampleValue;
 		}
+
+		//Float? Not supported yet.
+		if(encoding.at(0) == 'F' || encoding.at(0) == 'f')
+		{
+			//hmmm
+			//The simple solution, for 32 and 64 bits, is to just 
+			//int i = 1;
+			//float * d = reinterpret_cast<float *>(&i);
+			//std:: cout << *d;
+		}
 		//Error
 		std::cout << "Error: Encoding is bad:" << encoding << std::endl;
 		return 0;
