@@ -2,13 +2,13 @@ FIRST:
 Rerun ALL TESTS
 
 Major:
+
 ChunkBuffer vs BlockBuffer.
-Encodings not supported other than two's complement.
+Support for floatingpoints
 Support more data types in decStream than just doubles.
 Complex values
-stream has multiple encodings?
 Fix one metadata/multiple files
-Ascii-mode
+Peg data to decstream
 
 Minor:
 Make IntermediateBuffer a friendclass of FileReader.
@@ -16,4 +16,6 @@ xproc.Load(metadataFile, false, md); throws any errors?
 Ibuffer.write and Ibuffer.read inconsistent
 Assure readfile is synchronous
 API wants 'Head' not 'H'
+Ascii-mode
+What is 'Alignment'
 
