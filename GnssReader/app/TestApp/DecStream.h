@@ -18,6 +18,10 @@ class DecStream{
 	volatile uint64_t samplePtr;			//Where we are pointing in the buffer.
 	std::string id;				//Name of this buffer's stream. TODO: Do I need this?
 	bool done;
+
+	//Band?
+	uint64_t sampleRate;
+
 	//Pointer to the XML object this stream represents.
 	//This is important, because when I am ready to put a sample in a stream, 
 	//I compare the address of the XMLstream to this field in the DecStream 

@@ -5,8 +5,13 @@
 void testSuite()
 {
 	try{
+			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\alignment\\test.xml",10000L,20000L,1000000L);
+			test4.makeDecStreams();
+			test4.setPrintOptions(true,true);
+			test4.start();
+	
 
-	//	{
+	/**	{
 			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);
 			test4.makeDecStreams();
 			test4.setPrintOptions(false,true);
@@ -33,6 +38,7 @@ void testSuite()
 
 			//delete inbuf when you're done
 		
+		*/
 
 		/**
 		{
@@ -45,11 +51,11 @@ void testSuite()
 		
 		{
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",10000L,20000L,1000000L);
-		test5.makeDecStreams();
-		test5.setPrintOptions(true,false);
-		test5.start();
+			test5.makeDecStreams();
+			test5.setPrintOptions(true,false);
+			test5.start();
 		}
-
+	
 		
 		{
 		char** paths = new char*[3];
@@ -87,12 +93,10 @@ void testSuite()
 
 int main(int argc, char** argv)
 {
-	while(true)
-	{
-		clock_t tStart = clock();
-		testSuite();
-		printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
-	}
+	clock_t tStart = clock();
+	testSuite();
+	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+
 	_CrtDumpMemoryLeaks();
 	std::cin.get();
 	return 0;

@@ -43,12 +43,11 @@ using namespace GnssMetadata;
 	
 				int chunkBufferSize = sizeWord*countWord;
 
-				//I can be smarter about allocating this buffer. It only needs realloc'd if the word size changes.
+				//I can be smarter about allocating this buffer. It only needs realloc'd if the word size/ count changes.
 				char* buf = new char[chunkBufferSize];
 				fr->getBufferedBytes(buf,chunkBufferSize);
 
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
-				//chunk->Endian(),chunk->Padding(),chunk->Shift());
 
 				while(!cb.chunkFullyRead())
 				{					
@@ -77,17 +76,23 @@ using namespace GnssMetadata;
 							else
 								stream = lump->streamArray[i];
 
-							int8_t packedBitCount = stream->Packedbits();
 
 							std::string encoding = stream->Encoding();
-							int64_t read= cb.readBits(packedBitCount,encoding);
 
 							//find the correct decStream based on address
 							for(int i = 0; i != decStreamCount; i++)
 							{
 								if(decStreamArray[i]->getCorrespondingStream() == stream){
-									//special case if one bit
+									//Alignment describes what bits are discarded 
+									if(stream->Alignment() == stream->Left)
+										cb.skipBits(stream->Packedbits() - stream->Quantization());
+
+									int64_t read= cb.readBits(stream->Quantization(),encoding);	
 									decStreamArray[i]->putSample(read);
+
+									if(stream->Alignment() == stream->Right)
+										cb.skipBits(stream->Packedbits() - stream->Quantization());
+	
 									break;
 								}
 							}
@@ -212,9 +217,10 @@ using namespace GnssMetadata;
 				fr->skipBufferedBytes(headerSize);
 				readChunkCycles(block, cycles);
 				fr->skipBufferedBytes(footerSize);
-
 				
-				/**
+				//TODO testmode
+				
+				
 				StreamAnalytics sa;
 				for(int i = 0; i != decStreamCount; i++)
 				{
@@ -230,7 +236,7 @@ using namespace GnssMetadata;
 						decStreamArray[i]->clear();
 					}
 				}
-				*/
+				
 			}
 		}
 
