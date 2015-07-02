@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GnssMetaDataApi">
+      <UniqueIdentifier>{2180344f-4160-4465-9496-2545ea2944ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GnssMetaDataApi\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="GnssMetaDataApi\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="TestAppMain">
+      <UniqueIdentifier>{5445f7bb-53e5-4265-bebc-3a67fa132f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GnssMetaDataApi\Source Files\XML">
+      <UniqueIdentifier>{14511c92-ae7d-4c6f-ba9e-0e4955aea5da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GnssMetaDataApi\Header Files\XML">
+      <UniqueIdentifier>{e4409312-e718-4488-ba99-7ab9bdcc85c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinyxml2">
+      <UniqueIdentifier>{7151c21f-09d5-4c19-b26c-239b2bd72705}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TestAppIfenConvert.cpp">
+      <Filter>TestAppMain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\AnyUri.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\AttributedObject.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Band.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\BaseTypes.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Block.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Chunk.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Cluster.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Comment.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Date.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Duration.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\File.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Frequency.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Lane.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Lump.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Metadata.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Position.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Session.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Source.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Stream.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\System.cpp">
+      <Filter>GnssMetaDataApi\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\AnyUriTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\BandTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\BlockTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\ChunkTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\ClusterTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\DurationTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\FileSetTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\FileTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\FrequencyTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\LaneTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\LumpTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\MetadataTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\OscillatorTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\PositionTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\RfConfigTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\SessionTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\SourceTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\StreamTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\SystemTranslator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\Translator.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\XmlProcessor.cpp">
+      <Filter>GnssMetaDataApi\Source Files\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\tinyxml2\tinyxml2.cpp">
+      <Filter>tinyxml2</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\AnyUriTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\BandTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\BlockTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\ChunkTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\ClusterTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\DurationTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\FileSetTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\FileTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\FrequencyTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\LaneTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\LumpTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\MetadataTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\OscillatorTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\PositionTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\RfConfigTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\SessionTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\SourceTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\StreamTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\SystemTranslator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\XmlDefs.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\AnyUri.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\AttributedObject.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Band.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\BaseTypes.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Block.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Chunk.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Cluster.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Comment.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Date.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Duration.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\File.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Frequency.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Lane.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Lump.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Metadata.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Oscillator.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Position.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\RfConfiguration.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Session.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Source.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Stream.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\System.h">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\Context.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\Translator.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\XmlProcessor.h">
+      <Filter>GnssMetaDataApi\Header Files\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\tinyxml2\tinyxml2.h">
+      <Filter>tinyxml2</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\GnssMetadata\CMakeLists.txt">
+      <Filter>GnssMetaDataApi\Header Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

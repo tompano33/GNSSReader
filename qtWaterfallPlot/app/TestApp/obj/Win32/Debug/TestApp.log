@@ -1,0 +1,31 @@
+﻿Build started 7/1/2015 1:40:29 PM.
+     1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\TestApp.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\lib\TinyXml2 /IC:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\\" /Fd"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Test.cpp
+         Test.cpp
+     1>c:\users\antadmin\desktop\gnssreader\gnssreader\app\testapp\test.cpp(19): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\lib\Win32\Debug GnssMetadata.lib TinyXml2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\bin\Win32\Debug\GNSSReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.lib" /MACHINE:X86 C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\DecStream.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\FileReader.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\IBuffer.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\StreamAnalytics.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\ChunkBuffer.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GnssReader.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\Test.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\XMLtoMeta.obj
+         C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\lib\Win32\Debug\GnssMetadata.lib
+     1>DecStream.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+     1>TinyXml2.lib(tinyxml2.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'TinyXml2.lib(tinyxml2.obj)' or at 'C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\bin\Win32\Debug\vc100.pdb'; linking object as if no debug info
+         TestApp.vcxproj -> C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\\bin\Win32\Debug\GNSSReader.exe;#1" /manifest C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.unsuccessfulbuild".
+         Touching "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.lastbuildstate".
+     1>Done Building Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\TestApp.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.39

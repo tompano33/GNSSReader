@@ -1,0 +1,92 @@
+﻿Build started 6/29/2015 3:15:13 PM.
+     1>Project "C:\Users\ANTuser\Documents\QTwaterfallPlot\lib\GnssMetadata\GnssMetadata.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /IC:\Users\ANTuser\Documents\QTwaterfallPlot\lib\GnssMetadata\\include /IC:\Users\ANTuser\Documents\QTwaterfallPlot\lib\GnssMetadata\\lib\tinyxml2 /Zi /nologo /W3 /WX- /Od /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"C:\Users\ANTuser\Documents\QTwaterfallPlot\lib\GnssMetadata\\obj\x64\Debug\\" /Fd"C:\Users\ANTuser\Documents\QTwaterfallPlot\lib\GnssMetadata\\obj\x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt AnyUri.cpp Xml\AnyUriTranslator.cpp AttributedObject.cpp Band.cpp Xml\BandTranslator.cpp Block.cpp Xml\BlockTranslator.cpp Chunk.cpp Xml\ChunkTranslator.cpp Cluster.cpp Xml\ClusterTranslator.cpp Comment.cpp Date.cpp Duration.cpp Xml\DurationTranslator.cpp File.cpp Xml\FileSetTranslator.cpp Xml\FileTranslator.cpp Frequency.cpp Xml\FrequencyTranslator.cpp Lane.cpp Xml\LaneTranslator.cpp Lump.cpp Xml\LumpTranslator.cpp Metadata.cpp Xml\MetadataTranslator.cpp Xml\OscillatorTranslator.cpp Position.cpp Xml\PositionTranslator.cpp Xml\RfConfigTranslator.cpp Session.cpp Xml\SessionTranslator.cpp Source.cpp Xml\SourceTranslator.cpp Stream.cpp Xml\StreamTranslator.cpp System.cpp Xml\SystemTranslator.cpp Xml\Translator.cpp Xml\XmlProcessor.cpp
+         XmlProcessor.cpp
+     1>Xml\XmlProcessor.cpp(24): fatal error C1083: Cannot open include file: 'GnssMetadata/Xml/XmlProcessor.h': No such file or directory
+         Translator.cpp
+     1>Xml\Translator.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/Xml/Translator.h': No such file or directory
+         SystemTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\SystemTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         System.cpp
+     1>System.cpp(21): fatal error C1083: Cannot open include file: 'GnssMetadata/System.h': No such file or directory
+         StreamTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\StreamTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Stream.cpp
+     1>Stream.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/Stream.h': No such file or directory
+         SourceTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\SourceTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Source.cpp
+     1>Source.cpp(24): fatal error C1083: Cannot open include file: 'GnssMetadata/Source.h': No such file or directory
+         SessionTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\SessionTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Session.cpp
+     1>Session.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/Session.h': No such file or directory
+         RfConfigTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\RfConfigTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         PositionTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\PositionTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Position.cpp
+     1>Position.cpp(23): fatal error C1083: Cannot open include file: 'GnssMetadata/Position.h': No such file or directory
+         OscillatorTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\OscillatorTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         MetadataTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\MetadataTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Metadata.cpp
+     1>Metadata.cpp(23): fatal error C1083: Cannot open include file: 'GnssMetadata/Metadata.h': No such file or directory
+         LumpTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\LumpTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Lump.cpp
+     1>Lump.cpp(24): fatal error C1083: Cannot open include file: 'GnssMetadata/Lump.h': No such file or directory
+         LaneTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\LaneTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Lane.cpp
+     1>Lane.cpp(24): fatal error C1083: Cannot open include file: 'GnssMetadata/Lane.h': No such file or directory
+         Generating Code...
+         Compiling...
+         FrequencyTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\FrequencyTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Frequency.cpp
+     1>Frequency.cpp(23): fatal error C1083: Cannot open include file: 'GnssMetadata/Frequency.h': No such file or directory
+         FileTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\FileTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         FileSetTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\FileSetTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         File.cpp
+     1>File.cpp(24): fatal error C1083: Cannot open include file: 'GnssMetadata/File.h': No such file or directory
+         DurationTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\DurationTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Duration.cpp
+     1>Duration.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/Duration.h': No such file or directory
+         Date.cpp
+     1>Date.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/Date.h': No such file or directory
+         Comment.cpp
+     1>Comment.cpp(23): fatal error C1083: Cannot open include file: 'GnssMetadata/Comment.h': No such file or directory
+         ClusterTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\ClusterTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Cluster.cpp
+     1>Cluster.cpp(24): fatal error C1083: Cannot open include file: 'GnssMetadata/Cluster.h': No such file or directory
+         ChunkTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\ChunkTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Chunk.cpp
+     1>Chunk.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/Chunk.h': No such file or directory
+         BlockTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\BlockTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Block.cpp
+     1>Block.cpp(24): fatal error C1083: Cannot open include file: 'GnssMetadata/Block.h': No such file or directory
+         BandTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\BandTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         Band.cpp
+     1>Band.cpp(21): fatal error C1083: Cannot open include file: 'GnssMetadata/Band.h': No such file or directory
+         AttributedObject.cpp
+     1>AttributedObject.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/AttributedObject.h': No such file or directory
+         AnyUriTranslator.cpp
+     1>c:\users\antuser\documents\qtwaterfallplot\lib\gnssmetadata\xml\AnyUriTranslator.h(25): fatal error C1083: Cannot open include file: 'GnssMetadata/BaseTypes.h': No such file or directory
+         AnyUri.cpp
+     1>AnyUri.cpp(22): fatal error C1083: Cannot open include file: 'GnssMetadata/AnyUri.h': No such file or directory
+         Generating Code...
+     1>Done Building Project "C:\Users\ANTuser\Documents\QTwaterfallPlot\lib\GnssMetadata\GnssMetadata.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.92

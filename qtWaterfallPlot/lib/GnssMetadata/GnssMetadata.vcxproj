@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7063ED65-8D65-44F0-AF2D-B1555601BD0B}</ProjectGuid>
+    <RootNamespace>GnssMetadata</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\lib\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\lib\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\lib\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\lib\tinyxml2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AnyUri.cpp" />
+    <ClCompile Include="Xml\AnyUriTranslator.cpp" />
+    <ClCompile Include="AttributedObject.cpp" />
+    <ClCompile Include="Band.cpp" />
+    <ClCompile Include="Xml\BandTranslator.cpp" />
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Xml\BlockTranslator.cpp" />
+    <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="Xml\ChunkTranslator.cpp" />
+    <ClCompile Include="Cluster.cpp" />
+    <ClCompile Include="Xml\ClusterTranslator.cpp" />
+    <ClCompile Include="Comment.cpp" />
+    <ClCompile Include="Date.cpp" />
+    <ClCompile Include="Duration.cpp" />
+    <ClCompile Include="Xml\DurationTranslator.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="Xml\FileSetTranslator.cpp" />
+    <ClCompile Include="Xml\FileTranslator.cpp" />
+    <ClCompile Include="Frequency.cpp" />
+    <ClCompile Include="Xml\FrequencyTranslator.cpp" />
+    <ClCompile Include="Lane.cpp" />
+    <ClCompile Include="Xml\LaneTranslator.cpp" />
+    <ClCompile Include="Lump.cpp" />
+    <ClCompile Include="Xml\LumpTranslator.cpp" />
+    <ClCompile Include="Metadata.cpp" />
+    <ClCompile Include="Xml\MetadataTranslator.cpp" />
+    <ClCompile Include="Xml\OscillatorTranslator.cpp" />
+    <ClCompile Include="Position.cpp" />
+    <ClCompile Include="Xml\PositionTranslator.cpp" />
+    <ClCompile Include="Xml\RfConfigTranslator.cpp" />
+    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="Xml\SessionTranslator.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Xml\SourceTranslator.cpp" />
+    <ClCompile Include="Stream.cpp" />
+    <ClCompile Include="Xml\StreamTranslator.cpp" />
+    <ClCompile Include="System.cpp" />
+    <ClCompile Include="Xml\SystemTranslator.cpp" />
+    <ClCompile Include="Xml\Translator.cpp" />
+    <ClCompile Include="Xml\XmlProcessor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\GnssMetadata\AnyUri.h" />
+    <ClInclude Include="Xml\AnyUriTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\AttributedObject.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Band.h" />
+    <ClInclude Include="Xml\BandTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\BaseTypes.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Block.h" />
+    <ClInclude Include="Xml\BlockTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Chunk.h" />
+    <ClInclude Include="Xml\ChunkTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Cluster.h" />
+    <ClInclude Include="Xml\ClusterTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Comment.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\Context.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Date.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Duration.h" />
+    <ClInclude Include="Xml\DurationTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\File.h" />
+    <ClInclude Include="Xml\FileSetTranslator.h" />
+    <ClInclude Include="Xml\FileTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Frequency.h" />
+    <ClInclude Include="Xml\FrequencyTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Lane.h" />
+    <ClInclude Include="Xml\LaneTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Lump.h" />
+    <ClInclude Include="Xml\LumpTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Metadata.h" />
+    <ClInclude Include="Xml\MetadataTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Oscillator.h" />
+    <ClInclude Include="Xml\OscillatorTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Position.h" />
+    <ClInclude Include="Xml\PositionTranslator.h" />
+    <ClInclude Include="Xml\RfConfigTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\RfConfiguration.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Session.h" />
+    <ClInclude Include="Xml\SessionTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Source.h" />
+    <ClInclude Include="Xml\SourceTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Stream.h" />
+    <ClInclude Include="Xml\StreamTranslator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\System.h" />
+    <ClInclude Include="Xml\SystemTranslator.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\Translator.h" />
+    <ClInclude Include="Xml\XmlDefs.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\XmlProcessor.h" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
