@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <iostream>
 #include "IBuffer.h"
 
 	IBuffer::IBuffer(uint64_t bufSize){
@@ -39,6 +40,13 @@
 	//TODO throw error if overreading
 	void IBuffer::read(uint64_t size, char* buf)
 	{
+		if(size > bufferSize)
+		{
+			printf("Error: chunk is bigger than buffer");
+			std::cin.get();
+			return;
+		}
+
 		while(size > numBytesStored){;}
 
 		if(size < (bufferSize - oldPtr))
