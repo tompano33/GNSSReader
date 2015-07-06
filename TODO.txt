@@ -1,10 +1,7 @@
 Major:
-Throw error if blockbuffer can't load enough data (means SDR file is corrupt)
 ChunkBuffer vs BlockBuffer
-Support for floatingpoints
 Fix one metadata/multiple files
 Endianness.
-Throw error if block is too bug for buffer
 Improved error handling.
 
 [wait]

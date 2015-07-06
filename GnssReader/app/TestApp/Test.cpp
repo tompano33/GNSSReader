@@ -18,10 +18,10 @@ void testSuite()
 		
 		*/
 	
-			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",5L,10L,1000000L);
-			test4.makeDecStreams();
-			test4.setPrintOptions(false,true);
-			test4.start();
+		//	GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",50L,1000L,1000000L);
+		//	test4.makeDecStreams();
+		//	test4.setPrintOptions(false,true);
+		//	test4.start();
 
 	/**	{
 			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);
@@ -60,7 +60,7 @@ void testSuite()
 		test4.start();
 		}
 
-		
+		*/
 		{
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",10000L,20000L,1000000L);
 			test5.makeDecStreams();
@@ -68,6 +68,7 @@ void testSuite()
 			test5.start();
 		}
 	
+		/*
 		
 		{
 		char** paths = new char*[3];

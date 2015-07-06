@@ -76,9 +76,6 @@ using namespace GnssMetadata;
 							else
 								stream = lump->streamArray[i];
 
-
-							std::string encoding = stream->Encoding();
-
 							//find the correct decStream based on address
 							for(int i = 0; i != decStreamCount; i++)
 							{
@@ -87,7 +84,7 @@ using namespace GnssMetadata;
 									if(stream->Alignment() == stream->Left)
 										cb.skipBits(stream->Packedbits() - stream->Quantization());
 
-									int64_t read= cb.readBits(stream->Quantization(),encoding);	
+									int64_t read= cb.readBits(stream->Quantization(),stream->Encoding());	
 
 									if(cb.wasSampleFloat())
 									{
