@@ -5,9 +5,7 @@
 void testSuite()
 {
 	try{
-		while(true)
-		{
-
+		/**
 			char** paths = new char*[1];
 			paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPathRead\\sine2\\";
 
@@ -16,9 +14,14 @@ void testSuite()
 			test4.setPrintOptions(true,false);
 			test4.startAsThread();
 			while(!test4.isDone()){;}
-		}
 	
+		
+		*/
 	
+			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",10000L,20000L,1000000L);
+			test4.makeDecStreams();
+			test4.setPrintOptions(false,true);
+			test4.start();
 
 	/**	{
 			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);

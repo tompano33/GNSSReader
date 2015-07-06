@@ -27,6 +27,7 @@ using namespace GnssMetadata;
 	//I need to test 64 bit values to make sure nothing breaks.
 	int64_t ChunkBuffer::readBits(uint8_t bitsToRead, std::string  encoding)
 	{
+		wasFloat = false;
 		uint8_t totalBitCount = bitsToRead;
 		int64_t sampleValue = 0;	//value that will be returned
 
@@ -99,7 +100,7 @@ using namespace GnssMetadata;
 		//Signed bit?
 		if(totalBitCount == 1)
 		{
-			return (sampleValue == 0 ? 1.0 : -1.0);
+			return (sampleValue == 0 ? 1 : -1);
 		}
 
 
@@ -125,19 +126,17 @@ using namespace GnssMetadata;
 			if( ((sampleValue >> (totalBitCount-1)) & 0x01) == 1)
 			{
 				//Because this number is signed, subtract the value of the signedbit and Negate.
+				//TODO test 64-bit sign-magnitude
 				sampleValue = -(sampleValue - (0x01 << (totalBitCount-1)));
 			}
 			return sampleValue;
 		}
 
-		//Float? Not supported yet.
+		//Float? well, just return the integer, and a flag saying this is a float. This could be done better later.
 		if(encoding.at(0) == 'F' || encoding.at(0) == 'f')
 		{
-			//hmmm
-			//The simple solution, for 32 and 64 bits, is to just 
-			//int i = 1;
-			//float * d = reinterpret_cast<float *>(&i);
-			//std:: cout << *d;
+			wasFloat = true;
+			return sampleValue;
 		}
 		//Error
 		std::cout << "Error: Encoding is bad:" << encoding << std::endl;
@@ -186,3 +185,6 @@ using namespace GnssMetadata;
 		return ((int)bufferBytePointer == (int)sizeOfBuffer);
 	};
 
+	bool ChunkBuffer::wasSampleFloat(){
+		return (wasFloat);
+	};

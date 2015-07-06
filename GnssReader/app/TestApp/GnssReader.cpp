@@ -69,6 +69,7 @@ using namespace GnssMetadata;
 						for(int i = 0; i != lump->streamCount; i++)
 						{
 							Stream* stream;
+
 							//If RIGHT-SHIFTED read the last stream first.
 							if(chunk->Shift() == chunk->Right)
 								stream = lump->streamArray[(lump->streamCount - 1) - i];
@@ -87,7 +88,20 @@ using namespace GnssMetadata;
 										cb.skipBits(stream->Packedbits() - stream->Quantization());
 
 									int64_t read= cb.readBits(stream->Quantization(),encoding);	
-									decStreamArray[i]->putSample(read);
+
+									if(cb.wasSampleFloat())
+									{
+										//need to convert read here! putSample takes a double.
+										if(stream->Quantization() == 64)
+											decStreamArray[i]->putSample(*(reinterpret_cast<double*>(&read)));
+										if(stream->Quantization() == 32)
+											decStreamArray[i]->putSample(*(reinterpret_cast<float*>(&read)));
+
+
+									} else
+									{
+										decStreamArray[i]->putSample(read);
+									}
 
 									if(stream->Alignment() == stream->Right)
 										cb.skipBits(stream->Packedbits() - stream->Quantization());

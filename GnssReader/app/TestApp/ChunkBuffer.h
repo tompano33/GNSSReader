@@ -14,7 +14,7 @@ class ChunkBuffer{
 	uint64_t bufferBytePointer; //The byte our "cursor" is at in the buffer
 	uint8_t bufferBitPointer; 	//The bit our "cursor" is at in the buffer, relative to the byte.
 	uint64_t sizeOfBuffer;		//The size of the buffer.
-
+	bool wasFloat;
 public:
 
 	/** Pass in the size of a buffer, and a pre-allocated buffer with the chunk already defined */
@@ -27,6 +27,8 @@ public:
 	bool chunkFullyRead();
 
 	void skipBits(uint8_t bitsToSkip);
+
+	bool wasSampleFloat();
 
 	/** Deallocates chunkInputBuffer */
 	ChunkBuffer::~ChunkBuffer();
