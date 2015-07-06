@@ -62,7 +62,6 @@ using namespace GnssMetadata;
 						(chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Tail))
 					{
 						/** The Padding is at the start */	
-						//std::cout << "Skipping! H" << std::endl;
 						cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
 					}
 
@@ -98,14 +97,13 @@ using namespace GnssMetadata;
 							}
 						}
 
-					//skip tail padding here!
-					if( (chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head) ||
-						(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail) )
-					{
-						/** The Padding is at the start */
-					//	std::cout << "Skipping!! T" << std::endl;
-						cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
-					}
+						//skip tail padding here!
+						if( (chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head) ||
+							(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail) )
+						{
+							/** The Padding is at the start */
+							cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
+						}
 					}
 				}
 			}
@@ -218,7 +216,7 @@ using namespace GnssMetadata;
 				readChunkCycles(block, cycles);
 				fr->skipBufferedBytes(footerSize);
 				
-				//TODO testmode
+				//TODO enable testmode
 				
 				
 				StreamAnalytics sa;

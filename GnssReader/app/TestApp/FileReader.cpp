@@ -48,7 +48,22 @@
 			int readFile = ReadFile(sdrFile, buff, readBufferSize, &i, NULL);
 
 			if(!readFile && GetLastError() != ERROR_IO_PENDING)
+			{
 				printf ("ReadFile failed with error %d.\n", GetLastError());
+				
+				//attempt to recover
+				filePtr--;
+				int oldFp = filePtr;
+				prepareHandle();
+				if(filePtr == oldFp)
+				{
+					printf ("Lost access to file and no alternates exist, aborting.\n");
+					killThreadFlag = true;
+					//read fail,abort!
+					return;
+				}
+
+			}
 
 			if(readFile){
 				//Todo: find out how to abandon this thead for a while.

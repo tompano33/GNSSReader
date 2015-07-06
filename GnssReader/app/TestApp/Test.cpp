@@ -5,15 +5,18 @@
 void testSuite()
 {
 	try{
-			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",10000L,20000L,1000000L);
-			test4.makeDecStreams();
-			test4.setPrintOptions(true,true);
-			test4.start();
+		while(true)
+		{
 
-			GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sixtyFour\\test.xml",10000L,20000L,1000000L);
-			test5.makeDecStreams();
-			test5.setPrintOptions(true,true);
-			test5.start();
+			char** paths = new char*[1];
+			paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPathRead\\sine2\\";
+
+			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPathRead\\test.xml",1,500000L,1000000L,-1, (const char**)paths,1);
+			test4.makeDecStreams();
+			test4.setPrintOptions(true,false);
+			test4.startAsThread();
+			while(!test4.isDone()){;}
+		}
 	
 	
 
