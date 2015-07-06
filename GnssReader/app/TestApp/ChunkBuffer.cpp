@@ -44,7 +44,7 @@ using namespace GnssMetadata;
 					//Since our buffer pointer is at 0, and we have at least 8 bytes to read, 
 					//we can just shift the return value left by 8 and add.
 					sampleValue = sampleValue << 8;
-					sampleValue = sampleValue | ((uint8_t)chunkInputBuffer[bufferBytePointer]);
+					sampleValue |= ((uint8_t)chunkInputBuffer[bufferBytePointer]);
 					bufferBytePointer++;
 					bitsToRead = bitsToRead - 8;
 				} else 
@@ -54,7 +54,7 @@ using namespace GnssMetadata;
 					//make room in the sample value for some new bits.
 					sampleValue = sampleValue << bitsToRead;
 					//The bits will be at the beginning of the buffer, so we can simply shift them right.
-					sampleValue = sampleValue | ((uint8_t)((uint8_t)(chunkInputBuffer[bufferBytePointer]) >> (8 - bitsToRead)));
+					sampleValue |= ((uint8_t)((uint8_t)(chunkInputBuffer[bufferBytePointer]) >> (8 - bitsToRead)));
 					bufferBitPointer = bufferBitPointer + bitsToRead;
 					bitsToRead = 0;
 				}
@@ -71,8 +71,7 @@ using namespace GnssMetadata;
 					//So, take the rest of the sample, put it in return value.
 					sampleValue = sampleValue << (remainingBits);
 
-					//What if this is negative?
-					sampleValue = sampleValue + (chunkInputBuffer[bufferBytePointer] & (0xFF >> bufferBitPointer));
+					sampleValue |= (chunkInputBuffer[bufferBytePointer] & (0xFF >> bufferBitPointer));
 
 					bufferBytePointer++;
 					bufferBitPointer = 0;
@@ -86,7 +85,7 @@ using namespace GnssMetadata;
 					uint8_t bitsToMask = chunkInputBuffer[bufferBytePointer] ;
 					bitsToMask &= (0xFF >> bufferBitPointer);
 					bitsToMask = bitsToMask >> (remainingBits - bitsToRead);
-					sampleValue = sampleValue + bitsToMask;
+					sampleValue |= bitsToMask;
 					bufferBitPointer += bitsToRead;
 					bitsToRead = 0;
 				}

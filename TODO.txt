@@ -1,14 +1,13 @@
-FIRST:
-Rerun ALL TESTS
-
 Major:
-
-ChunkBuffer vs BlockBuffer.
+Throw error if blockbuffer can't load enough data (means SDR file is corrupt)
+ChunkBuffer vs BlockBuffer
 Support for floatingpoints
-Support more data types in decStream than just doubles.
-Complex values
 Fix one metadata/multiple files
-Peg data to decstream
+Endianness.
+
+[wait]
+Peg data to decstream 
+Complex values
 
 Minor:
 Make IntermediateBuffer a friendclass of FileReader.
@@ -17,5 +16,6 @@ Ibuffer.write and Ibuffer.read inconsistent
 Assure readfile is synchronous
 API wants 'Head' not 'H'
 Ascii-mode
-What is 'Alignment'
+What is 'Alignment' (document)
+Support more data types in decStream than just doubles.
 

@@ -5,10 +5,16 @@
 void testSuite()
 {
 	try{
-			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\alignment\\test.xml",10000L,20000L,1000000L);
+			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",10000L,20000L,1000000L);
 			test4.makeDecStreams();
 			test4.setPrintOptions(true,true);
 			test4.start();
+
+			GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sixtyFour\\test.xml",10000L,20000L,1000000L);
+			test5.makeDecStreams();
+			test5.setPrintOptions(true,true);
+			test5.start();
+	
 	
 
 	/**	{
