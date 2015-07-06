@@ -3,7 +3,7 @@
 
     <stream id="2stream">
         <ratefactor>1</ratefactor>
-        <quantization>1</quantization>
+        <quantization>2</quantization>
         <packedbits>2</packedbits>
         <alignment>N</alignment>
         <format>IF</format>
@@ -18,7 +18,7 @@
 	
 	<stream id="4stream">
         <ratefactor>1</ratefactor>
-        <quantization>1</quantization>
+        <quantization>4</quantization>
         <packedbits>4</packedbits>
         <alignment>N</alignment>
         <format>IF</format>

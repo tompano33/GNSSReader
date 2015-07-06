@@ -57,10 +57,16 @@
 				prepareHandle();
 				if(filePtr == oldFp)
 				{
-					printf ("Lost access to file and no alternates exist, aborting.\n");
+					printf ("\nLost access to file and no alternates exist, aborting.\n");
 					killThreadFlag = true;
 					//read fail,abort!
 					return;
+				} else {					
+					printf ("\nLost access to file but recovered.\n");
+					//recovery successful!
+					//TODO: test on files > 4 GB (for low part)
+					SetFilePointer(sdrFile,bytesRead,NULL,FILE_BEGIN);
+
 				}
 
 			}
@@ -153,7 +159,6 @@
 		if(!fileFound)
 		{
 			printf("Data file could not be found");
-			std::cin.get();
 		}
 	}
 

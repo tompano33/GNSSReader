@@ -4,6 +4,8 @@ ChunkBuffer vs BlockBuffer
 Support for floatingpoints
 Fix one metadata/multiple files
 Endianness.
+Throw error if block is too bug for buffer
+Improved error handling.
 
 [wait]
 Peg data to decstream 
