@@ -98,7 +98,7 @@ using namespace GnssMetadata;
 						if( (chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head) ||
 							(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail) )
 						{
-							/** The Padding is at the start */
+
 							cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
 						}
 					}
@@ -268,12 +268,17 @@ using namespace GnssMetadata;
 				for(int k = 0; k!= c->lumpCount;k++){
 					Lump* l = c->lumpArray[k];
 					l->lumpSize = 0;
+
 					for(int i2  = 0; i2 != l->streamCount;i2++)
 					{
 						Stream* s = l->streamArray[i2];
 						//we got a stream! Make sure it's not a duplicate
 
+						//TODO modifiying this does nothing? design flaw?
 						l->lumpSize += s->Packedbits();
+						//extra samples included w/ complex data
+						if(!(s->Format() == s->IF || s->Format() == s->IFn))	
+							l->lumpSize += s->Packedbits();
 
 						bool newStream = true;
 
@@ -329,6 +334,10 @@ using namespace GnssMetadata;
 
 						
 						l->lumpSize += s->Packedbits();
+
+						//duplicated
+						if(!(s->Format() == s->IF || s->Format() == s->IFn))	
+							l->lumpSize += s->Packedbits();
 
 						bool streamReassigned = false;
 						//we got a stream! Match it with a predefined one, based on the ID.
@@ -386,9 +395,10 @@ using namespace GnssMetadata;
 
 	void GNSSReader::readAndPutSample(ChunkBuffer * cb,GnssMetadata::Stream * s, int i, bool negate)
 	{
-
+		
 		int64_t read= cb->readBits(s->Quantization(),s->Encoding());	
 
+		//This should not work?
 		if(negate) 
 			read = -read;
 
@@ -420,9 +430,12 @@ using namespace GnssMetadata;
 
 		void GNSSReader::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
 		{
+			
 			switch(stream->Format())
 			{
+
 				case stream->IF:
+					
 					skipLeftPackedBits(stream,cb);
 					readAndPutSample(cb,stream,i,false);
 					skipRightPackedBits(stream,cb);
@@ -459,11 +472,23 @@ using namespace GnssMetadata;
 				case stream->InQn:
 				case stream->QnIn:
 					skipLeftPackedBits(stream,cb);
-					readAndPutSample(cb,stream,i,TRUE);
+					readAndPutSample(cb,stream,i,true);
 					skipRightPackedBits(stream,cb);
 
 					skipLeftPackedBits(stream,cb);
 					readAndPutSample(cb,stream,i,true);
+					skipRightPackedBits(stream,cb);
+					break;
+
+				case stream->InQ:
+				case stream->QnI:
+
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,true);
+					skipRightPackedBits(stream,cb);
+
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,false);
 					skipRightPackedBits(stream,cb);
 					break;
 									

@@ -4,7 +4,100 @@
 #include <iostream>
 void testSuite()
 {
-	try{
+	//alignment: Tests quantization and aligned bits. 
+	{
+		printf("Expecting: [5, -2, -16, 15]\n");
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\alignment\\test.xml",50L,1000L,1000000L);
+		test.makeDecStreams();
+		test.setPrintOptions(false,true);
+		test.start();
+	}
+
+	//altPaths: Tests quantization and aligned bits. 
+	{
+		//Todo, test local paths, limited block reads.
+		printf("Expecting: A nice introduction \n");
+
+		char** paths = new char*[3];
+		paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\";
+		paths[1] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\";
+		paths[2] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\extremestorage\\";
+		
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",50L,1000L,1000000L,-1,(const char**)paths,3);
+		test.makeDecStreams();
+		test.setPrintOptions(false,true);
+		test.start();
+	}
+		
+	//exception: throws error if invalid XML exists.
+	{
+		try{
+			printf("Expecting: Printed 'foostream1' \n");
+			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\exception\\test.xml",50L,1000L,1000000L);
+			test.makeDecStreams();
+			test.setPrintOptions(false,true);
+			test.start();
+		} catch (std::exception& e) {
+			printf(e.what());
+		}
+	}
+
+	//floatingpoint: tests reading of floating point numbers
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--------------------------------------ERROR!
+	{
+		printf("Expecting: [-5.168466E29 -2.4479542E-19 6.3108872E-30 0 ] and two doubles. \n");
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",50L,1000L,1000000L);
+		test.makeDecStreams();
+		test.setPrintOptions(false,true);
+		test.start();
+	}
+
+	//tests skipping of headers and footers of various sizes.
+	{
+		printf("Expecting: [HELLO___SDR_WORLD___THISIS__A___TEST_!_]  \n");
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",50L,1000L,1000000L);
+		test.makeDecStreams();
+		test.setPrintOptions(false,true);
+		test.start();
+	}
+
+	//multistream: outputs four 1-bit streams.
+	//INVESTIGATE the mean & variance are wrong
+	{
+		
+		printf("ERROR!:  \n");
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",50L,1000L,1000000L,1);
+		test.makeDecStreams();
+		test.setPrintOptions(true,false);
+		test.start();
+	}
+
+	//offset-binary
+	{
+		printf("Expecting 0100 0101 0100 1100 0100 1111  -2 -3 -2 0 2 -3 -3 3 -4 -3 -4 4 -4 7\n");
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\offsetBin\\test.xml",50L,1000L,1000000L,-1);
+		test.makeDecStreams();
+		test.setPrintOptions(false,true);
+		test.start();
+	}
+
+	//padAndShift: Tests padding and shifting.
+	{
+		printf("Expecting repeated pattern\n");
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\lshp.xml",50L,1000L,1000000L,-1);
+		test.makeDecStreams();
+		test.setPrintOptions(false,true);
+		test.start();
+	}
+
+	//format-one
+	{
+		printf("Expecting reals of 10, complexes of -2\n");
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\formatOne\\test.xml",50L,1000L,1000000L,-1);
+		test.makeDecStreams();
+		test.setPrintOptions(false,true);
+		test.start();
+	}
 		/**
 			char** paths = new char*[1];
 			paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPathRead\\sine2\\";
@@ -18,10 +111,7 @@ void testSuite()
 		
 		*/
 	
-		//	GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",50L,1000L,1000000L);
-		//	test4.makeDecStreams();
-		//	test4.setPrintOptions(false,true);
-		//	test4.start();
+
 
 	/**	{
 			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);
@@ -60,7 +150,6 @@ void testSuite()
 		test4.start();
 		}
 
-		*/
 		{
 		GNSSReader test5 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",10000L,20000L,1000000L);
 			test5.makeDecStreams();
@@ -98,10 +187,7 @@ void testSuite()
 			test8.start();
 		}
 		*/
-
-	} catch (std::exception& e) {
-			printf(e.what());
-	}
+	
 }
 
 int main(int argc, char** argv)

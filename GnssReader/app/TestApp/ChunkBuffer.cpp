@@ -27,9 +27,11 @@ using namespace GnssMetadata;
 	//I need to test 64 bit values to make sure nothing breaks.
 	int64_t ChunkBuffer::readBits(uint8_t bitsToRead, std::string  encoding)
 	{
+
 		wasFloat = false;
 		uint8_t totalBitCount = bitsToRead;
 		int64_t sampleValue = 0;	//value that will be returned
+
 
 
 		
@@ -94,6 +96,7 @@ using namespace GnssMetadata;
 		}
 
 		//Time to convert the value based on encoding.
+		
 		
 		//Prime territory for function pointers here:
 
@@ -175,6 +178,8 @@ using namespace GnssMetadata;
 				}
 			}
 		}
+
+		
 	};
 
 	ChunkBuffer::~ChunkBuffer(){
