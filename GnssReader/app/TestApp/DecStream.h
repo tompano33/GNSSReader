@@ -18,6 +18,8 @@ class DecStream{
 	volatile uint64_t samplePtr;			//Where we are pointing in the buffer.
 	std::string id;				//Name of this buffer's stream. TODO: Do I need this?
 	bool done;
+	bool hasCPart;
+	bool CPartFirst;
 
 	//Band?
 	uint64_t sampleRate;
@@ -35,7 +37,7 @@ class DecStream{
 public:
 	
 	//Pass in a sample capacity, an ID, and a stream. Creates a buffer. TODO: id???
-	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream* corStream);
+	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream* corStream,bool hasComplexPart, bool complexPartFirst);
 
 	//Puts a sample in the buffer. Only supports doubles for now
 	void putSample(double sample);
@@ -55,6 +57,10 @@ public:
 	void flushOutputStream(double* buf, uint64_t* byteCount);
 	//returns buffer size
 	uint64_t getBufSize();
+
+	bool hasComplexPart();
+	bool complexPartFirst();
+
 	~DecStream();
 };
 

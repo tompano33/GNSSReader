@@ -8,7 +8,7 @@
 #include "GnssMetadata\Stream.h"
 #include <iostream>
 
-	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream * corStream)
+	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream * corStream, bool hasComplexPart, bool complexPartFirst)
 	{
 		done = false;
 		sampleCapacity = sampleCap;
@@ -16,6 +16,9 @@
 		samplePtr = 0;
 		this->id = id;
 		this->correspondingStream = corStream;
+		this->hasCPart = hasComplexPart;
+		this->CPartFirst = complexPartFirst;
+
 		InitializeCriticalSection(&crit);
 	};
 
@@ -74,4 +77,14 @@
 		samplePtr = 0;
 
 		LeaveCriticalSection(&crit);
+	}
+
+	bool DecStream::hasComplexPart()
+	{
+		return hasCPart;
+	}
+
+	bool DecStream::complexPartFirst()
+	{
+		return CPartFirst;
 	}

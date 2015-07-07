@@ -32,10 +32,13 @@ using namespace GnssMetadata;
 	
 	void GNSSReader::readChunkCycles(Block * block, uint32_t cycles)
 	{
+		//for every cycle:
 		for(;cycles != 0; cycles--)
 		{
+			//for every chunk:
 			for(int i = 0; i != block->chunkCount; i++)
 			{
+
 				Chunk* chunk = block->chunkArray[i];
 
 				uint8_t sizeWord = chunk->SizeWord();
@@ -43,21 +46,23 @@ using namespace GnssMetadata;
 	
 				int chunkBufferSize = sizeWord*countWord;
 
+				//Initialize a chunkbuffer and populate it.
 				//I can be smarter about allocating this buffer. It only needs realloc'd if the word size/ count changes.
 				char* buf = new char[chunkBufferSize];
 				fr->getBufferedBytes(buf,chunkBufferSize);
-
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
 
+
+				//while there are still bits left in the chunk:
 				while(!cb.chunkFullyRead())
 				{					
 					//for each lump
 					for(int i = 0; i != chunk->lumpCount; i++)
 					{
+
 					Lump* lump = chunk->lumpArray[i];
 
-
-
+					//skip any padding.
 					if( (chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Head) ||
 						(chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Tail))
 					{
@@ -70,41 +75,22 @@ using namespace GnssMetadata;
 						{
 							Stream* stream;
 
-							//If RIGHT-SHIFTED read the last stream first.
+							//If RIGHT-SHIFTED read the last stream first. Else, read from the left stream.
 							if(chunk->Shift() == chunk->Right)
 								stream = lump->streamArray[(lump->streamCount - 1) - i];
 							else
 								stream = lump->streamArray[i];
 
-							//find the correct decStream based on address
+							//find the correct decoded-Stream based on address
 							for(int i = 0; i != decStreamCount; i++)
 							{
 								if(decStreamArray[i]->getCorrespondingStream() == stream){
-									//Alignment describes what bits are discarded 
-									if(stream->Alignment() == stream->Left)
-										cb.skipBits(stream->Packedbits() - stream->Quantization());
-
-									int64_t read= cb.readBits(stream->Quantization(),stream->Encoding());	
-
-									if(cb.wasSampleFloat())
-									{
-										//need to convert read here! putSample takes a double.
-										if(stream->Quantization() == 64)
-											decStreamArray[i]->putSample(*(reinterpret_cast<double*>(&read)));
-										if(stream->Quantization() == 32)
-											decStreamArray[i]->putSample(*(reinterpret_cast<float*>(&read)));
-
-
-									} else
-									{
-										decStreamArray[i]->putSample(read);
-									}
-
-									if(stream->Alignment() == stream->Right)
-										cb.skipBits(stream->Packedbits() - stream->Quantization());
-	
-									break;
+									//given a metadata-stream, a chunkbuffer, and an output stream, 
+									//puts samples away according to their packedbits/quant/align.
+									decodeFormattedStream(stream,&cb,i);
 								}
+
+							
 							}
 						}
 
@@ -298,7 +284,9 @@ using namespace GnssMetadata;
 
 						if(newStream)
 						{
-							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s);
+							//record if it in complex, and if so, what value comes first.
+							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s,!((s->Format() == s->IF) || (s->Format() == s->IFn)),
+								(s->Format() == s->QI) || (s->Format() == s->QnIn) || (s->Format() == s->QIn) || (s->Format() == s->QnI));
 							decStreamCount++;
 						}
 					}
@@ -395,3 +383,93 @@ using namespace GnssMetadata;
 	{
 		return done;
 	};
+
+	void GNSSReader::readAndPutSample(ChunkBuffer * cb,GnssMetadata::Stream * s, int i, bool negate)
+	{
+
+		int64_t read= cb->readBits(s->Quantization(),s->Encoding());	
+
+		if(negate) 
+			read = -read;
+
+		if(cb->wasSampleFloat())
+		{
+		//need to convert read here! putSample takes a double.
+			if(s->Quantization() == 64)
+				decStreamArray[i]->putSample(*(reinterpret_cast<double*>(&read)));
+			if(s->Quantization() == 32)
+				decStreamArray[i]->putSample(*(reinterpret_cast<float*>(&read)));
+
+		} else
+		{
+				decStreamArray[i]->putSample(read);
+		}
+	}
+
+		void GNSSReader::skipLeftPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb)
+		{
+			if(stream->Alignment() == stream->Left)
+				cb->skipBits(stream->Packedbits() - stream->Quantization());
+		}
+
+		void GNSSReader::skipRightPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb)
+		{
+			if(stream->Alignment() == stream->Right)
+				cb->skipBits(stream->Packedbits() - stream->Quantization());
+		}
+
+		void GNSSReader::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
+		{
+			switch(stream->Format())
+			{
+				case stream->IF:
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,false);
+					skipRightPackedBits(stream,cb);
+					break;
+
+				case stream->IFn:
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,true);
+					skipRightPackedBits(stream,cb);
+					break;
+
+				case stream->IQ:
+				case stream->QI:
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,false);
+					skipRightPackedBits(stream,cb);
+
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,false);
+					skipRightPackedBits(stream,cb);
+					break;
+
+				case stream->IQn:
+				case stream->QIn:
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,false);
+					skipRightPackedBits(stream,cb);
+
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,true);
+					skipRightPackedBits(stream,cb);
+					break;
+
+				case stream->InQn:
+				case stream->QnIn:
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,TRUE);
+					skipRightPackedBits(stream,cb);
+
+					skipLeftPackedBits(stream,cb);
+					readAndPutSample(cb,stream,i,true);
+					skipRightPackedBits(stream,cb);
+					break;
+									
+				default:
+					printf("Format error");
+
+			}
+		}
+	

@@ -12,6 +12,7 @@
 #include<GnssMetadata/Metadata.h>
 #include "DecStream.h"
 #include "FileReader.h"
+#include "ChunkBuffer.h"
 using namespace GnssMetadata;
 
 class GNSSReader {
@@ -35,6 +36,12 @@ class GNSSReader {
 
 	//Helper function to start a thread of a class method at runtime.
 	static void ThreadEntry(void *p);
+
+	void readAndPutSample(ChunkBuffer * cb, Stream* s, int i, bool negate);
+
+	void skipLeftPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb);
+	void skipRightPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb);
+	void decodeFormattedStream(GnssMetadata::Stream * stream, ChunkBuffer * cb, int i);
 
 	bool done;
 
