@@ -19,12 +19,16 @@ class IBuffer{
 
 	char* ibuf; //The buffer itself
 
-	volatile uint64_t bufPtr; //Pointer to where we may write new bytes to the buffer.
-	volatile uint64_t oldPtr; //Pointer to oldest data in buffer
+	uint64_t bufPtr; //Pointer to where we may write new bytes to the buffer.
+	uint64_t oldPtr; //Pointer to oldest data in buffer
 
 	volatile int numBytesStored; //count of all the bytes that are stored
 
 	volatile bool finish;
+
+
+	//do not write and read
+	CRITICAL_SECTION crit; 
 
 
 public:

@@ -63,7 +63,6 @@
 				space = ib->canWriteBlock();
 				if(finish)
 					ib->finishWrite();
-				
 			}
 
 			int readFile = ReadFile(sdrFile, space, readBufferSize, &i, NULL);

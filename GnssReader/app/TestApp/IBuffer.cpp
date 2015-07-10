@@ -14,48 +14,52 @@
 		finish = false;
 		bufPtr = preBufferSize;
 		oldPtr = preBufferSize;
+		
+		InitializeCriticalSection(&crit);
 	}
 
 	//returns true if a block of 'writeblocksize' can be written, false if not
 
 	char* IBuffer::canWriteBlock()
 	{
-		//we can be certain bufPtr won't change. But, what about oldPtr?
-		//int thisOldPtr = oldPtr;
-		//std::cout << bufPtr << "_" << totalBufferSize;
-		//buffer is clear!
+		char* retval;
+
+        EnterCriticalSection(&crit);
+
 		if(bufPtr == oldPtr)
 		{
-			return ibuf+bufPtr;
+			retval = ibuf+bufPtr;
 		}
 
 		//we need not worry about overlap
 		if(bufPtr < oldPtr)
 		{
 			if((oldPtr - bufPtr) > writeBlockSize)
-				return ibuf+bufPtr;
+				retval = ibuf+bufPtr;
 			else
-				return NULL;
+				retval = NULL;
 		} else 
 		{
 			uint64_t endOfBufferDataSize = (totalBufferSize) - bufPtr;
 
 			if(endOfBufferDataSize >= writeBlockSize)
 			{
-				return ibuf+bufPtr;
+				retval =  ibuf+bufPtr;
 			} else
 			{
-				return NULL;
+				retval =  NULL;
 			}
 		}
+
+		LeaveCriticalSection(&crit);
+		return retval;
 	}
 
 	void IBuffer::doneWritingBlock()
 	{
-		if(bufPtr > totalBufferSize)
-		{
-			printf("critical error");
-		}
+
+        EnterCriticalSection(&crit);
+
 		numBytesStored += writeBlockSize;
 		bufPtr+=writeBlockSize;
 
@@ -63,10 +67,17 @@
 		{
 			bufPtr = preBufferSize;
 		}
+
+		
+		LeaveCriticalSection(&crit);
 	}
 	
 	char* IBuffer::tryRead(uint64_t count)
 	{
+		
+        EnterCriticalSection(&crit);
+		
+		char* retval;
 
 		if(finish)
 		{
@@ -76,17 +87,17 @@
 		//buffer is clear!
 		if(bufPtr == oldPtr)
 		{
-			return NULL;
+			retval =  NULL;
 		}
 
 		//we need not worry about overlap
-		if(bufPtr > oldPtr)
+		else if(bufPtr > oldPtr)
 		{
 
 			if((bufPtr - oldPtr) > count)
-				return ibuf+oldPtr;
+				retval = ibuf+oldPtr;
 			else
-				return NULL;
+				retval = NULL;
 		} else 
 		{
 			uint64_t endOfBufferDataSize = (totalBufferSize) - oldPtr;
@@ -95,22 +106,30 @@
 	
 			if(endOfBufferDataSize > count)
 			{
-				return ibuf+oldPtr;
+				 retval =  ibuf+oldPtr;
 			} 
 
-			if( (startBufferDataSize + endOfBufferDataSize) > count)
+			else if( (startBufferDataSize + endOfBufferDataSize) > count)
 			{
 				memcpy(ibuf+(preBufferSize-endOfBufferDataSize),ibuf+oldPtr,endOfBufferDataSize);
-				return ibuf+(preBufferSize-endOfBufferDataSize);
+				retval =  ibuf+(preBufferSize-endOfBufferDataSize);
 			} 
 			
-			return NULL;
+			else retval = NULL;
 			
 		}
+
+		
+		LeaveCriticalSection(&crit);
+		return retval;
 	};
 
 	void IBuffer::doneReading(uint64_t count)
 	{
+		
+
+        EnterCriticalSection(&crit);
+
 		numBytesStored -= count;
 		//we need not worry about overlap
 		if(bufPtr > oldPtr)
@@ -128,7 +147,7 @@
 			if(endOfBufferDataSize > count)
 			{
 				oldPtr += count;
-							
+				LeaveCriticalSection(&crit);			
 				return;
 			} 
 
@@ -141,6 +160,9 @@
 			
 			
 		}
+
+		
+		LeaveCriticalSection(&crit);
 
 	};
 

@@ -7,7 +7,6 @@
 void testSuite()
 {
 
-	/**
 	
 	//alignment: Tests quantization and aligned bits. 
 	{
@@ -45,10 +44,9 @@ void testSuite()
 		test.start();
 	}
 
-	*/
 
 	{
-		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",800L,3L,100000L);
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",1000L,10L,100000L);
 		
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
