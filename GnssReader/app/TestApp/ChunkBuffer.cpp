@@ -182,9 +182,8 @@ using namespace GnssMetadata;
 		
 	};
 
-	ChunkBuffer::~ChunkBuffer(){
-		delete [] chunkInputBuffer;
-	}
+
+
 
 	bool ChunkBuffer::chunkFullyRead(){
 		return ((int)bufferBytePointer == (int)sizeOfBuffer);

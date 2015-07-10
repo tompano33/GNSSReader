@@ -12,13 +12,15 @@
 #include "IBuffer.h"
 #include "GnssReader.h"
 
-	FileReader::FileReader(std::vector<std::string> fnames,uint64_t readBufferSize, uint64_t intermediateBufferSize,const char* origPath,const char** addlPaths,uint64_t pathCount){
-		this->readBufferSize = readBufferSize;
-		ib = new IBuffer(intermediateBufferSize);
-		buff = new char[readBufferSize];
+	FileReader::FileReader(std::vector<std::string> fnames,uint64_t inBlockSize, uint64_t inBlockCount,const char* origPath,const char** addlPaths,uint64_t pathCount){
+	
+		this->readBufferSize = inBlockSize;
+
+		ib = new IBuffer(inBlockSize,inBlockCount);
 		killThreadFlag = false;
 		this->fnames = fnames;
 		filePtr = 0;
+		bytesRead = 0;
 
 		//copy const strings to something that wont go out of scope.
 		pathNames = new char*[pathCount+1];
@@ -33,22 +35,39 @@
 		prepareHandle();
 	}
 
-	//Assumes that sdrFile, buff both defined.
 	void FileReader::readFile()
 	{
+		
+
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
 		{
-			//don't overread
+
+
+			int finish = false;
+
 			if(readBufferSize > fileSize.QuadPart - bytesRead)
+			{
 				readBufferSize = fileSize.QuadPart - bytesRead;
+				finish = true;
+			}
 
 			//Does all the reading
 			DWORD i;
-			int readFile = ReadFile(sdrFile, buff, readBufferSize, &i, NULL);
+			char* space = NULL;
+			while(space == NULL && !killThreadFlag)
+			{
+				space = ib->canWriteBlock();
+				if(finish)
+					ib->finishWrite();
+				
+			}
+
+			int readFile = ReadFile(sdrFile, space, readBufferSize, &i, NULL);
 
 			if(!readFile && GetLastError() != ERROR_IO_PENDING)
 			{
+
 				printf ("ReadFile failed with error %d.\n", GetLastError());
 				
 				//attempt to recover
@@ -73,30 +92,41 @@
 
 			if(readFile){
 				//Todo: find out how to abandon this thead for a while.
-				while(!ib->write(buff,readBufferSize) && !killThreadFlag){;}
+				ib->doneWritingBlock();
+
 				bytesRead = bytesRead + readBufferSize;
 			} else {
 				std::cout << "Error, Not a full read"   << std::endl;
 			}
 
+			if(bytesRead == fileSize.QuadPart) 
+				ib->finishWrite();
 			//load in next file
 			//(that is, file is done reading and there are more files).
 			if(bytesRead == fileSize.QuadPart && filePtr < fnames.size())
 			{
+				ib->finishWrite();
 				CloseHandle(sdrFile);
 				prepareHandle();
 				std::cout << "Opening file " << filePtr << " \n";
 			}
 
 		}
+		
 		CloseHandle(sdrFile);
 	};
 
-	void FileReader::getBufferedBytes(char* b, int count)
+	char* FileReader::getBufferedBytes(int count)
 	{
-		ib->read(count,b);
-	}
+		char* c = NULL;
+		while(c == NULL)
+		{
+			c = ib->tryRead(count);
+		}
 
+		return c;
+
+	}
 
 	void FileReader::readAll()
 	{
@@ -107,6 +137,11 @@
 	{
 		((FileReader *) p)->readFile();   
 		_endthread();
+	}
+
+	void FileReader::doneReading(uint64_t count)
+	{
+		ib->doneReading(count);
 	}
 
 	bool FileReader::hasReadWholeFile(){
@@ -129,7 +164,11 @@
 
 	void FileReader::skipBufferedBytes(int count)
 	{
-		ib->skip(count);
+		if(count != 0)
+		{
+			getBufferedBytes(count);
+			doneReading(count);
+		}
 	}
 
 	void FileReader::prepareHandle()
@@ -163,8 +202,7 @@
 	}
 
 	FileReader::~FileReader(){
-		delete [] buff;
-		delete ib;
+	//	delete ib;
 	}
 
 

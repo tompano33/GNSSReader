@@ -2,91 +2,158 @@
 #include <iostream>
 #include "IBuffer.h"
 
-	IBuffer::IBuffer(uint64_t bufSize){
-		this->bufferSize = bufSize;
-		ibuf = new char[bufSize];
-		bufPtr = 0;
-		oldPtr = 0;
-		numBytesStored = 0;
+	IBuffer::IBuffer(uint64_t writeBlockSize, uint64_t writeBlockCount){
+
+		this->writeBlockSize = writeBlockSize;
+		this->writeBlockCount = writeBlockCount;
+		this->normalBufferSize = writeBlockSize*(writeBlockCount);
+		this->preBufferSize = writeBlockSize;
+		this->totalBufferSize = normalBufferSize+preBufferSize;
+		this->numBytesStored = 0;
+		ibuf = new char[totalBufferSize];
+		finish = false;
+		bufPtr = preBufferSize;
+		oldPtr = preBufferSize;
 	}
 
-	//returns true if write was successful
-	bool IBuffer::write(char* bytes, uint64_t count)
+	//returns true if a block of 'writeblocksize' can be written, false if not
+
+	char* IBuffer::canWriteBlock()
 	{
-		//Not enough room to put bytes!
-		if((bufferSize-numBytesStored) < count){
-			return false;
-		} else
+		//buffer is clear!
+		if(bufPtr == oldPtr)
 		{
-			//the buffer has space, and we aren't going to wrap around, we can just memcpy
-			if(count < (bufferSize- bufPtr) ) 
-			{
-				memcpy(ibuf+bufPtr, bytes, count);
-				bufPtr += count;
-			}
+			return ibuf+bufPtr;
+		}
+
+		//we need not worry about overlap
+		if(bufPtr < oldPtr)
+		{
+			if((oldPtr - bufPtr) > writeBlockSize)
+				return ibuf+bufPtr;
 			else
-			{
-				//we need to write twice, once before the end, one after
-				int spaceLeftAtEnd = (bufferSize - bufPtr);
-				memcpy(ibuf+bufPtr,bytes,spaceLeftAtEnd);
-				memcpy(ibuf,bytes+spaceLeftAtEnd,count-spaceLeftAtEnd);
-				bufPtr = count-spaceLeftAtEnd;
-			}
-			numBytesStored += count;
-			return true;
-		}
-	}
-
-	//TODO throw error if overreading
-	void IBuffer::read(uint64_t size, char* buf)
-	{
-		if(size > bufferSize)
-		{
-			printf("Error: chunk is bigger than buffer");
-			std::cin.get();
-			return;
-		}
-
-		while(size > numBytesStored){;}
-
-		if(size < (bufferSize - oldPtr))
-		{
-			memcpy(buf,ibuf+oldPtr,size);
-			oldPtr+= size;
+				return NULL;
 		} else 
 		{
-			int spaceLeftAtEnd = (bufferSize - oldPtr);
-			memcpy(buf,ibuf+oldPtr,spaceLeftAtEnd);
-			memcpy(buf+spaceLeftAtEnd,ibuf,size-spaceLeftAtEnd);
-			oldPtr=size-spaceLeftAtEnd;
-		}	
+			uint64_t endOfBufferDataSize = (totalBufferSize) - oldPtr;
+
+			if(endOfBufferDataSize >= writeBlockSize)
+			{
+				return ibuf+bufPtr;
+			} else
+			{
+				return NULL;
+			}
+		}
+	}
+
+	void IBuffer::doneWritingBlock()
+	{
+		numBytesStored += writeBlockSize;
+		bufPtr+=writeBlockSize;
+		if(bufPtr == totalBufferSize && oldPtr != preBufferSize)
+		{
+			bufPtr = preBufferSize;
+		}
+	}
+	
+	char* IBuffer::tryRead(uint64_t count)
+	{
+
+		if(finish)
+		{
+			count--;
+		}
+
+		//buffer is clear!
+		if(bufPtr == oldPtr)
+		{
+			return NULL;
+		}
+
+		//we need not worry about overlap
+		if(bufPtr > oldPtr)
+		{
+
+			if((bufPtr - oldPtr) > count)
+				return ibuf+oldPtr;
+			else
+				return NULL;
+		} else 
+		{
+			uint64_t endOfBufferDataSize = (totalBufferSize) - oldPtr;
+			uint64_t startBufferDataSize = bufPtr - preBufferSize;
+
+	
+			if(endOfBufferDataSize > count)
+			{
+				return ibuf+oldPtr;
+			} 
+
+			if( (startBufferDataSize + endOfBufferDataSize) > count)
+			{
+				memcpy(ibuf+(preBufferSize-endOfBufferDataSize),ibuf+oldPtr,endOfBufferDataSize);
+				return ibuf+(preBufferSize-endOfBufferDataSize);
+			} 
 			
-		numBytesStored -=size;
+			return NULL;
+			
+		}
 	};
+
+	void IBuffer::doneReading(uint64_t count)
+	{
+		numBytesStored -= count;
+		//we need not worry about overlap
+		if(bufPtr > oldPtr)
+		{
+			oldPtr += count;
+
+
+			if(bufPtr == totalBufferSize)
+				bufPtr = preBufferSize;
+		} else 
+		{
+			uint64_t endOfBufferDataSize = (totalBufferSize) - oldPtr;
+			uint64_t startBufferDataSize = bufPtr - (preBufferSize) ;
+
+			if(endOfBufferDataSize > count)
+			{
+				oldPtr += count;
+							
+				return;
+			} 
+
+			if( (startBufferDataSize + endOfBufferDataSize) > count)
+			{
+				uint64_t post = count - (endOfBufferDataSize);
+				oldPtr = preBufferSize+post;
+
+			} 
+			
+			
+		}
+
+	};
+
+
 
 	uint64_t IBuffer::getNumBytesStored()
 	{
 		return numBytesStored;
-	};
-
-	void IBuffer::skip(uint64_t size)
+	}
+	void IBuffer::dbg_printPtrs()
 	{
-		//wait for there to be enough bytes to skip
-		while(size > numBytesStored){;}
-			
-		if(size < (bufferSize - oldPtr))
-		{
-				oldPtr+= size;
-		} else 
-		{
-			uint64_t spaceLeftAtEnd = (bufferSize - oldPtr);
-			oldPtr=size-spaceLeftAtEnd;
-		}
-			
-		numBytesStored -=size;
-	};
+		std::cout << oldPtr << " " << bufPtr << "\n";
 
-	IBuffer::~IBuffer(){
-		delete [] ibuf;
 	}
 
+	IBuffer::~IBuffer(){
+		//need to delete- but causes errors
+	//	delete [] ibuf;
+	}
+
+	void IBuffer::finishWrite()
+	{
+		finish = true;
+	}

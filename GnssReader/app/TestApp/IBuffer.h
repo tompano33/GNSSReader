@@ -10,27 +10,45 @@
 #include <windows.h>
 
 class IBuffer{
-	uint64_t bufferSize; // size of the intermediatebuffer
-	char* ibuf; //The buffer
-	int bufPtr; //Pointer to where we may write new bytes to the buffer.
-	int oldPtr; //Pointer to oldest data in buffer
-	char* returnbuf; //return buffer for when we want to read bytes from this buffer.
+
+	uint64_t writeBlockSize;
+	uint64_t writeBlockCount; 
+	uint64_t normalBufferSize;
+	uint64_t preBufferSize;
+	uint64_t totalBufferSize;
+
+	char* ibuf; //The buffer itself
+
+	volatile uint64_t bufPtr; //Pointer to where we may write new bytes to the buffer.
+	volatile uint64_t oldPtr; //Pointer to oldest data in buffer
+
 	volatile int numBytesStored; //count of all the bytes that are stored
+
+	volatile bool finish;
 
 public:
 
-	IBuffer::IBuffer(uint64_t bufferSize);
+	//makes a buffer.
+	IBuffer::IBuffer(uint64_t writeBlockSize, uint64_t writeBlockCount);
 
-	//returns true if write was successful.
-	bool write(char* bytes, uint64_t count);
+	//If there is space in the buffer, returns a pointer to the buffer where writing may begin for 'n' bytes. Returns 'null' if no such space exists
+	char* canWriteBlock();
+
+	//After you write to the buffer, you MUST call this to confirm that the bytes were written.
+	void doneWritingBlock();
 
 	//blocks until it can read.
-	void read(uint64_t size, char* buf);
+	char* tryRead(uint64_t count);
+
+	void doneReading(uint64_t count);
+
 	~IBuffer();
 
 	uint64_t getNumBytesStored();
-	//skips over "count" bytes in the buffer
-	void skip(uint64_t count);
+
+	void dbg_printPtrs();
+
+	void finishWrite();
 
 };
 #endif

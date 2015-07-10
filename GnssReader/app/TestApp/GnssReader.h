@@ -18,7 +18,7 @@ using namespace GnssMetadata;
 class GNSSReader {
 
 	std::vector<Metadata*>* mdList;	//List of all metadata objects.
-	uint64_t mdPtr; //Pointer to metadata object we are currently decoding.
+	unsigned int mdPtr; //Pointer to metadata object we are currently decoding.
 	std::vector<std::string>* sdrFileNames; //List of all SDR file names to decode, in order. This can be disposed of when i have some time
 	DecStream** decStreamArray; //Array of Decoded Sample Output Streams
 	uint64_t decStreamCount; //The count of these streams.

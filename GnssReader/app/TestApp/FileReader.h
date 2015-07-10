@@ -19,15 +19,15 @@ class FileReader{
 
 	HANDLE sdrFile;						//Handle to the file that is currently being read.
 	uint64_t readBufferSize;			//How many bytes to read at once
-	char* buff;							//Buffer to handle transfers between the file and the intermediate buffer.
-	volatile uint64_t bytesRead;		//Count of total bytes read from the current file so far
+	volatile int64_t bytesRead;		//Count of total bytes read from the current file so far
 	LARGE_INTEGER fileSize;				//Count of total bytes in the file
-	IBuffer* ib;						//Buffer that holds the files that have been read.
 	bool killThreadFlag;				//A Flag that can kill all file reading operations if need be.
 	std::vector<std::string> fnames;	//Holds all the SDR files in consecutive order.
 	int filePtr;						//points to which file we are on in the vector.
-	char** pathNames;
-	uint64_t pathNameCount;
+	char** pathNames;					//list of path names
+	uint64_t pathNameCount;				//count of path names
+	IBuffer* ib;						//Buffer that holds the files that have been read.
+
 
 	//Helper function to start a thread of a class method at runtime.
 	static void ThreadEntry(void *p);
@@ -37,14 +37,14 @@ class FileReader{
 
 public:
 
-	//Needs a list of sdr data file names, the count of how many bytes to read a time, and the size of the buffer to store the bytes. 
+	//Needs a list of sdr data file names, the count of how many bytes to read a time, and the size of the buffer to store the bytes in terms of readBufferSize
 	FileReader::FileReader(std::vector<std::string> fname,uint64_t readBufferSize, uint64_t intermediateBufferSize, const char *origPath, const char** paths, uint64_t pathCount);
 
 	//Starts a thread that populates intermediatebuffer.
 	void readAll();
 
 	//given a request for count bytes, puts them in predefined buffer b.
-	void getBufferedBytes(char* b, int count);
+	char* getBufferedBytes(int count);
 
 	//Returns true if the whole file has been read.
 	//This is useful because once all the blocks have been read we can check for extraneous data.
@@ -58,6 +58,8 @@ public:
 
 	//kills the thread that reads the file.
 	void killReadThread();
+
+	void doneReading(uint64_t count);
 
 	//skips over "count" bytes (good for getting over headers/footers)
 	void skipBufferedBytes(int count);

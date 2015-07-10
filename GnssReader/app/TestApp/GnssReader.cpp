@@ -38,6 +38,7 @@ using namespace GnssMetadata;
 			//for every chunk:
 			for(int i = 0; i != block->chunkCount; i++)
 			{
+				
 
 				Chunk* chunk = block->chunkArray[i];
 
@@ -46,10 +47,8 @@ using namespace GnssMetadata;
 	
 				int chunkBufferSize = sizeWord*countWord;
 
-				//Initialize a chunkbuffer and populate it.
-				//I can be smarter about allocating this buffer. It only needs realloc'd if the word size/ count changes.
-				char* buf = new char[chunkBufferSize];
-				fr->getBufferedBytes(buf,chunkBufferSize);
+				char* buf = fr->getBufferedBytes(chunkBufferSize);
+
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
 
 
@@ -84,6 +83,7 @@ using namespace GnssMetadata;
 							//find the correct decoded-Stream based on address
 							for(int i = 0; i != decStreamCount; i++)
 							{
+								
 								if(decStreamArray[i]->getCorrespondingStream() == stream){
 									//given a metadata-stream, a chunkbuffer, and an output stream, 
 									//puts samples away according to their packedbits/quant/align.
@@ -103,6 +103,8 @@ using namespace GnssMetadata;
 						}
 					}
 				}
+
+				fr->doneReading(chunkBufferSize);
 			}
 		}
 	}
@@ -176,10 +178,13 @@ using namespace GnssMetadata;
 	//Start decoding the file into stream(s)
 	void GNSSReader::start(){
 
-		//start the file reader thread. 
 		fr->readAll();
 	
+
 		Metadata* md;
+
+
+
 		//for all metadatas
 		while(mdPtr < mdList->size())
 		{
@@ -205,6 +210,7 @@ using namespace GnssMetadata;
 				//how many chunk cycles are there?
 				uint32_t cycles = block->Cycles();
 				//is there a header or footer we need to skip?
+
 				uint32_t headerSize = block->SizeHeader();
 				//std::cout << "\n" << headerSize << "\n";
 				uint32_t footerSize = block->SizeFooter();
@@ -283,6 +289,7 @@ using namespace GnssMetadata;
 						bool newStream = true;
 
 						for(int c = 0; newStream &&  c != decStreamCount; c++){	
+
 							if(s == decStreamArray[c]->getCorrespondingStream())
 									newStream = false;
 						}
@@ -306,13 +313,13 @@ using namespace GnssMetadata;
 	}
 
 	GNSSReader::~GNSSReader(){
-		delete fr;
-		for(int i = 0; i != decStreamCount; i++)
-		{
+	//	delete fr;
+	//	for(int i = 0; i != decStreamCount; i++)
+	//	{
 			
-			delete decStreamArray[i];
-		}
-		delete [] decStreamArray;
+	//		delete decStreamArray[i];
+	//	}
+	//	delete [] decStreamArray;
 	}
 	
 	//When we load a new XML file, we must assoicate the already-open streams with those found in the file.
@@ -331,7 +338,7 @@ using namespace GnssMetadata;
 					for(int i2  = 0; i2 != l->streamCount;i2++)
 					{
 						Stream* s = l->streamArray[i2];
-
+				
 						
 						l->lumpSize += s->Packedbits();
 
@@ -412,7 +419,7 @@ using namespace GnssMetadata;
 
 		} else
 		{
-				decStreamArray[i]->putSample(read);
+				decStreamArray[i]->putSample((read));
 		}
 	}
 

@@ -29,9 +29,6 @@ public:
 	void skipBits(uint8_t bitsToSkip);
 
 	bool wasSampleFloat();
-
-	/** Deallocates chunkInputBuffer */
-	ChunkBuffer::~ChunkBuffer();
 };
 
 #endif
