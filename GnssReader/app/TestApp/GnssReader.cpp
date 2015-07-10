@@ -178,8 +178,9 @@ using namespace GnssMetadata;
 	//Start decoding the file into stream(s)
 	void GNSSReader::start(){
 
+		std::cout << getDecStreamArray()[0]->getID();
 		fr->readAll();
-	
+
 
 		Metadata* md;
 

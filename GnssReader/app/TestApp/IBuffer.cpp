@@ -20,6 +20,9 @@
 
 	char* IBuffer::canWriteBlock()
 	{
+		//we can be certain bufPtr won't change. But, what about oldPtr?
+		//int thisOldPtr = oldPtr;
+		//std::cout << bufPtr << "_" << totalBufferSize;
 		//buffer is clear!
 		if(bufPtr == oldPtr)
 		{
@@ -35,7 +38,7 @@
 				return NULL;
 		} else 
 		{
-			uint64_t endOfBufferDataSize = (totalBufferSize) - oldPtr;
+			uint64_t endOfBufferDataSize = (totalBufferSize) - bufPtr;
 
 			if(endOfBufferDataSize >= writeBlockSize)
 			{
@@ -49,8 +52,13 @@
 
 	void IBuffer::doneWritingBlock()
 	{
+		if(bufPtr > totalBufferSize)
+		{
+			printf("critical error");
+		}
 		numBytesStored += writeBlockSize;
 		bufPtr+=writeBlockSize;
+
 		if(bufPtr == totalBufferSize && oldPtr != preBufferSize)
 		{
 			bufPtr = preBufferSize;

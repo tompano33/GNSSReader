@@ -12,6 +12,9 @@
 #include "IBuffer.h"
 #include "GnssReader.h"
 
+//I dont want to have to do this but I cant fnid this bug
+#include "Test.h"
+
 	FileReader::FileReader(std::vector<std::string> fnames,uint64_t inBlockSize, uint64_t inBlockCount,const char* origPath,const char** addlPaths,uint64_t pathCount){
 	
 		this->readBufferSize = inBlockSize;
@@ -37,7 +40,7 @@
 
 	void FileReader::readFile()
 	{
-		
+
 
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)

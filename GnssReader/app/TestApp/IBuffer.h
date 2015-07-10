@@ -26,6 +26,7 @@ class IBuffer{
 
 	volatile bool finish;
 
+
 public:
 
 	//makes a buffer.
