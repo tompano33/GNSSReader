@@ -226,6 +226,9 @@ private:
     bool        m_PeakHoldValid;
     float       m_PeakDetection;
 
+    /* Addition 7-2-15 */
+    bool m_jetColorMap;
+
     QMap<int,int>   m_Peaks;
 };
 

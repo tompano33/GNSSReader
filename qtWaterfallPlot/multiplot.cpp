@@ -3,6 +3,8 @@
 #include <QToolBar>
 #include <iostream>
 
+#define PI 3.14159265358979323846
+
 MultiPlot::MultiPlot(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MultiPlot)
@@ -10,16 +12,17 @@ MultiPlot::MultiPlot(QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose);
     ui->setupUi(this);
 
-    // FFT Initialization
-    fft = new Fft();
 
     // Setup docks
     uiDockFft = new DockFft();
     uiDockRxOpt = new DockRxOpt();
     uiDockAudio = new DockAudio();
     addDockWidget(Qt::RightDockWidgetArea, uiDockFft);
-//    addDockWidget(Qt::RightDockWidgetArea, uiDockRxOpt);
-//    tabifyDockWidget(uiDockRxOpt,uiDockFft);
+    addDockWidget(Qt::RightDockWidgetArea, uiDockRxOpt);
+    tabifyDockWidget(uiDockRxOpt,uiDockFft);
+
+    // For now, hide Receiver dockable wiget
+    uiDockRxOpt->hide();
 
     /* FFT timer & data */
     fft_timer = new QTimer(this);
@@ -29,6 +32,26 @@ MultiPlot::MultiPlot(QWidget *parent) :
     /* Audio timer */
     audio_fft_timer = new QTimer(this);
     //connect(audio_fft_timer, SIGNAL(timeout()), this, SLOT(audioFftTimeout()));
+
+    QToolBar *toolbar = addToolBar(tr("Waterfall"));
+    toolbar->addWidget(ui->freqCtrl);
+    toolbar->addWidget(ui->sMeter);
+    toolbar->addWidget(ui->windowTypeSelect);
+
+    ui->menuView->addAction(uiDockRxOpt->toggleViewAction());
+    ui->menuView->addAction(uiDockAudio->toggleViewAction());
+    ui->menuView->addAction(uiDockFft->toggleViewAction());
+
+    /* frequency control widget */
+    ui->freqCtrl->setup(10, (quint64) 0, (quint64) 9999e6, 1, UNITS_MHZ);
+    ui->freqCtrl->setFrequency(144500000);
+
+    /* Connect the frequency control widget to main window */
+    connect(ui->freqCtrl, SIGNAL(newFrequency(qint64)), this, SLOT(setNewFrequency(qint64)));
+
+    /* meter timer */
+    meter_timer = new QTimer(this);
+    connect(meter_timer, SIGNAL(timeout()), this, SLOT(meterTimeout()));
 
     /* Connect GUI with FFT rate and size and the FFT dockable widget */
     connect(this, SIGNAL(fftRateChanged(int)), this, SLOT(setFftRate(int)));
@@ -69,39 +92,52 @@ MultiPlot::MultiPlot(QWidget *parent) :
     connect(uiDockAudio, SIGNAL(audioPlayStopped()), this, SLOT(stopAudioPlayback()));
     connect(uiDockAudio, SIGNAL(fftRateChanged(int)), this, SLOT(setAudioFftRate(int)));
 
-    // Set min and max dB ... TODO: switch to dynamic method of scaling
+    // Set min and max dB
     ui->plotter->setMaxDB(100);
     ui->plotter->setMinDB(-100);
 
-//    ui->plotter->setSampleRate(44100.0);
-//    ui->plotter->setSpanFreq(440.0);
+    ui->plotter->setSampleRate(44100.0);
+    ui->plotter->setSpanFreq(440.0);
     ui->plotter->setPercent2DScreen(30);
     ui->plotter->resetHorizontalZoom();
-    ui->plotter->setCenterFreq(0);
+    ui->plotter->setCenterFreq(14500000);
 
+    // FFT Initialization
+
+    inputData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*16384);
+    fft = new Fft(inputData);
     currentFFTsize = fft->size();
-    inputData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*currentFFTsize);
     outputData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*currentFFTsize);
-
+    outputFFTdata = (double*) malloc(sizeof(double)*currentFFTsize);
+    d_fftAvg = 0.5;
+    switchSigns = false;
+    windowType = -2; // Default is Hamming
+    currentPoint = 0;
+    stopPoint = 0;
+    minValue = maxValue = 0.0;
+    resetMinMax = true; // Reset the min and max
 }
 
 MultiPlot::~MultiPlot()
 {
     //Memory deallocation:
-    std::cout<< "~MultiPlot()" << std::endl;
-    fft_timer->stop();
-
-    audio_fft_timer->stop();
-    delete audio_fft_timer;
-
-    free(inputBuffer);
-    fftw_cleanup();
-    delete uiDockFft;
-    delete uiDockRxOpt;
-    delete uiDockAudio;
-    delete ui;
-    delete fft_timer;
-    delete fft;
+    /* Note: 7-9-15, issues with ~MultiPlot...*/
+//    std::cout<< "~MultiPlot()" << std::endl;
+//    fft_timer->stop();
+//    delete fft_timer;
+//    meter_timer->stop();
+//    delete meter_timer;
+//    audio_fft_timer->stop();
+//    delete audio_fft_timer;
+//    free(outputFFTdata);
+//    inputBuffer.clear();
+//    fftw_free(inputData);
+//    fftw_free(outputData);
+//    delete uiDockFft;
+//    delete uiDockRxOpt;
+//    delete uiDockAudio;
+//    delete ui;
+//    delete fft;
 }
 
 /*
@@ -111,14 +147,91 @@ MultiPlot::~MultiPlot()
 */
 void MultiPlot::FftTimeout()
 {
-    // Set FFT running state to true.
-    ui->plotter->setRunningState(true);
+    // Pull current stream
+    stopPoint += int(currentFFTsize);
+    int i = 0;
+    for(; currentPoint < stopPoint; currentPoint++)
+    {
+        if(currentPoint == inputBuffer.size()-1)
+        {
+            stopPoint = int(currentFFTsize - i);
+            currentPoint = 0;
+        }
+        inputData[i][0] = inputBuffer[currentPoint];
+        inputData[i][1] = 0.0;
+        i++;
+    }
+
+    // Calculate Window Functions - Hanning, Hamming, or Blackman-Harris
+    // Or no window function at all
+    double windowFactor;
+    double a0 = 0.35875, a1 = 0.48829, a2=0.14128, a3 = 0.01168;
+    double alpha = 0.54, beta = 1- alpha;
+
+    for(unsigned int i=0; i < currentFFTsize; i++)
+    {
+
+        switch(windowType)
+        {
+            case -2:
+                windowFactor = 1.0;
+                break;
+            case 0:
+            //Hanning
+                windowFactor= 0.5*(1 - cos((2*PI*i)/(currentFFTsize-1)));
+                break;
+            case 1:
+                //Blackman-Harris
+                windowFactor = a0 - a1*cos((2*PI*i)/(currentFFTsize-1))
+                    + a2*cos((4*PI*i)/(currentFFTsize-1))
+                    - a3*cos((6*PI*i)/(currentFFTsize-1));
+                break;
+            case -1:
+            default:
+                //Hamming
+                windowFactor= alpha-beta*cos((2*PI*i)/(currentFFTsize-1));
+                break;
+        }
+
+
+        inputData[i][0] *= windowFactor;
+    }
 
     // FFT execution and input
-    fft->update(inputData);
     outputData = fft->exec();
-    ui->plotter->setNewFttData(fft->getInData(), (double*)(outputData), int(fft->size()));
+    double minValue = 0.0, maxValue = 0.0;
+    for(int i= 0; i < currentFFTsize; i++)
+    {
+        outputFFTdata[i] = outputFFTdata[i]/outputFFTdata[0];
+        outputFFTdata[i] = sqrt((outputData[i][0]*outputData[i][0])
+                +(outputData[i][1]*outputData[i][1]));
 
+        outputFFTdata[i]= 10*log10(outputFFTdata[i]);
+
+        if(outputFFTdata[i] > maxValue)
+        {
+            maxValue = outputFFTdata[i];
+        }
+        else if( outputFFTdata[i] < minValue)
+        {
+            minValue = outputFFTdata[i];
+        }
+    }
+
+    //Output Data
+    printf("\nOutput Buffer: \n");
+    printf("Minimum value: %i\n", int(minValue));
+    printf("Maximum value: %i\n", int(maxValue));
+    printf("Last value: %3.3f\n", outputFFTdata[currentFFTsize/2 - 1]);
+    // Set FFT running state to true.
+    ui->plotter->setRunningState(true);
+    ui->plotter->setNewFttData(outputFFTdata,int(fft->size()));
+    if(resetMinMax)
+    {
+        ui->plotter->setMinDB(0.5*qint32(minValue));
+        ui->plotter->setMaxDB(0.5*qint32(maxValue));
+        resetMinMax = false;
+    }
 }
 
 /*
@@ -152,37 +265,24 @@ void MultiPlot::setFftRate(int fps)
 */
 void MultiPlot::setFftSize(int value)
 {
+    printf("setFftSize() called! \n");
     if(value > 0)
     {
-        oldFFTsize = fft->size();
-        inputData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*value);
-        outputData  = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*value);
-
-        for(size_t i =0; i < value; i++)
+        if(value != currentFFTsize)
         {
-            inputData[i][0] = inputBuffer[i];
-            inputData[i][1] = 0.0;
+            inputData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*value);
+            outputData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*value);
+            outputFFTdata = (double*) malloc(sizeof(double)*value);
         }
-
         fft->update(value);
-        fft->update(inputData);
 
-        std::cout<<"Current FFT Size: " << fft->size() << std::endl;
-        std::cout<<"Size of inData: " << sizeof(fft->getInData()) << std::endl;
-        ui->plotter->setMinDB(5*qint32(minValue));
-        ui->plotter->setMaxDB(5*qint32(maxValue));
-        ui->plotter->resetHorizontalZoom();
-
-        if(value > oldFFTsize)
-        {
-            float zoomLevel = float(value / oldFFTsize)*100.0;
-            ui->plotter->zoomOnXAxis(zoomLevel);
-        }
+        currentFFTsize = fft->size();
     }
     else
     {
         printf("Invalid size value, fft unchanged.");
     }
+
 }
 
 /*! Set FFT plot color. */
@@ -236,32 +336,60 @@ void MultiPlot::setIqFftAvg(float avg)
   data sent and then the inputData is filled with buffer
   data up to the current FFT size.
 */
-void MultiPlot::setBuffer(double* input, size_t size)
+void MultiPlot::setBuffer(GNSSReader* input, size_t numStream)
 {
-    inputBuffer = (double*) malloc(size*sizeof(double*));
-    memcpy(inputBuffer, input, size);
-    minValue = maxValue = inputBuffer[0];
-    for(int x=0; x < currentFFTsize; x++)
+    /* Sent from main window (pointers) */
+    inputStream = input;
+    streamNumber = numStream;
+    double highestValue = 0.0,lowestValue = 0.0;
+    inputBuffer.set_capacity(inputStream->getDecStreamArray()[numStream]->getBufSize());
+    if(inputStream->isDone())
     {
-        if(inputBuffer[x] < minValue)
-        {
-            minValue = int(inputBuffer[x]);
-        }
-        if(inputBuffer[x] > maxValue)
-        {
-            maxValue = int(inputBuffer[x]);
-        }
-        inputData[x][0] = inputBuffer[x];
-        inputData[x][1] = 0.0;
+        printf("InputStream is done.\n");
     }
-    std::cout << "Min value: " << minValue << std::endl;
-    std::cout << "Max value: " << maxValue << std::endl;
+    else
+    {
+        printf("InputStream is NOT done.\n");
+    }
+    uint64_t count = 1;
+    while(count != 0)
+    {
+        count = 0;
+        double* tempBuf = (double*) malloc(sizeof(double)*
+                                           inputStream->getDecStreamArray()[numStream]->getBufSize());
 
-    ui->plotter->setMinDB(5*qint32(minValue));
-    ui->plotter->setMaxDB(5*qint32(maxValue));
-    ui->plotter->zoomOnXAxis(75.0);  // Switch to defined values
+        inputStream->getDecStreamArray()[numStream]->flushOutputStream(tempBuf, &count);
+        for(unsigned int i = 0; i < count; i++)
+        {
+            inputBuffer.push_back(tempBuf[i]);
+            if(tempBuf[i] > highestValue)
+            {
+                highestValue = tempBuf[i];
+            }
+            else if(tempBuf[i] < lowestValue)
+            {
+                lowestValue = tempBuf[i];
+            }
+        }
+        delete[] tempBuf;
+
+    }
+    printf("Input Buffer: \n");
+    printf("Highest value: %3.3f \n", highestValue);
+    printf("Lowest value: %3.3f \n", lowestValue);
+//    printf("Value at start point: %3.3f\n", inputBuffer[0]);
+//    printf("Value at 1/2 point: %3.3f\n", inputBuffer[inputBufferSize/2]);
+//    printf("Value at 3/4 point: %3.3f\n", inputBuffer[(3*inputBufferSize)/4]);
+//    printf("Value at end point: %3.3f\n", inputBuffer[inputBufferSize-1]);
+//    double x;
+//    printf("Value of uninitialized Double: %3.3f\n",x);
+
+    // How many actual elements are in circular buffer
+    inputBufferSize = unsigned int(inputBuffer.size());
+    printf("Input Buffer Size %i\n",inputBuffer.size());
+//    ui->plotter->setMinDB(5*(lowestValue-1));
+//    ui->plotter->setMaxDB(5*(highestValue+1));
 }
-
 /*
     Switches the timer on or off. This is called from the main window's
     startWFbutton. It either sets the waterfall plots to run or quit running.
@@ -291,20 +419,17 @@ void MultiPlot::closeEvent(QCloseEvent *event)
 /* Sets the center frequency */
 void MultiPlot::setNewFrequency(qint64 freq)
 {
-    ui->plotter->setCenterFreq(freq);
+    if(ui->plotter->isVisible())
+        ui->plotter->setCenterFreq(freq);
 }
 
 /*
-   Sends the new center frequency to the "receiver"
-    object. (NOTE: This has not been added yet as
-    of 6-30-15)
+   Sends the new center frequency to the frequency
+    control object.
 */
 void MultiPlot::on_plotter_newCenterFreq(qint64 f)
 {
-    f = NULL;
-    // TODO: Implement this after "receiver" class set up
-    //rx->set_rf_freq(f);
-    //ui->freqCtrl->setFrequency(f);
+    ui->freqCtrl->setFrequency(f);
 }
 
 /*! \brief Set new channel filter offset.
@@ -796,4 +921,37 @@ void MultiPlot::setAudioFftRate(int fps)
 
     if (audio_fft_timer->isActive())
         audio_fft_timer->setInterval(interval);
+}
+
+/*! \brief Signal strength meter timeout */
+void MultiPlot::meterTimeout()
+{
+    float level;
+
+    //level = rx->get_signal_pwr(true);
+    level = 0.0;
+    ui->sMeter->setLevel(level);
+}
+
+void MultiPlot::on_windowTypeSelect_currentIndexChanged(const QString & text)
+{
+    //Reset input buffer
+    //setBuffer(inputBuffer, inputBufferSize);
+    std::string windowTypeStr = text.toLower().toStdString();
+    if (windowTypeStr == "hamming")
+    {
+        windowType = -1;
+    }
+    else if(windowTypeStr == "hanning")
+    {
+        windowType = 0;
+    }
+    else if(windowTypeStr == "blackman-harris")
+    {
+        windowType = 1;
+    }
+    else if(windowTypeStr == "none")
+    {
+        windowType = -2;
+    }
 }

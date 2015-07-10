@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include <complex.h>
 
+#include <QThread>
 #include "math.h"
 #include <QMutex>
 #include <QFile>
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     // File filters for loading dialog.
     fileFilters = tr("XML files (*.xml)\n"
+                     "SDRX files (*.sdrx)\n"
                      "All files (*)");
 
     /* Set up the  user interface, multiple document interface (MDI) area
@@ -39,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     wfRunning = false;
 
     /* Multithreading on/off */
-    threading = false;
+    threading = true;
 
     /* Set up the toolbar. */
     QToolBar *toolbar = addToolBar(tr("Waterfall"));
@@ -51,20 +53,6 @@ MainWindow::MainWindow(QWidget *parent) :
     toolbar->addWidget(ui->blankLabel);
     toolbar->addSeparator();
     toolbar->addWidget(ui->timeLabel);
-    toolbar->addSeparator();
-    toolbar->addWidget(ui->freqCtrl);
-    toolbar->addWidget(ui->sMeter);
-
-    /* frequency control widget */
-    ui->freqCtrl->setup(10, (quint64) 0, (quint64) 9999e6, 1, UNITS_MHZ);
-    ui->freqCtrl->setFrequency(144500000);
-
-    /* Connect the frequency control widget to main window*/
-    connect(ui->freqCtrl, SIGNAL(newFrequency(qint64)), this, SLOT(setNewFrequency(qint64)));
-
-    /* meter timer */
-    meter_timer = new QTimer(this);
-    connect(meter_timer, SIGNAL(timeout()), this, SLOT(meterTimeout()));
 
     /* Connect push button*/
     connect(ui->startWFbutton,SIGNAL(clicked()),this,SLOT(wfButtonToggled()));
@@ -74,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Default file:
     //load("C:/Users/ANTuser/Documents/Tests/sine/test.xml");
-    load("C:\\Users\\ANTuser\\Documents\\Tests\\singleStream\\test.xml");
+    load("C:\\Users\\ANTuser\\Documents\\Tests\\sine\\test.xml");
     // Maximize window
     this->showMaximized();
 }
@@ -83,9 +71,8 @@ MainWindow::~MainWindow()
 {
     // Memory deallocation:
     multiPlots.clear();
-    meter_timer->stop();
-    delete meter_timer;
     delete ui;
+    delete test;
     free(tempBuffer);
 }
 
@@ -187,7 +174,7 @@ bool MainWindow::open()
         printf("File load failed.");
         return false;
     }
-    // TODO: Switch "/" to "\\" for passing to GNSSReader constructor
+    // Switch "/" to "\\" for passing to GNSSReader constructor
     fileName.replace("/","\\");
 
     load(fileName.toStdString().c_str());
@@ -217,40 +204,15 @@ void MainWindow::load(const char* file)
         multiPlots.clear();
         workspace->closeAllSubWindows();
         //GNSSReader test(file, 50000L,100000L,10000000L);
-        GNSSReader test (file,100000L,200000L,10000000L,5,NULL,0);
-        test.makeDecStreams();
-        if(!threading)
-        {
-            test.start();
-        }
-        else
-        {
-            test.startAsThread();
-        }
-//        while(!test.isDone()){
-
-//            //Once test4 finishes, you will still have to flush the stream one more time.
-//            uint64_t byteCount;
-//            double* d = (double*) malloc(sizeof(double)*test.getDecStreamArray()[0]->getBufSize());
-//            test.getDecStreamArray()[0]->flushOutputStream(d,&byteCount);
-//            std::cout << byteCount << std::endl;
-//        }
-
-        std::cout << "Done!" << std::endl;
-        numStreams = test.getDecStreamCount();
-        // Implementation of multiple plotters
-        printf("The number of streams: %i\n", numStreams);
-        for(size_t i=0; i < numStreams;i++)
+        test = new GNSSReader (file,100000L,200000L,100000L,-1,NULL,0);
+        test->makeDecStreams();
+        test->startAsThread();
+        numStreams = test->getDecStreamCount();
+        for(int i=0; i < numStreams; i++)
         {
             MultiPlot* mplot = new MultiPlot;
-            int bufferSize = test.getDecStreamArray()[i]->getBufSize();
-            printf("The size of the buffer: %i\n", bufferSize);
-            tempBuffer = (double*) malloc(bufferSize*sizeof(double));
-            memmove(tempBuffer,test.getDecStreamArray()[i]->getBuf(), bufferSize);
-            mplot->setBuffer(tempBuffer,
-                                     bufferSize);
+            mplot->setBuffer(test, i);
             QString winTitle;
-
             winTitle.sprintf("Stream #%i", i+1);
             mplot->setWindowTitle(winTitle);
             multiPlots.push_back(mplot);
@@ -265,6 +227,12 @@ void MainWindow::load(const char* file)
                 mplot->setIqFftSplit(15);
             }
         }
+
+
+        std::cout << "Done!" << std::endl;
+        numStreams = test->getDecStreamCount();
+        // Implementation of multiple plotters
+        printf("The number of streams: %i\n", numStreams);
         printf(file);
         printf("\n");
     } catch (std::exception& e) {
@@ -314,45 +282,3 @@ void MainWindow::on_actionAbout_triggered()
                           "</p>").arg(VERSION));
 }
 
-/*! \brief Slot for receiving frequency change signals.
- *  \param[in] freq The new frequency.
- *
- * This slot is connected to the CFreqCtrl::newFrequency() signal and is used
- * to set new RF frequency.
- */
-void MainWindow::setNewFrequency(qint64 freq)
-{
-    /* TODO: After setting up "receiver," update this function. */
-    /* set receiver frequency */
-    //rx->set_rf_freq((double) (freq-d_lnb_lo));
-
-    MultiPlot* mplot;
-    /* update pandapter */
-    for(size_t i=0; i < numStreams; i++)
-    {
-        if(!multiPlots.empty())
-        {
-            mplot = multiPlots.at(i);
-            mplot->setNewFrequency(freq);
-        }
-    }
-    //ui->plotter->setCenterFreq(freq);
-
-    /* update RX frequncy label in rxopts */
-    //uiDockRxOpt->setRfFreq(freq);
-}
-
-void MainWindow::setNewCenterFreq(qint64)
-{
-    // TODO: Finish this later
-}
-
-/*! \brief Signal strength meter timeout */
-void MainWindow::meterTimeout()
-{
-    float level;
-
-    //level = rx->get_signal_pwr(true);
-    level = 0.0;
-    ui->sMeter->setLevel(level);
-}

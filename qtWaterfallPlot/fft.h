@@ -3,6 +3,7 @@
 #include "fftw/fftw3.h"
 #include <string>
 #include <iostream>
+#include <vector>
 
 #define NUMTHREADS 4
 
@@ -20,16 +21,15 @@ class Fft
 {
 public:
     // Default constructor
-    Fft()
+    Fft(fftw_complex* &in)
     {
         fftw_init_threads();
         fftw_plan_with_nthreads(NUMTHREADS);
-        fftSize = 10000;
-        inData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*fftSize);
+        fftSize = 16384;
+        inData = in;
         outData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*fftSize);
-        m_inDataDouble = (double*) malloc(sizeof(double)*fftSize);
         my_plan = fftw_plan_dft_1d(int(fftSize),
-                  inData, outData,FFTW_FORWARD, FFTW_ESTIMATE_PATIENT);
+                  in, outData,FFTW_FORWARD, FFTW_ESTIMATE_PATIENT);
         std::cout <<" New FFT created:" << std::endl;
         std::cout << "===================" << std::endl;
         std::cout << "Address of my_plan: " << &my_plan << std::endl;
@@ -39,16 +39,16 @@ public:
         Constructor that takes size as an argument to set the initial FFT
         size to more or less than 10000.
     */
-    Fft(unsigned int size)
+    Fft(fftw_complex* &in, unsigned int size)
     {
         fftw_init_threads();
         fftw_plan_with_nthreads(NUMTHREADS);
         fftSize = size;
-        inData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*fftSize);
+        inData = in;
         outData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*fftSize);
-        m_inDataDouble = (double*) malloc(sizeof(double)*fftSize);
         my_plan = fftw_plan_dft_1d(int(fftSize),
                   inData, outData,FFTW_FORWARD, FFTW_ESTIMATE_PATIENT);
+
     }
 
     //Destructor
@@ -56,23 +56,13 @@ public:
     {
 //        std::cout<< "~Fft() is called and address of my_plan is: " << std::endl;
 //        std::cout << &my_plan << std::endl;
-//        fftw_destroy_plan(my_plan);
-//        fftw_cleanup_threads();
-        free(m_inDataDouble);
+
+        // Destroying plan does not work...
+        //fftw_destroy_plan(my_plan);
         fftw_cleanup();
+        //fftw_cleanup_threads();
     }
 
-    /*
-        Updates the input data with new input passed as a parameter.
-    */
-    void update(fftw_complex* in)
-    {
-        memcpy(inData,in,sizeof(fftw_complex)*fftSize);
-        for(unsigned int i=0; i < fftSize; i++)
-        {
-            m_inDataDouble[i] = inData[i][0];
-        }
-    }
 
     /*
         Updates the input data to work with a new size FFT. If the new size is
@@ -81,36 +71,9 @@ public:
         smaller FFT size is passed.
     */
     void update(unsigned int size)
-    {        
-        fftw_plan_with_nthreads(NUMTHREADS);
-        unsigned int oldSize = fftSize;
+    {
+        outData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*size);
         fftSize = size;
-        fftw_complex* NewInData = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*size);
-        fftw_complex* NewOutData  = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*size);
-        double* NewInDataDouble = (double*) malloc(sizeof(double)*size);
-
-        if(oldSize <= size)
-        {
-            memmove(NewInData,inData,oldSize);
-            memmove(NewOutData,outData,oldSize);
-            memmove(NewInDataDouble, m_inDataDouble, oldSize);
-        }
-        else
-        {
-            memmove(NewInData,inData,fftSize);
-            memmove(NewOutData,outData,fftSize);
-            memmove(NewInDataDouble, m_inDataDouble, fftSize);
-        }
-        inData = NewInData;
-        outData = NewOutData;
-        m_inDataDouble = NewInDataDouble;
-
-        for(unsigned int i=0; i < size; i++)
-        {
-            m_inDataDouble[i] = inData[i][0];
-        }
-        my_plan = fftw_plan_dft_1d(int(fftSize),
-                  inData, outData,FFTW_FORWARD, FFTW_ESTIMATE_PATIENT);
     }
 
     /*
@@ -131,21 +94,11 @@ public:
         return fftSize;
     }
 
-    /*
-        Returns the input data.
-    */
-    double* getInData()
-    {
-        return m_inDataDouble;
-    }
-
-
 private:
 
         // Member variables
         fftw_complex *inData, *outData;
         fftw_plan my_plan;
-        double *m_inDataDouble;
         unsigned int fftSize;
 
 };

@@ -1,5 +1,4 @@
 Major:
-ChunkBuffer vs BlockBuffer
 Fix one metadata/multiple files
 Endianness.
 Improved error handling.

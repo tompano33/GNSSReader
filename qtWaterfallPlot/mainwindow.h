@@ -29,9 +29,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     size_t getNumStream();
-public slots:
-    void setNewFrequency(qint64);
-    void setNewCenterFreq(qint64);
 
 private slots:
     /* Menu and toolbar actions */
@@ -42,16 +39,12 @@ private slots:
     bool open();
     void load(const char*);
 
-    /* cyclic processing */
-    void meterTimeout();
-
 private:
 
    // bool openFile(const QString &fileName);
     bool wfRunning, threading; // State condition of waterfall plot(s) running
 
     Ui::MainWindow *ui;
-    QTimer *meter_timer;
 
     /* Multiple Windows */
     std::vector<MultiPlot* > multiPlots;
@@ -59,10 +52,13 @@ private:
     QSignalMapper *windowMapper;
     QString fileFilters;
 
+    // Input /File reading
+    GNSSReader *test;
+
     // FFT
     //Fft fft;
     size_t oldFFTsize;
-    double *buffer1, *tempBuffer;
+    double **bufferThread, *tempBuffer;
     size_t buffer1size, streamBufferSize;
     uint64_t numStreams;
 

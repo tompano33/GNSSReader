@@ -1,4 +1,4 @@
-﻿Build started 7/10/2015 11:35:05 AM.
+﻿Build started 7/10/2015 1:46:34 PM.
      1>Project "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\TestApp.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "C:\Users\ANTadmin\Desktop\GNSSReader\GnssReader\app\TestApp\\obj\Win32\Debug\GNSSReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -27,4 +27,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.44
+Time Elapsed 00:00:01.70

@@ -56,75 +56,81 @@ CPlotter::CPlotter(QWidget *parent) :
     setAttribute(Qt::WA_NoSystemBackground, true);
     setMouseTracking(true);
 
-//    /* OLD Waterfall Color Scheme*/
-//    //create a default waterfall color scheme
-//    // *** Need to read from file ***
-//    for (int i = 0; i < 256; i++)
-//    {
-//        if( (i<43) )
-//            m_ColorTbl[i].setRgb( 0,0, 255*(i)/43);
-//        if( (i>=43) && (i<87) )
-//            m_ColorTbl[i].setRgb( 0, 255*(i-43)/43, 255 );
-//        if( (i>=87) && (i<120) )
-//            m_ColorTbl[i].setRgb( 0,255, 255-(255*(i-87)/32));
-//        if( (i>=120) && (i<154) )
-//            m_ColorTbl[i].setRgb( (255*(i-120)/33), 255, 0);
-//        if( (i>=154) && (i<217) )
-//            m_ColorTbl[i].setRgb( 255, 255 - (255*(i-154)/62), 0);
-//        if( (i>=217)  )
-//            m_ColorTbl[i].setRgb( 255, 0, 128*(i-217)/38);
-//    }
-
-
-    // default waterfall color scheme  NEWER
-//    for (int i = 0; i < 256; i++)
-//    {
-//        // level 0: black background
-//        if (i < 20)
-//            m_ColorTbl[i].setRgb(0, 0, 0);
-//        // level 1: black -> blue
-//        else if ((i >= 20) && (i < 70))
-//            m_ColorTbl[i].setRgb(0, 0, 140*(i-20)/50);
-//        // level 2: blue -> light-blue / greenish
-//        else if ((i >= 70) && (i < 100))
-//            m_ColorTbl[i].setRgb(60*(i-70)/30, 125*(i-70)/30, 115*(i-70)/30 + 140);
-//        // level 3: light blue -> yellow
-//        else if ((i >= 100) && (i < 150))
-//            m_ColorTbl[i].setRgb(195*(i-100)/50 + 60, 130*(i-100)/50 + 125, 255-(255*(i-100)/50));
-//        // level 4: yellow -> red
-//        else if ((i >= 150) && (i < 250))
-//            m_ColorTbl[i].setRgb(255, 255-255*(i-150)/100, 0);
-//        // level 5: red -> white
-//        else if (i >= 250)
-//            m_ColorTbl[i].setRgb(255, 255*(i-250)/5, 255*(i-250)/5);
-//    }
 
 // File input for jet color map
     // ??? Doesn't work quite right
-QFile colorMap("C:/Users/ANTuser/Documents/QTwaterfallPlot/jetColorMap.txt");
-if (!colorMap.open(QIODevice::ReadOnly| QIODevice::Text)) {
-    std::cerr << "Cannot open file for reading: "
-         << qPrintable(colorMap.errorString()) << std::endl;
-    return;
+// On/off for jetColorMap
+m_jetColorMap = true;
+
+if(m_jetColorMap)
+{
+    QFile colorMap("C:/Users/ANTuser/Documents/QTwaterfallPlot/jetColorMap.txt");
+    if (!colorMap.open(QIODevice::ReadOnly| QIODevice::Text)) {
+        std::cerr << "Cannot open file for reading: "
+             << qPrintable(colorMap.errorString()) << std::endl;
+        return;
+    }
+    else
+    {
+        int colorIndex = 0;
+        double red, green, blue;
+        while(!colorMap.atEnd())
+        {
+           QString line = colorMap.readLine();
+           QStringList fields = line.split(' ',QString::SkipEmptyParts);
+           red = fields.at(2).toDouble();
+           green = fields.at(1).toDouble();
+           blue = fields.at(0).toDouble();
+           m_ColorTbl[colorIndex].setRgb(int(red),int(green),int(blue));
+           ++colorIndex;
+        }
+        colorMap.close();
+        printf("Color Table Size: %i\n", colorIndex);
+    }
 }
 else
 {
-    int colorIndex = 0;
-    double red, green, blue;
-    while(!colorMap.atEnd())
-    {
-       QString line = colorMap.readLine();
-       QStringList fields = line.split(' ',QString::SkipEmptyParts);
-       red = fields.at(2).toDouble();
-       green = fields.at(1).toDouble();
-       blue = fields.at(0).toDouble();
-       m_ColorTbl[colorIndex].setRgb(int(red),int(green),int(blue));
-       ++colorIndex;
-    }
-    colorMap.close();
+    //    /* OLD Waterfall Color Scheme*/
+    //    //create a default waterfall color scheme
+    //    // *** Need to read from file ***
+        for (int i = 0; i < 256; i++)
+        {
+            if( (i<43) )
+                m_ColorTbl[i].setRgb( 0,0, 255*(i)/43);
+            if( (i>=43) && (i<87) )
+                m_ColorTbl[i].setRgb( 0, 255*(i-43)/43, 255 );
+            if( (i>=87) && (i<120) )
+                m_ColorTbl[i].setRgb( 0,255, 255-(255*(i-87)/32));
+            if( (i>=120) && (i<154) )
+                m_ColorTbl[i].setRgb( (255*(i-120)/33), 255, 0);
+            if( (i>=154) && (i<217) )
+                m_ColorTbl[i].setRgb( 255, 255 - (255*(i-154)/62), 0);
+            if( (i>=217)  )
+                m_ColorTbl[i].setRgb( 255, 0, 128*(i-217)/38);
+        }
+//        // default waterfall color scheme  NEWER
+//        for (int i = 0; i < 256; i++)
+//        {
+//            // level 0: black background
+//            if (i < 20)
+//                m_ColorTbl[i].setRgb(0, 0, 0);
+//            // level 1: black -> blue
+//            else if ((i >= 20) && (i < 70))
+//                m_ColorTbl[i].setRgb(0, 0, 140*(i-20)/50);
+//            // level 2: blue -> light-blue / greenish
+//            else if ((i >= 70) && (i < 100))
+//                m_ColorTbl[i].setRgb(60*(i-70)/30, 125*(i-70)/30, 115*(i-70)/30 + 140);
+//            // level 3: light blue -> yellow
+//            else if ((i >= 100) && (i < 150))
+//                m_ColorTbl[i].setRgb(195*(i-100)/50 + 60, 130*(i-100)/50 + 125, 255-(255*(i-100)/50));
+//            // level 4: yellow -> red
+//            else if ((i >= 150) && (i < 250))
+//                m_ColorTbl[i].setRgb(255, 255-255*(i-150)/100, 0);
+//            // level 5: red -> white
+//            else if (i >= 250)
+//                m_ColorTbl[i].setRgb(255, 255*(i-250)/5, 255*(i-250)/5);
+//        }
 }
-
-
 
     /* New additions 6-17-15*/
     m_PeakHoldActive=false;
