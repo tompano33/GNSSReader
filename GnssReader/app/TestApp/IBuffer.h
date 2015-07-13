@@ -16,6 +16,7 @@ class IBuffer{
 	uint64_t normalBufferSize;
 	uint64_t preBufferSize;
 	uint64_t totalBufferSize;
+	uint64_t bytesInFinish;
 
 	char* ibuf; //The buffer itself
 
@@ -53,7 +54,9 @@ public:
 
 	void dbg_printPtrs();
 
-	void finishWrite();
+	void finishWrite(uint64_t bytes);
+
+	bool isFinished();
 
 };
 #endif

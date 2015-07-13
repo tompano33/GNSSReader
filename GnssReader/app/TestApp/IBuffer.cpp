@@ -162,7 +162,17 @@
 			
 		}
 
-		
+		if(finish)
+		{
+			if(bufPtr == 0)
+				printf("\n\n\n***ERROR***\n\n\n");
+			else if(oldPtr == bufPtr +- writeBlockSize + bytesInFinish)
+			{
+				bufPtr = preBufferSize;
+				oldPtr = preBufferSize;
+				finish = false;
+			}
+		}
 		LeaveCriticalSection(&crit);
 
 	};
@@ -184,7 +194,13 @@
 	//	delete [] ibuf;
 	}
 
-	void IBuffer::finishWrite()
+	void IBuffer::finishWrite(uint64_t bytes)
 	{
 		finish = true;
+		bytesInFinish = bytes;
+	}
+
+	bool IBuffer::isFinished()
+	{
+		return finish;
 	}

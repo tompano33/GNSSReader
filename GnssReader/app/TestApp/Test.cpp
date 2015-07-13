@@ -144,6 +144,7 @@ void testSuite()
 
 	//Sine as stream
 	{
+		printf("sineasstream");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);

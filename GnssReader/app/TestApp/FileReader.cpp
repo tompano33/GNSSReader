@@ -45,11 +45,12 @@
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
 		{
-
+			while(ib->isFinished())
+			{;}
 
 			int finish = false;
 
-			if(readBufferSize > fileSize.QuadPart - bytesRead)
+			if(readBufferSize >= fileSize.QuadPart - bytesRead)
 			{
 				readBufferSize = fileSize.QuadPart - bytesRead;
 				finish = true;
@@ -62,7 +63,7 @@
 			{
 				space = ib->canWriteBlock();
 				if(finish)
-					ib->finishWrite();
+					ib->finishWrite(readBufferSize);
 			}
 
 			int readFile = ReadFile(sdrFile, space, readBufferSize, &numBytesRead, NULL);
@@ -107,14 +108,10 @@
 			} else {
 				std::cout << "Error, Not a full read"   << std::endl;
 			}
-
-			if(bytesRead == fileSize.QuadPart) 
-				ib->finishWrite();
 			//load in next file
 			//(that is, file is done reading and there are more files).
 			if(bytesRead == fileSize.QuadPart && filePtr < fnames.size())
 			{
-				ib->finishWrite();
 				CloseHandle(sdrFile);
 				prepareHandle();
 				std::cout << "Opening file " << filePtr << " \n";
