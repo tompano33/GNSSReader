@@ -56,7 +56,7 @@
 			}
 
 			//Does all the reading
-			DWORD i;
+			DWORD numBytesRead;
 			char* space = NULL;
 			while(space == NULL && !killThreadFlag)
 			{
@@ -65,7 +65,13 @@
 					ib->finishWrite();
 			}
 
-			int readFile = ReadFile(sdrFile, space, readBufferSize, &i, NULL);
+			int readFile = ReadFile(sdrFile, space, readBufferSize, &numBytesRead, NULL);
+
+			if(killThreadFlag)
+				return;
+
+			if(numBytesRead != readBufferSize)
+				std::cout << "Final Read" <<  numBytesRead << "\n";
 
 			if(!readFile && GetLastError() != ERROR_IO_PENDING)
 			{
@@ -96,7 +102,8 @@
 				//Todo: find out how to abandon this thead for a while.
 				ib->doneWritingBlock();
 
-				bytesRead = bytesRead + readBufferSize;
+				bytesRead = bytesRead + numBytesRead;
+
 			} else {
 				std::cout << "Error, Not a full read"   << std::endl;
 			}

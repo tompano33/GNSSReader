@@ -79,6 +79,7 @@
 		
 		char* retval;
 
+		//trick the buffer into letting us write to the same place
 		if(finish)
 		{
 			count--;
