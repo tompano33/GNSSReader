@@ -4,6 +4,8 @@
 #include <iostream>
 void testSuite()
 {
+	
+
 	//alignment: Tests quantization and aligned bits. 
 	{
 		printf("Expecting: [5, -2, -16, 15]\n");
@@ -28,7 +30,7 @@ void testSuite()
 		test.setPrintOptions(false,true);
 		test.start();
 	}
-		/**
+		
 	//exception: throws error if invalid XML exists.
 	{
 		try{
@@ -97,7 +99,7 @@ void testSuite()
 		test.start();
 	}
 
-	/**padding: Tests Padding 
+	// padding: Tests Padding 
 	{
 		printf("Expecting repeated pattern\n");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padding\\test.xml",50L,1000L,1000000L,-1);
@@ -133,20 +135,24 @@ void testSuite()
 	
 	//SixtyFour
 	{
+		printf("sixty four bit numbers");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sixtyFour\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.start();
 	}
 
-	//Sine as stream
+	/**
+	//Sine as stream: does not work
 	{
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",50L,1000L,1000000L);
+		
 		test.makeDecStreams();
-		test.setPrintOptions(true,false);
-		test.startAsThread();
-		while(!test.isDone()){;}
+		test.setPrintOptions(false,true);
+		test.start();
+		//while(!test.isDone()){;}
 	}
+	*/
 
 	//SingleStream
 	{
@@ -170,21 +176,19 @@ void testSuite()
 		*/
 	
 
+	/**
+	{
+		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);
+		test4.makeDecStreams();
+		test4.setPrintOptions(false,true);
+		test4.startAsThread();
 
-	/*	{
-			GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",10000L,20000L,1000000L);
-			test4.makeDecStreams();
-			test4.setPrintOptions(false,true);
-			test4.startAsThread();
-	
-		
-			while(!test4.isDone())
-			{		
+		while(!test4.isDone())
+		{		
 				
-				double* inbuf = new double[test4.getDecStreamArray()[0]->getBufSize()];
-				uint64_t count = 0; 
-				test4.getDecStreamArray()[0]->flushOutputStream(inbuf, &count);
-				
+			double* inbuf = new double[test4.getDecStreamArray()[0]->getBufSize()];
+			uint64_t count = 0; 
+			test4.getDecStreamArray()[0]->flushOutputStream(inbuf, &count);				
 				std::cout << "Count is" << count << std::endl;
 			
 				for(int i = 0; i != count; i++)
@@ -200,54 +204,14 @@ void testSuite()
 		
 		*/
 
-		/**
-		{
-		GNSSReader test4 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sevenEight\\test.xml",10000L,20000L,1000000L);
-		test4.makeDecStreams();
-		test4.setPrintOptions(false,true);
-		test4.start();
-		}
-
-		{
-
-	
-		/*
-		
-		{
-		char** paths = new char*[3];
-		paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\";
-		paths[1] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\";
-		paths[2] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\extremestorage\\";
-
-		GNSSReader test6 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",10000L,20000L,1000000L,-1,(const char**)paths,3);
-		test6.makeDecStreams();
-		test6.setPrintOptions(false,true);
-		test6.start();
-		}
-		
-	
-		{
-		GNSSReader test7 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\lshp.xml",10000L,20000L,1000000L);
-		test7.makeDecStreams();
-		test7.setPrintOptions(false,true);
-		test7.start();
-		}
-		
-
-		{
-			GNSSReader test8 ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\lshp.xml",10000L,20000L,1000000L);
-			test8.makeDecStreams();
-			test8.setPrintOptions(false,true);
-			test8.start();
-		}
-		*/
-	
 }
 
 int main(int argc, char** argv)
 {
 	clock_t tStart = clock();
+
 	testSuite();
+	
 	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 
 	//_CrtDumpMemoryLeaks();

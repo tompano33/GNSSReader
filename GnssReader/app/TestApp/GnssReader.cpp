@@ -164,7 +164,7 @@ using namespace GnssMetadata;
 		//If there is a next file, and there are still blocks to read (or we elect to read infinite)
 		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
 		{
-			std::cout << "Adding File to list: " << nextMeta->Files().front().Next().Value() << std::endl;
+			//std::cout << "Adding File to list: " << nextMeta->Files().front().Next().Value() << std::endl;
 			
 			x2m = new XMLtoMeta((&(nextMeta->Files().front().Next().toString()))->c_str());
 			nextMeta = x2m->getNonRefdMetadata();
@@ -178,7 +178,7 @@ using namespace GnssMetadata;
 	//Start decoding the file into stream(s)
 	void GNSSReader::start(){
 
-		std::cout << getDecStreamArray()[0]->getID();
+	//	std::cout << getDecStreamArray()[0]->getID();
 		fr->readAll();
 
 
@@ -387,7 +387,7 @@ using namespace GnssMetadata;
 	void GNSSReader::ThreadEntry(void *p)
 	{
 		((GNSSReader *) p)->start(); 
-		//_endthread();
+		_endthread();
 	}
 
 	void GNSSReader::startAsThread()
