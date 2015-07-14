@@ -14,6 +14,7 @@ void testSuite()
 		test.setPrintOptions(false,true);
 		test.start();
 	}
+	
 
 	//altPaths: Tests quantization and aligned bits. 
 	{
@@ -144,7 +145,7 @@ void testSuite()
 	
 		printf("\n sine \n");
 		
-		/**
+	
 	//Sine as does work, but if you try to open the file again later an error is thrown. Perhaps the handle is not closed as i thought?
 	{
 		//fix a chunkbuffer that is too small
@@ -155,9 +156,9 @@ void testSuite()
 		test.startAsThread();
 		while(!test.isDone()){
 
-			uint64_t count = 0; 
-			test.getDecStreamArray()[0]->flushOutputStream(&count);				
-			std::cout << "Count is" << count << std::endl;
+	//		uint64_t count = 0; 
+	//		test.getDecStreamArray()[0]->flushOutputStream(&count);				
+	//		std::cout << "Count is" << count << std::endl;
 			
 	//			for(int i = 0; i != count; i++)
 	//			{
@@ -166,19 +167,20 @@ void testSuite()
 
 
 			}
-
+			
 	}
-	*/
+
+	
 
 	//SingleStream
 	{
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",5000L,5L,1000000L,5);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
-		test.startAsThread();
-		while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
-	}
 
+		test.start();
+		//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
+	}
 	
 
 }

@@ -45,8 +45,6 @@ public:
 	void putSample(double sample);
 	//returns ID of stream
 	std::string getID();
-	//resets the samplePtr, that is to say, resets the buffer.
-	void clear();
 	//returns correspoding XML stream.
 	GnssMetadata::Stream* getCorrespondingStream();
 	//Sets the corresponding XML stream. Needed when entering a new XML file and the reference to the old stream is lost.

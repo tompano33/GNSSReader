@@ -41,8 +41,10 @@
 	void StreamAnalytics::printMeanAndVar(){
 		uint64_t sampCount;
 		double* d= s->flushOutputStream(&sampCount);
+
 		calcMean(sampCount,d);
 		calcVar(sampCount,d);
+
 		std::cout << "On stream: " << s->getID();
 		printf(" Block has mean %f and variance %f\n",mean, variance);
 	};

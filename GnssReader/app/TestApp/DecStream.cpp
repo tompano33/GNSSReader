@@ -57,10 +57,6 @@
 		return sampleCapacity;
 	}
 
-	void DecStream::clear(){
-		samplePtr = 0;
-	};
-
 	GnssMetadata::Stream* DecStream::getCorrespondingStream(){
 		return correspondingStream;
 	};
@@ -76,15 +72,14 @@
         EnterCriticalSection(&crit);
 		*byteCount = samplePtr;
 		samplePtr = 0;
-
-		//return the sample that isn't locked
-		if(!lockSampleBuf1)
+		lockSampleBuf1 = !lockSampleBuf1;
+		LeaveCriticalSection(&crit);
+		//return the sample that isn't locked, (we just intverted it)
+		if(lockSampleBuf1)
 			return sampleBuf1;
 		else
 			return sampleBuf2;
 
-		lockSampleBuf1 = !lockSampleBuf1;
-		LeaveCriticalSection(&crit);
 	}
 
 	bool DecStream::hasComplexPart()
