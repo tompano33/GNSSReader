@@ -68,6 +68,8 @@ public:
 	void startAsThread();
 
 	bool isDone();
+	
+	double getIBufPercent();
 };
 
 

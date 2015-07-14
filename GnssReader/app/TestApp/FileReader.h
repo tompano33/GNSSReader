@@ -66,7 +66,9 @@ public:
 
 	//When it is time to open a new datafile, this is called to make the transition 
 	void prepareHandle();
-	
+
+	double getIBufPercent();
+
 	//Kills off all buffers
 	~FileReader();
 

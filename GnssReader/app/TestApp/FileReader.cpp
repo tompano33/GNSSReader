@@ -212,6 +212,11 @@
 		}
 	}
 
+	double FileReader::getIBufPercent()
+	{
+		return ib->getPercent();
+	}
+
 	FileReader::~FileReader(){
 	//	delete ib;
 	}

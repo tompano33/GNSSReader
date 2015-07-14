@@ -368,6 +368,11 @@ using namespace GnssMetadata;
 		printStats = stat;
 	}
 
+	double GNSSReader::getIBufPercent()
+	{
+		return fr->getIBufPercent();
+	}
+
 	void GNSSReader::changeWD(const char* pathToFile)
 	{
 		

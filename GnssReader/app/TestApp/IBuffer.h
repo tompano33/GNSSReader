@@ -58,6 +58,8 @@ public:
 
 	bool isFinished();
 
+	double getPercent();
+
 };
 #endif
 

@@ -71,6 +71,11 @@
 		
 		LeaveCriticalSection(&crit);
 	}
+
+	double IBuffer::getPercent()
+	{
+		return (double)numBytesStored / (double)normalBufferSize;
+	}
 	
 	char* IBuffer::tryRead(uint64_t count)
 	{

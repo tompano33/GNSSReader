@@ -68,13 +68,13 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 	}
 
 	//multistream: outputs four 1-bit streams.
 	//INVESTIGATE the mean & variance are wrong
 	{
-		printf("ERROR!:  \n");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",50L,1000L,1000000L,1);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
@@ -172,11 +172,11 @@ void testSuite()
 
 	//SingleStream
 	{
-		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",50L,1000L,1000000L,5);
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",5000L,5L,1000000L,5);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
 		test.startAsThread();
-		while(!test.isDone()){;}
+		while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 	}
 
 	
