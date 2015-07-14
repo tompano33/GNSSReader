@@ -45,6 +45,8 @@
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
 		{
+			uint64_t thisLoopReadBufferSize = readBufferSize;
+
 			while(ib->isFinished())
 			{;}
 
@@ -52,7 +54,7 @@
 
 			if(readBufferSize >= fileSize.QuadPart - bytesRead)
 			{
-				readBufferSize = fileSize.QuadPart - bytesRead;
+				thisLoopReadBufferSize = fileSize.QuadPart - bytesRead;
 				finish = true;
 			}
 
@@ -62,16 +64,19 @@
 			while(space == NULL && !killThreadFlag)
 			{
 				space = ib->canWriteBlock();
-				if(finish)
-					ib->finishWrite(readBufferSize);
 			}
 
-			int readFile = ReadFile(sdrFile, space, readBufferSize, &numBytesRead, NULL);
+			if(finish)
+				{
+					ib->finishWrite(thisLoopReadBufferSize);
+				}
+
+			int readFile = ReadFile(sdrFile, space, thisLoopReadBufferSize, &numBytesRead, NULL);
 
 			if(killThreadFlag)
 				return;
 
-			if(numBytesRead != readBufferSize)
+			if(numBytesRead != thisLoopReadBufferSize)
 				std::cout << "Final Read" <<  numBytesRead << "\n";
 
 			if(!readFile && GetLastError() != ERROR_IO_PENDING)

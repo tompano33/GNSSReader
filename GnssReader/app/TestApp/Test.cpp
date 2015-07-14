@@ -13,7 +13,6 @@ void testSuite()
 		test.start();
 	}
 
-	/**
 	//altPaths: Tests quantization and aligned bits. 
 	{
 		//Todo, test local paths, limited block reads.
@@ -24,13 +23,12 @@ void testSuite()
 		paths[1] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\";
 		paths[2] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\extremestorage\\";
 		
-		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",50L,1000L,1000000L,-1,(const char**)paths,3);
+		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",6L,3L,1000000L,-1,(const char**)paths,3);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.start();
 	}
-	*/
-		
+		/**
 	//exception: throws error if invalid XML exists.
 	{
 		try{
@@ -45,7 +43,6 @@ void testSuite()
 	}
 
 	//floatingpoint: tests reading of floating point numbers
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--------------------------------------ERROR!
 	{
 		printf("Expecting: [-5.168466E29 -2.4479542E-19 6.3108872E-30 0 ] and two doubles. \n");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",50L,1000L,1000000L);
@@ -100,7 +97,7 @@ void testSuite()
 		test.start();
 	}
 
-	/**padding: Tests Padding */
+	/**padding: Tests Padding 
 	{
 		printf("Expecting repeated pattern\n");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padding\\test.xml",50L,1000L,1000000L,-1);
@@ -144,7 +141,6 @@ void testSuite()
 
 	//Sine as stream
 	{
-		printf("sineasstream");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);

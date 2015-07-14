@@ -164,8 +164,12 @@
 
 		if(finish)
 		{
-			if(bufPtr == 0)
-				printf("\n\n\n***ERROR***\n\n\n");
+			if(bufPtr == preBufferSize && oldPtr == totalBufferSize +-writeBlockSize + bytesInFinish)
+			{
+				bufPtr = preBufferSize;
+				oldPtr = preBufferSize;
+				finish = false;
+			}
 			else if(oldPtr == bufPtr +- writeBlockSize + bytesInFinish)
 			{
 				bufPtr = preBufferSize;
