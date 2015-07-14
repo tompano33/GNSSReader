@@ -234,8 +234,8 @@ using namespace GnssMetadata;
 							sa.printAllSamples();
 						if(printStats)
 							sa.printMeanAndVar();
-
-						decStreamArray[i]->clear();
+						if(printSamples || printStats)
+							decStreamArray[i]->clear();
 					}
 				}
 				

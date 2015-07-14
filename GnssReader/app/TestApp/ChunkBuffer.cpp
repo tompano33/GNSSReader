@@ -23,8 +23,6 @@ using namespace GnssMetadata;
 		bufferBitPointer = 0;
 	};
 
-
-	//I need to test 64 bit values to make sure nothing breaks.
 	int64_t ChunkBuffer::readBits(uint8_t bitsToRead, std::string  encoding)
 	{
 

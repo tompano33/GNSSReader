@@ -29,7 +29,7 @@
 
 
 	void DecStream::putSample(double sample){
-		
+
 		while(samplePtr >= sampleCapacity){;}
 		//wait for a withdraw
         EnterCriticalSection(&crit);
@@ -75,7 +75,6 @@
 		memcpy(d,sampleBuf,sizeof(double) * samplePtr);
 		*byteCount = samplePtr;
 		samplePtr = 0;
-
 		LeaveCriticalSection(&crit);
 	}
 
