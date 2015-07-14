@@ -13,7 +13,9 @@
 
 class DecStream{
 
-	double* sampleBuf;			//A buffer for samples
+	double* sampleBuf1;			//A buffer for samples
+	double* sampleBuf2;			//A buffer for samples
+	bool lockSampleBuf1;
 	uint64_t sampleCapacity;	//Maximum capacity of buffer (it's size)
 	volatile uint64_t samplePtr;			//Where we are pointing in the buffer.
 	std::string id;				//Name of this buffer's stream. TODO: Do I need this?
@@ -43,18 +45,14 @@ public:
 	void putSample(double sample);
 	//returns ID of stream
 	std::string getID();
-	//Points to the next open spot in the decoded stream.
-	uint64_t getSamplePtr();
-	//returns a pointer to the buffer. Only supports double sample sizes.
-	double* getBuf();
 	//resets the samplePtr, that is to say, resets the buffer.
 	void clear();
 	//returns correspoding XML stream.
 	GnssMetadata::Stream* getCorrespondingStream();
 	//Sets the corresponding XML stream. Needed when entering a new XML file and the reference to the old stream is lost.
 	void setCorrespondingStream(GnssMetadata::Stream* s);
-	//Flushes buffer to spec'd location
-	void flushOutputStream(double* buf, uint64_t* byteCount);
+	//Flushes buffer. returns reference.
+	double* flushOutputStream(uint64_t* byteCount);
 	//returns buffer size
 	uint64_t getBufSize();
 

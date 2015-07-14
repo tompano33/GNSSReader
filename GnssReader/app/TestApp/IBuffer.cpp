@@ -34,8 +34,7 @@
 		//we need not worry about overlap
 		if(bufPtr < oldPtr)
 		{
-			if((oldPtr - bufPtr) > writeBlockSize
-)
+			if((oldPtr - bufPtr) > writeBlockSize)
 				retval = ibuf+bufPtr;
 			else
 				retval = NULL;

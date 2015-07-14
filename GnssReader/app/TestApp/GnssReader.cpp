@@ -226,8 +226,6 @@ using namespace GnssMetadata;
 				StreamAnalytics sa;
 				for(int i = 0; i != decStreamCount; i++)
 				{
-					if(decStreamArray[i]->getSamplePtr() != 0)
-					{
 						sa.setStream(decStreamArray[i]);
 					
 						if(printSamples)
@@ -236,7 +234,6 @@ using namespace GnssMetadata;
 							sa.printMeanAndVar();
 						if(printSamples || printStats)
 							decStreamArray[i]->clear();
-					}
 				}
 				
 			}

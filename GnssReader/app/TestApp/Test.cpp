@@ -144,6 +144,7 @@ void testSuite()
 	
 		printf("\n sine \n");
 		
+		/**
 	//Sine as does work, but if you try to open the file again later an error is thrown. Perhaps the handle is not closed as i thought?
 	{
 		//fix a chunkbuffer that is too small
@@ -153,23 +154,21 @@ void testSuite()
 		//test.setPrintOptions(true,false);
 		test.startAsThread();
 		while(!test.isDone()){
-				
-			double* inbuf = new double[test.getDecStreamArray()[0]->getBufSize()];
+
 			uint64_t count = 0; 
-			test.getDecStreamArray()[0]->flushOutputStream(inbuf, &count);				
-				std::cout << "Count is" << count << std::endl;
+			test.getDecStreamArray()[0]->flushOutputStream(&count);				
+			std::cout << "Count is" << count << std::endl;
 			
 	//			for(int i = 0; i != count; i++)
 	//			{
 	//				std::cout << inbuf[i] << std::endl;
 	//			}
 
-				delete[] inbuf; //(crashes for some reason??!?)
 
 			}
 
 	}
-	
+	*/
 
 	//SingleStream
 	{

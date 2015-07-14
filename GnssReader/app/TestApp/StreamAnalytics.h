@@ -14,11 +14,11 @@ class StreamAnalytics{
 	DecStream* s;
 	double mean;
 	double variance;
+	void calcMean(uint64_t,double*);
+	void calcVar(uint64_t,double*);
 
 public:
 	void setStream(DecStream* s);
-	void calcMean();
-	void calcVar();
 	void printMeanAndVar();
 	void printAllSamples();
 };

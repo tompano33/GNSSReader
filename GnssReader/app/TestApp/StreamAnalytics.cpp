@@ -15,38 +15,47 @@
 		this->s = s;
 	};
 
-	void StreamAnalytics::calcMean(){
+	void StreamAnalytics::calcMean(uint64_t sampCount, double * samps){
 		double sum = 0;
-		for(int i = 0; i != s->getSamplePtr(); i++)
+	
+		for(int i = 0; i != sampCount; i++)
 		{
-			sum += s->getBuf()[i];
+			sum += samps[i];
 		}
-		mean = sum / s->getSamplePtr();
+
+		mean = sum / sampCount;
 	};
 
-	void StreamAnalytics::calcVar(){
+	void StreamAnalytics::calcVar(uint64_t sampCount, double * samps){
+
 		double sum = 0;
-		for(int i = 0; i != s->getSamplePtr(); i++)
+		for(int i = 0; i != sampCount; i++)
 		{
-			double sumval = ((double)s->getBuf()[i] - mean);
+			double sumval = ((double)samps[i] - mean);
 			sumval *= sumval;
 			sum += sumval;
 		}
-		variance = sum / (s->getSamplePtr()-1);
+		variance = sum / (sampCount-1);
 	};
 
 	void StreamAnalytics::printMeanAndVar(){
-		calcMean();
-		calcVar();
+		uint64_t sampCount;
+		double* d= s->flushOutputStream(&sampCount);
+		calcMean(sampCount,d);
+		calcVar(sampCount,d);
 		std::cout << "On stream: " << s->getID();
 		printf(" Block has mean %f and variance %f\n",mean, variance);
 	};
 
 	void StreamAnalytics::printAllSamples()
 	{
-		for(int i = 0; i != s->getSamplePtr(); i++)
+		
+		uint64_t sampCount;
+		double* d= s->flushOutputStream(&sampCount);
+
+		for(int i = 0; i != sampCount; i++)
 		{
-			std::cout << s->getBuf()[i] <<  " " <<  (uint8_t)s->getBuf()[i] << std::endl;
+			std::cout << d[i] <<  " " <<  (uint8_t)d[i] << std::endl;
 		}
 
 	}
