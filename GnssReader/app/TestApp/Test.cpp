@@ -12,7 +12,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\alignment\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 	
 
@@ -29,7 +30,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",6L,3L,1000000L,-1,(const char**)paths,3);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 		
 	//exception: throws error if invalid XML exists.
@@ -39,7 +41,9 @@ void testSuite()
 			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\exception\\test.xml",50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
-			test.start();
+			test.startAsThread();
+			while(!test.isDone()){;}
+		
 		} catch (std::exception& e) {
 			printf(e.what());
 		}
@@ -51,7 +55,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	//formatOne: tests IQ, IF formats
@@ -60,7 +65,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\formatOne\\test.xml",50L,1000L,1000000L,-1);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	//header: tests skipping of headers and footers of various sizes.
@@ -70,7 +76,7 @@ void testSuite()
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.startAsThread();
-		while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
+		while(!test.isDone()){/**std::cout << test.getIBufPercent() << "\n";*/}
 	}
 
 	//multistream: outputs four 1-bit streams.
@@ -79,7 +85,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",50L,1000L,1000000L,1);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	//offset-binary
@@ -88,7 +95,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\offsetBin\\test.xml",50L,1000L,1000000L,-1);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	//padAndShift: Tests padding and shifting.
@@ -97,7 +105,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\lshp.xml",50L,1000L,1000000L,-1);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	// padding: Tests Padding 
@@ -106,7 +115,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padding\\test.xml",50L,1000L,1000000L,-1);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	//SampleBits: tests samples of various sizes
@@ -114,7 +124,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	//Seven Eight: a 7 bit and 8 bit stream
@@ -122,7 +133,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sevenEight\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	//Sign-Magnitude:
@@ -130,7 +142,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\signMag\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	
@@ -139,7 +152,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sixtyFour\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 	}
 
 	
@@ -177,8 +191,8 @@ void testSuite()
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",5000L,5L,1000000L,5);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
-
-		test.start();
+		test.startAsThread();
+		while(!test.isDone()){;}
 		//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 	}
 	
