@@ -180,6 +180,9 @@ using namespace GnssMetadata;
 			mdList->push_back(nextMeta);
 			sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
 		}
+
+
+	std::cout << "\nblock1 " << mdBlockSizes->back()[0] << "\n";
 	}
 
 	//Start decoding the file into stream(s)
@@ -533,7 +536,7 @@ using namespace GnssMetadata;
 			for(int j = 0; j != b->chunkCount ; j++)
 			{
 				Chunk* c = b->chunkArray[j];
-				size += c->CountWords() * c->SizeWord() * b->Cycles();
+				size += b->SizeFooter() + b->SizeHeader() + (c->CountWords() * c->SizeWord() * b->Cycles());
 			}
 			//add to array.
 			blockSizeArray[i] = size;

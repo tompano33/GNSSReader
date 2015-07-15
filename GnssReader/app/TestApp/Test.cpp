@@ -169,9 +169,9 @@ void testSuite()
 		test.startAsThread();
 		while(!test.isDone()){
 
-	//		uint64_t count = 0; 
-	//		test.getDecStreamArray()[0]->flushOutputStream(&count);				
-	//		std::cout << "Count is" << count << std::endl;
+			uint64_t count = 0; 
+			test.getDecStreamArray()[0]->flushOutputStream(&count);				
+			std::cout << "Count is" << count << std::endl;
 			
 	//			for(int i = 0; i != count; i++)
 	//			{
