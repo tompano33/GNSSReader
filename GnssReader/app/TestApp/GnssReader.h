@@ -18,8 +18,14 @@ using namespace GnssMetadata;
 class GNSSReader {
 
 	std::vector<Metadata*>* mdList;	//List of all metadata objects.
+	std::vector<int*>* mdBlockSizes;//Length of a repeating block cycle for the associated metadata. Needed for skipping to an exact block.
+	std::vector<int>* mdBlockSizesCount ;//Length of a repeating block cycle for the associated metadata. Needed for skipping to an exact block.
+
 	unsigned int mdPtr; //Pointer to metadata object we are currently decoding.
-	std::vector<std::string>* sdrFileNames; //List of all SDR file names to decode, in order. This can be disposed of when i have some time
+
+	std::vector<std::string>* sdrFileNames; //List of all SDR file names to decode, in order. 
+	std::vector<uint64_t> mdLaneSize; //Length of the SDR file. Needed for block skipping.
+
 	DecStream** decStreamArray; //Array of Decoded Sample Output Streams
 	uint64_t decStreamCount; //The count of these streams.
 	uint64_t streamSize; //The size of an output stream.
@@ -73,6 +79,10 @@ public:
 	
 	double getIBufPercent();
 	std::string fileBeingDecoded();
+
+	void startAtBlock(uint64_t);
+
+	int* generateBlockSizeArray(GnssMetadata::Lane*);
 };
 
 

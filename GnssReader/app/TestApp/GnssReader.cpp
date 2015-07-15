@@ -153,6 +153,9 @@ using namespace GnssMetadata;
 		mdList = new std::vector<Metadata*>;
 		sdrFileNames = new std::vector<std::string>;
 
+		mdBlockSizes = new std::vector<int*>;
+		mdBlockSizesCount = new std::vector<int>;
+
 		//get the metadata of first file.
 		XMLtoMeta* x2m = new XMLtoMeta(pathToFile.c_str());
 		Metadata* nextMeta = x2m->getNonRefdMetadata();
@@ -160,6 +163,10 @@ using namespace GnssMetadata;
 		//add it to the queue
 		mdList->push_back(nextMeta);
 		sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
+		//add all block sizes. 
+		mdBlockSizesCount->push_back(nextMeta->Files().front().Lane().blockCount);
+		mdBlockSizes->push_back(generateBlockSizeArray(&nextMeta->Files().front().Lane()));
+		//now we know how many blocks there are in each metadata array, and also the sizes. As a result, we can fastforward to jump to a specific point in a metadata file.
  
 		//If there is a next file, and there are still blocks to read (or we elect to read infinite)
 		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
@@ -312,7 +319,6 @@ using namespace GnssMetadata;
 	//	delete fr;
 	//	for(int i = 0; i != decStreamCount; i++)
 	//	{
-			
 	//		delete decStreamArray[i];
 	//	}
 	//	delete [] decStreamArray;
@@ -507,6 +513,33 @@ using namespace GnssMetadata;
 				default:
 					printf("Format error");
 
+	}
+}
+
+	void GNSSReader::startAtBlock(uint64_t block)
+	{
+		//tell the filereader where to start
+	}
+
+	int* GNSSReader::generateBlockSizeArray(GnssMetadata::Lane * l)
+	{
+		int * blockSizeArray = new int[l->blockCount];
+		int size = 0;
+		//for each block
+		for(int i = 0; i != l->blockCount; i++)
+		{
+			Block * b = l->blockArray[i];
+			//get the size of the block.
+			for(int j = 0; j != b->chunkCount ; j++)
+			{
+				Chunk* c = b->chunkArray[j];
+				size += c->CountWords() * c->SizeWord() * b->Cycles();
 			}
+			//add to array.
+			blockSizeArray[i] = size;
 		}
+		return blockSizeArray;
+	}
+
+
 	

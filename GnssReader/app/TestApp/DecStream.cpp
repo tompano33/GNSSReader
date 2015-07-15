@@ -57,6 +57,7 @@
 		return sampleCapacity;
 	}
 
+	//You can call this to get all of the data
 	GnssMetadata::Stream* DecStream::getCorrespondingStream(){
 		return correspondingStream;
 	};
