@@ -69,6 +69,8 @@ public:
 
 	double getIBufPercent();
 
+	std::string fileBeingDecoded();
+
 	//Kills off all buffers
 	~FileReader();
 

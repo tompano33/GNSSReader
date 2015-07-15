@@ -4,7 +4,6 @@
 #include <iostream>
 void testSuite()
 {
-	
 
 	//alignment: Tests quantization and aligned bits. 
 	{

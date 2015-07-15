@@ -144,6 +144,11 @@
 		_beginthread(FileReader::ThreadEntry, 0, this);
 	};
 
+	std::string FileReader::fileBeingDecoded()
+	{
+		return fnames.at(filePtr);
+	}
+
 	void FileReader::ThreadEntry(void *p)
 	{
 		((FileReader *) p)->readFile();   

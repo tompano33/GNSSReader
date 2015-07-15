@@ -46,6 +46,7 @@ class GNSSReader {
 	bool done;
 	void start();
 
+
 public:
 
 	//changes Working Directory.
@@ -71,6 +72,7 @@ public:
 	bool isDone();
 	
 	double getIBufPercent();
+	std::string fileBeingDecoded();
 };
 
 

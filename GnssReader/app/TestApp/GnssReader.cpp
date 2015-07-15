@@ -436,6 +436,10 @@ using namespace GnssMetadata;
 				cb->skipBits(stream->Packedbits() - stream->Quantization());
 		}
 
+		std::string GNSSReader::fileBeingDecoded()
+		{
+			return fr->fileBeingDecoded();
+		}
 		void GNSSReader::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
 		{
 			
