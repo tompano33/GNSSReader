@@ -433,23 +433,24 @@ using namespace GnssMetadata;
 		}
 	}
 
-		void GNSSReader::skipLeftPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb)
+	void GNSSReader::skipLeftPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb)
 		{
 			if(stream->Alignment() == stream->Left)
 				cb->skipBits(stream->Packedbits() - stream->Quantization());
 		}
 
-		void GNSSReader::skipRightPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb)
+	void GNSSReader::skipRightPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb)
 		{
 			if(stream->Alignment() == stream->Right)
 				cb->skipBits(stream->Packedbits() - stream->Quantization());
 		}
 
-		std::string GNSSReader::fileBeingDecoded()
+	std::string GNSSReader::fileBeingDecoded()
 		{
 			return fr->fileBeingDecoded();
 		}
-		void GNSSReader::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
+	
+	void GNSSReader::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
 		{
 			
 			switch(stream->Format())

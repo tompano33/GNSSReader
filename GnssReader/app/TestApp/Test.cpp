@@ -4,7 +4,7 @@
 #include <iostream>
 void testSuite()
 {
-
+	/**
 	//alignment: Tests quantization and aligned bits. 
 	{
 		printf("Expecting: [5, -2, -16, 15]\n");
@@ -75,7 +75,7 @@ void testSuite()
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.startAsThread();
-		while(!test.isDone()){/**std::cout << test.getIBufPercent() << "\n";*/}
+		while(!test.isDone()){/**std::cout << test.getIBufPercent() << "\n";}
 	}
 
 	//multistream: outputs four 1-bit streams.
@@ -145,17 +145,17 @@ void testSuite()
 		while(!test.isDone()){;}
 	}
 
-	
+	*/
 	//SixtyFour
 	{
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sixtyFour\\test.xml",50L,1000L,1000000L);
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.startAsThread();
-		while(!test.isDone()){;}
+		while(!test.isDone()){std::cout << test.fileBeingDecoded();}
 	}
 
-	
+	/**
 		printf("\n sine \n");
 		
 	
@@ -195,7 +195,7 @@ void testSuite()
 		//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 	}
 	
-
+	*/
 }
 
 int main(int argc, char** argv)

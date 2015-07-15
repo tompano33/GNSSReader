@@ -146,7 +146,7 @@
 
 	std::string FileReader::fileBeingDecoded()
 	{
-		return fnames.at(filePtr);
+		return fnames.at(filePtr-1);
 	}
 
 	void FileReader::ThreadEntry(void *p)
