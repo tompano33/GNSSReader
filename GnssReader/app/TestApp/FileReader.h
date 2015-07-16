@@ -19,7 +19,7 @@ class FileReader{
 
 	HANDLE sdrFile;						//Handle to the file that is currently being read.
 	uint64_t readBufferSize;			//How many bytes to read at once
-	volatile int64_t bytesRead;		//Count of total bytes read from the current file so far
+	volatile int64_t bytesRead;			//Count of total bytes read from the current file so far
 	LARGE_INTEGER fileSize;				//Count of total bytes in the file
 	bool killThreadFlag;				//A Flag that can kill all file reading operations if need be.
 	std::vector<std::string> fnames;	//Holds all the SDR files in consecutive order.
@@ -70,6 +70,8 @@ public:
 	double getIBufPercent();
 
 	std::string fileBeingDecoded();
+
+	uint64_t getSizeOfFile(std::string);
 
 	//Kills off all buffers
 	~FileReader();

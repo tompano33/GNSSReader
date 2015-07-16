@@ -35,12 +35,12 @@
 		}
 
 		pathNameCount = pathCount+1;
-		prepareHandle();
 	}
 
 	void FileReader::readFile()
 	{
-
+		//prep first handle
+		prepareHandle();
 
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
@@ -146,6 +146,11 @@
 
 	std::string FileReader::fileBeingDecoded()
 	{
+		//transitioning
+		if(filePtr == 0)
+		{
+			return "loading...";
+		}
 		return fnames.at(filePtr-1);
 	}
 
@@ -224,6 +229,32 @@
 
 	FileReader::~FileReader(){
 	//	delete ib;
+	}
+
+	uint64_t FileReader::getSizeOfFile(std::string fname)
+	{
+		std::wstring stemp = std::wstring(fname.begin(), fname.end());
+		LPCWSTR wfname =  stemp.c_str();
+		HANDLE tempSdrFile;
+
+		for(int i = 0; i < pathNameCount; i++)
+		{			
+			GNSSReader::changeWD(pathNames[i]);
+			tempSdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
+
+			if(tempSdrFile == INVALID_HANDLE_VALUE)
+			{
+				continue;
+			}	
+			//dword?
+			LARGE_INTEGER tempFileSize;
+			GetFileSizeEx(tempSdrFile,&tempFileSize);
+			CloseHandle(tempSdrFile);
+			return tempFileSize.QuadPart;
+		}
+
+		printf("Error: Could not open datafile to skip to");
+		return 0;
 	}
 
 

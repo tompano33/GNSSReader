@@ -128,9 +128,11 @@ using namespace GnssMetadata;
 		
 		try
 		{
-
 			makeFileList(fname);
 			fr = new FileReader(*sdrFileNames,readSize,buffSize,pathToFile,addlPaths,pathCount);
+			fetchFileSizes();
+			
+
 
 		} catch (TranslationException e)
 		{
@@ -167,7 +169,7 @@ using namespace GnssMetadata;
 		mdBlockSizesCount->push_back(nextMeta->Files().front().Lane().blockCount);
 		mdBlockSizes->push_back(generateBlockSizeArray(&nextMeta->Files().front().Lane()));
 		//now we know how many blocks there are in each metadata array, and also the sizes. As a result, we can fastforward to jump to a specific point in a metadata file.
- 
+ 		
 		//If there is a next file, and there are still blocks to read (or we elect to read infinite)
 		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
 		{
@@ -179,12 +181,24 @@ using namespace GnssMetadata;
 			totalBlocksDiscovered += bc;
 			mdList->push_back(nextMeta);
 			sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
+			
 		}
 
 
-	std::cout << "\nblock1 " << mdBlockSizes->back()[0] << "\n";
 	}
 
+
+	void GNSSReader::fetchFileSizes()
+	{
+		sdrFileSize = new std::vector<uint64_t>;
+
+		for(int i = 0; i != sdrFileNames->size(); i++)
+		{
+			sdrFileSize->push_back(fr->getSizeOfFile(sdrFileNames->at(i)));
+		}
+
+
+	}
 	//Start decoding the file into stream(s)
 	void GNSSReader::start(){
 
@@ -404,7 +418,6 @@ using namespace GnssMetadata;
 		_beginthread(GNSSReader::ThreadEntry, 0, this);
 	};
 
-	
 	bool GNSSReader::isDone()
 	{
 		return done;
@@ -446,9 +459,9 @@ using namespace GnssMetadata;
 		}
 
 	std::string GNSSReader::fileBeingDecoded()
-		{
-			return fr->fileBeingDecoded();
-		}
+	{
+		return fr->fileBeingDecoded();
+	}
 	
 	void GNSSReader::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
 		{
