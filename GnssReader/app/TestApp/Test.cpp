@@ -3,7 +3,7 @@
 #include "GnssReader.h"
 #include <iostream>
 void testSuite()
-{
+{/**
 
 	//alignment: Tests quantization and aligned bits. 
 	{
@@ -75,7 +75,9 @@ void testSuite()
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.startAsThread();
-		while(!test.isDone()){/**std::cout << test.getIBufPercent() << "\n";*/}
+		while(!test.isDone()){
+		//std::cout << test.getIBufPercent() << "\n";
+		}
 	}
 
 	//multistream: outputs four 1-bit streams.
@@ -181,13 +183,16 @@ void testSuite()
 			
 	}
 
-	
+	*/
 
 	//SingleStream
 	{
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",5000L,5L,1000000L,5);
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
+
+		//94697
+		test.startAtBlock(90);
 		test.startAsThread();
 		while(!test.isDone()){;}
 		//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}

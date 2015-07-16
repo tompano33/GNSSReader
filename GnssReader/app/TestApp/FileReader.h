@@ -28,6 +28,8 @@ class FileReader{
 	uint64_t pathNameCount;				//count of path names
 	IBuffer* ib;						//Buffer that holds the files that have been read.
 
+	uint64_t startByteLocation;
+
 
 	//Helper function to start a thread of a class method at runtime.
 	static void ThreadEntry(void *p);
@@ -72,6 +74,8 @@ public:
 	std::string fileBeingDecoded();
 
 	uint64_t getSizeOfFile(std::string);
+
+	void setStartLocation(int file, uint64_t bytesToSkip);
 
 	//Kills off all buffers
 	~FileReader();

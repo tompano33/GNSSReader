@@ -531,8 +531,11 @@ using namespace GnssMetadata;
 	}
 }
 
-	void GNSSReader::startAtBlock(uint64_t targetBlock,int * startFile, uint64_t * bytesToSkipInFile)
+	//zero-indexed.
+	void GNSSReader::startAtBlock(uint64_t targetBlock)
 	{
+	
+
 		//tell the filereader where to start
 		//ok this is where it gets tricky.
 
@@ -548,22 +551,30 @@ using namespace GnssMetadata;
 	//std::vector<uint64_t>* sdrFileSize; //Length of the SDR file. Needed for block skipping.
 		if(targetBlock == 0)
 		{
-			*startFile = 0;
-			*bytesToSkipInFile = 0;
 			return;
 		}
 
 		uint64_t bytesToSkip = 0;
 		
-		for(int fileNo = 0; fileNo != mdList->size(); fileNo++)
+		for(int fileNo = 0; fileNo != mdList->size();)
 		{
+			//for each block in the file
 			for(int block = 0; block != mdBlockSizesCount->size() && bytesToSkip < sdrFileSize->at(fileNo); block++)
 			{
-
-
+				targetBlock--;
+				bytesToSkip = bytesToSkip + mdBlockSizes->at(fileNo)[block];
+				if(targetBlock == 0)
+				{
+					fr->setStartLocation(fileNo,bytesToSkip);
+					return;
+				}
 			}
 
-
+			if(bytesToSkip < sdrFileSize->at(fileNo))
+				continue;
+			else
+				fileNo++;
+			//Error if we skipped more bytes than in file. 
 		}
 	}
 

@@ -25,6 +25,8 @@
 		filePtr = 0;
 		bytesRead = 0;
 
+		startByteLocation = 0;
+
 		//copy const strings to something that wont go out of scope.
 		pathNames = new char*[pathCount+1];
 		pathNames[0] = strdup(origPath);
@@ -41,6 +43,9 @@
 	{
 		//prep first handle
 		prepareHandle();
+
+		if(startByteLocation != 0)
+			SetFilePointer(sdrFile,startByteLocation,NULL,FILE_BEGIN);
 
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
 		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
@@ -255,6 +260,12 @@
 
 		printf("Error: Could not open datafile to skip to");
 		return 0;
+	}
+
+	void FileReader::setStartLocation(int loc, uint64_t bytesSkip)
+	{
+		filePtr = loc;
+		startByteLocation = bytesSkip;
 	}
 
 
