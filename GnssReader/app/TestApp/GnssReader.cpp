@@ -131,8 +131,6 @@ using namespace GnssMetadata;
 			makeFileList(fname);
 			fr = new FileReader(*sdrFileNames,readSize,buffSize,pathToFile,addlPaths,pathCount);
 			fetchFileSizes();
-			
-
 
 		} catch (TranslationException e)
 		{
@@ -533,9 +531,40 @@ using namespace GnssMetadata;
 	}
 }
 
-	void GNSSReader::startAtBlock(uint64_t block)
+	void GNSSReader::startAtBlock(uint64_t targetBlock,int * startFile, uint64_t * bytesToSkipInFile)
 	{
 		//tell the filereader where to start
+		//ok this is where it gets tricky.
+
+		//First, I need to consider each metadata w/ associated data
+
+	//std::vector<Metadata*>* mdList;	//List of all metadata objects.
+	//std::vector<int*>* mdBlockSizes;//Length of a repeating block cycle for the associated metadata. Needed for skipping to an exact block.
+	//std::vector<int>* mdBlockSizesCount;//Length of a repeating block cycle for the associated metadata. Needed for skipping to an exact block.
+
+	//unsigned int mdPtr; //Pointer to metadata object we are currently decoding.
+
+	//std::vector<std::string>* sdrFileNames; //List of all SDR file names to decode, in order. 
+	//std::vector<uint64_t>* sdrFileSize; //Length of the SDR file. Needed for block skipping.
+		if(targetBlock == 0)
+		{
+			*startFile = 0;
+			*bytesToSkipInFile = 0;
+			return;
+		}
+
+		uint64_t bytesToSkip = 0;
+		
+		for(int fileNo = 0; fileNo != mdList->size(); fileNo++)
+		{
+			for(int block = 0; block != mdBlockSizesCount->size() && bytesToSkip < sdrFileSize->at(fileNo); block++)
+			{
+
+
+			}
+
+
+		}
 	}
 
 	int* GNSSReader::generateBlockSizeArray(GnssMetadata::Lane * l)

@@ -80,7 +80,7 @@ public:
 	double getIBufPercent();
 	std::string fileBeingDecoded();
 
-	void startAtBlock(uint64_t);
+	void startAtBlock(uint64_t,int * , uint64_t *);
 
 	int* generateBlockSizeArray(GnssMetadata::Lane*);
 
