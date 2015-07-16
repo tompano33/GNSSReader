@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E08A5CDB-78E5-47D2-992B-544407489CF5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TestAppIfenConvert</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\lib\tinyxml2</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\lib\tinyxml2</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\lib\GnssMetadata\AnyUri.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\AttributedObject.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Band.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\BaseTypes.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Block.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Chunk.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Cluster.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Comment.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Date.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Duration.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\File.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Frequency.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Lane.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Lump.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Metadata.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Position.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Session.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Source.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Stream.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\System.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\AnyUriTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\BandTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\BlockTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\ChunkTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\ClusterTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\DurationTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\FileSetTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\FileTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\FrequencyTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\LaneTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\LumpTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\MetadataTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\OscillatorTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\PositionTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\RfConfigTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\SessionTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\SourceTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\StreamTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\SystemTranslator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\Translator.cpp" />
+    <ClCompile Include="..\..\lib\GnssMetadata\Xml\XmlProcessor.cpp" />
+    <ClCompile Include="..\..\lib\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="TestAppIfenConvert.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\GnssMetadata\AnyUri.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\AttributedObject.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Band.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\BaseTypes.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Block.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Chunk.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Cluster.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Comment.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Date.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Duration.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\File.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Frequency.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Lane.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Lump.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Metadata.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Oscillator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Position.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\RfConfiguration.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Session.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Source.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Stream.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\System.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\Context.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\Translator.h" />
+    <ClInclude Include="..\..\include\GnssMetadata\Xml\XmlProcessor.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\AnyUriTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\BandTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\BlockTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\ChunkTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\ClusterTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\DurationTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\FileSetTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\FileTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\FrequencyTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\LaneTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\LumpTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\MetadataTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\OscillatorTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\PositionTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\RfConfigTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\SessionTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\SourceTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\StreamTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\SystemTranslator.h" />
+    <ClInclude Include="..\..\lib\GnssMetadata\Xml\XmlDefs.h" />
+    <ClInclude Include="..\..\lib\tinyxml2\tinyxml2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\GnssMetadata\CMakeLists.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
