@@ -8,9 +8,10 @@
 #include<cstdint>
 #include<iostream>
 #include<stdio.h>
-#include<time.h>
 #include<sys/stat.h>
+
 //For chdir
+//TODO: Put macro here
 //#include <unistd.h>
 #include <direct.h>
 
@@ -30,92 +31,8 @@
 
 using namespace GnssMetadata;
 	
-	void GNSSReader::readChunkCycles(Block * block, uint32_t cycles)
-	{
-		//for every cycle:
-		for(;cycles != 0; cycles--)
-		{
-			//for every chunk:
-			for(int i = 0; i != block->chunkCount; i++)
-			{
-				
-
-				Chunk* chunk = block->chunkArray[i];
-
-				uint8_t sizeWord = chunk->SizeWord();
-				uint8_t countWord = chunk->CountWords();
-	
-				int chunkBufferSize = sizeWord*countWord;
-
-				char* buf = fr->getBufferedBytes(chunkBufferSize);
-
-				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
-
-
-				//while there are still bits left in the chunk:
-				while(!cb.chunkFullyRead())
-				{					
-					//for each lump
-					for(int i = 0; i != chunk->lumpCount; i++)
-					{
-
-					Lump* lump = chunk->lumpArray[i];
-
-					//skip any padding.
-					if( (chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Head) ||
-						(chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Tail))
-					{
-						/** The Padding is at the start */	
-						cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
-					}
-
-						//for each stream
-						for(int i = 0; i != lump->streamCount; i++)
-						{
-							Stream* stream;
-
-							//If RIGHT-SHIFTED read the last stream first. Else, read from the left stream.
-							if(chunk->Shift() == chunk->Right)
-								stream = lump->streamArray[(lump->streamCount - 1) - i];
-							else
-								stream = lump->streamArray[i];
-
-							//find the correct decoded-Stream based on address
-							for(int i = 0; i != decStreamCount; i++)
-							{
-								
-								if(decStreamArray[i]->getCorrespondingStream() == stream){
-									//given a metadata-stream, a chunkbuffer, and an output stream, 
-									//puts samples away according to their packedbits/quant/align.
-									decodeFormattedStream(stream,&cb,i);
-								}
-
-							
-							}
-						}
-
-						//skip tail padding here!
-						if( (chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head) ||
-							(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail) )
-						{
-
-							cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
-						}
-					}
-				}
-
-				fr->doneReading(chunkBufferSize);
-			}
-		}
-	}
-	
-	DecStream** GNSSReader::getDecStreamArray(){
-		return decStreamArray;
-	}
-
 	GNSSReader::GNSSReader(const char* pathToFile, uint64_t readSize, uint64_t buffSize, uint64_t streamSize, uint64_t blockTotal, const char** addlPaths, uint64_t pathCount)
 	{
-		//total amout of blocks to read, -1 means read all.
 		done = false;
 		blocksLeftToRead = blockTotal;
 		printStats = false;
@@ -146,6 +63,80 @@ using namespace GnssMetadata;
 
 	}
 
+	void GNSSReader::readChunkCycles(Block * block, uint32_t cycles)
+	{
+		//for every cycle:
+		for(;cycles != 0; cycles--)
+		{
+			//for every chunk in the block:
+			for(int i = 0; i != block->chunkCount; i++)
+			{
+				Chunk* chunk = block->chunkArray[i];
+
+				uint8_t sizeWord = chunk->SizeWord();
+				uint8_t countWord = chunk->CountWords();
+	
+				int chunkBufferSize = sizeWord*countWord;
+
+				char* buf = fr->getBufferedBytes(chunkBufferSize);
+
+				//The chunkbuffer does not allocate a new buffer, it simply uses the one passed to it from fileReader
+				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
+
+				//while there are still bits left in the chunk:
+				while(!cb.chunkFullyRead())
+				{					
+					//for each lump
+					for(int i = 0; i != chunk->lumpCount; i++)
+					{
+
+						Lump* lump = chunk->lumpArray[i];
+
+						//skip any padding at the start.
+						if( (chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Head) ||
+						(chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Tail))
+						{
+							/** The Padding is at the start */	
+							cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
+						}
+
+						//for each stream
+						for(int i = 0; i != lump->streamCount; i++)
+						{
+							Stream* stream;
+
+							//If RIGHT-SHIFTED read the last stream first. Else, read from the left stream.
+							if(chunk->Shift() == chunk->Right)
+								stream = lump->streamArray[(lump->streamCount - 1) - i];
+							else
+								stream = lump->streamArray[i];
+
+							//find the correct decoded-Stream based on address
+							for(int i = 0; i != decStreamCount; i++)
+							{
+								
+								if(decStreamArray[i]->getCorrespondingStream() == stream){
+									//decode this sample.
+									decodeFormattedStream(stream,&cb,i);
+								}
+							}
+						}
+
+						//skip padding at the end.
+						if( (chunk->Shift() == chunk->Right && chunk->Padding() == chunk->Head) ||
+						(chunk->Shift() == chunk->Left && chunk->Padding() == chunk->Tail) )
+						{
+							cb.skipBits((8*chunk->SizeWord()) - lump->lumpSize);
+						}
+					}
+				}
+
+				//now that we are done reading the chunk, we can alert the filereader to release this chunk.
+				fr->doneReading(chunkBufferSize);
+			}
+		}
+	}
+	
 	void GNSSReader::makeFileList(std::string pathToFile)
 	{
 
@@ -163,16 +154,15 @@ using namespace GnssMetadata;
 		//add it to the queue
 		mdList->push_back(nextMeta);
 		sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
-		//add all block sizes. 
+
+		//add all block sizes of this metadata. 
 		mdBlockSizesCount->push_back(nextMeta->Files().front().Lane().blockCount);
 		mdBlockSizes->push_back(generateBlockSizeArray(&nextMeta->Files().front().Lane()));
-		//now we know how many blocks there are in each metadata array, and also the sizes. As a result, we can fastforward to jump to a specific point in a metadata file.
  		
 		//If there is a next file, and there are still blocks to read (or we elect to read infinite)
 		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
 		{
-			//std::cout << "Adding File to list: " << nextMeta->Files().front().Next().Value() << std::endl;
-			
+			//add the metadata and it's information to the list.
 			x2m = new XMLtoMeta((&(nextMeta->Files().front().Next().toString()))->c_str());
 			nextMeta = x2m->getNonRefdMetadata();
 			int bc = nextMeta->Files().front().nLane->blockCount;
@@ -185,34 +175,30 @@ using namespace GnssMetadata;
 
 	}
 
-
 	void GNSSReader::fetchFileSizes()
 	{
 		sdrFileSize = new std::vector<uint64_t>;
-
 		for(int i = 0; i != sdrFileNames->size(); i++)
 		{
 			sdrFileSize->push_back(fr->getSizeOfFile(sdrFileNames->at(i)));
 		}
-
-
 	}
-	//Start decoding the file into stream(s)
+
 	void GNSSReader::start(){
 
-	//	std::cout << getDecStreamArray()[0]->getID();
+		//start the filereading thread.
 		fr->readAll();
 
-
+		//pointer to next metadata to read
 		Metadata* md;
-
-
 
 		//for all metadatas
 		while(mdPtr < mdList->size())
 		{
+			//increment the pointer.
 			md =  mdList->at(mdPtr++);
 		
+			//repair the decoded streams, since we use addresses to find the right decoding stream.
 			repairDecStreams(md);
 	
 			//we don't do filesets yet, but almost
@@ -221,10 +207,13 @@ using namespace GnssMetadata;
 				printf("Unsupported Format: Spatial/Temporal File");
 			}
 	
+			//TODO: add nLane to API. nLane points to the non referenced lane of this file.
 			Lane* singleLane =  md->Files().front().nLane;
 
+			//for each block in lane
 			for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
 			{
+				
 				if(blocksLeftToRead > 0)
 					blocksLeftToRead--;
 
@@ -232,19 +221,20 @@ using namespace GnssMetadata;
 			
 				//how many chunk cycles are there?
 				uint32_t cycles = block->Cycles();
-				//is there a header or footer we need to skip?
+				
+				//skip headers/footers
 
 				uint32_t headerSize = block->SizeHeader();
-				//std::cout << "\n" << headerSize << "\n";
 				uint32_t footerSize = block->SizeFooter();
 			
 				fr->skipBufferedBytes(headerSize);
 				readChunkCycles(block, cycles);
 				fr->skipBufferedBytes(footerSize);
 				
-				//TODO enable testmode
-				
-				
+
+				//In order to test, this class will print data from a block.
+				//This will be discarded when code is fully tests.
+
 				StreamAnalytics sa;
 				for(int i = 0; i != decStreamCount; i++)
 				{
@@ -259,32 +249,37 @@ using namespace GnssMetadata;
 			}
 		}
 
-		//done! see if there are any bytes in the DecStream. If there are, print a warning but kill the process anyhow.
+		//Done reading all blocks specified by metadata. TODO: Loop over a block set, but that's easy.
+		//see if there are any bytes in the File or IBuffer. If there are, print a warning but kill the process anyhow.
 		if(!fr->hasReadWholeFile())
 		{
 			std::cout << "Warning: Some samples did not get read! In Buffer: " << fr->numBytesLeftInBuffer() << " In File: " << fr->numBytesLeftToReadFromFile() << "\n" ;
 			fr->killReadThread();
 		}
-
+		
+		//done! Signal that we are done reading.
 		done = true;
 	}
 
 	//TODO Improve arbitrary array to vector.
-	//Prepares decoded streams.
-	//TODO If lumpsize changes things break
 	void GNSSReader::makeDecStreams(){
 
-		//TODO use a vector or something
+		//Count of all the streams we have found so far.
 		decStreamCount = 0;
 		//TODO magic number!
 		decStreamArray = new DecStream*[256];
-		//i need to read how many streams there are, and also, data about them. 
-		//how can I get that?
-		//well, I need to iterate through every xml element and count the num of streams there are
-		//I need to be careful to avoid duplicates...
 
+		/** I need to find how many streams there are, and also, data about them. 
+		/ * How can I get that?
+		/ * Well, I need to iterate through every xml element and count the num of streams there are
+		/ * I need to be careful to avoid duplicates...
+		/ * We also need to get the size of a lump, in order to be able to do padding properly.
+        **/
+
+		//Start with the lane of the first metadata file.
 		Lane* singleLane = mdList->at(0)->Files().front().nLane;
 
+		//for every stream in every lump in every chunk in every block
 		for(int i = 0; i != singleLane->blockCount; i++){
 			Block* b = singleLane->blockArray[i];
 			for(int j = 0; j != b->chunkCount;j++){
@@ -296,25 +291,27 @@ using namespace GnssMetadata;
 					for(int i2  = 0; i2 != l->streamCount;i2++)
 					{
 						Stream* s = l->streamArray[i2];
-						//we got a stream! Make sure it's not a duplicate
 
-						//TODO modifiying this does nothing? design flaw?
 						l->lumpSize += s->Packedbits();
-						//extra samples included w/ complex data
+
+						//Account for extra samples that would included w/ complex data
+						//That is, add another sample in.
 						if(!(s->Format() == s->IF || s->Format() == s->IFn))	
 							l->lumpSize += s->Packedbits();
 
+						//This is a newstream until proven not a new stream.
 						bool newStream = true;
 
+						//Iterate through all streams, if the address of this stream matches another, it's not new.
 						for(int c = 0; newStream &&  c != decStreamCount; c++){	
-
 							if(s == decStreamArray[c]->getCorrespondingStream())
 									newStream = false;
 						}
 
+						//But if it is a new stream:
 						if(newStream)
 						{
-							//record if it in complex, and if so, what value comes first.
+							//Create a new decoded stream, make sure that the name is there, and other information useful in decoding.
 							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s,!((s->Format() == s->IF) || (s->Format() == s->IFn)),
 								(s->Format() == s->QI) || (s->Format() == s->QnIn) || (s->Format() == s->QIn) || (s->Format() == s->QnI));
 							decStreamCount++;
@@ -330,6 +327,7 @@ using namespace GnssMetadata;
 		return decStreamCount;
 	}
 
+	//TODO Do actually try to prevent memory leaks
 	GNSSReader::~GNSSReader(){
 	//	delete fr;
 	//	for(int i = 0; i != decStreamCount; i++)
@@ -339,10 +337,10 @@ using namespace GnssMetadata;
 	//	delete [] decStreamArray;
 	}
 	
-	//When we load a new XML file, we must assoicate the already-open streams with those found in the file.
 	void GNSSReader::repairDecStreams(Metadata* md)
 	{
 
+		//for stream in lump in block in lane
 		for(int i = 0; i != md->Files().front().nLane->blockCount; i++){
 			Block* b = md->Files().front().nLane->blockArray[i];
 			for(int j = 0; j != b->chunkCount;j++){
@@ -355,11 +353,10 @@ using namespace GnssMetadata;
 					for(int i2  = 0; i2 != l->streamCount;i2++)
 					{
 						Stream* s = l->streamArray[i2];
-				
-						
+
+						//TODO dup'd from makeDec'dStreams
 						l->lumpSize += s->Packedbits();
 
-						//duplicated
 						if(!(s->Format() == s->IF || s->Format() == s->IFn))	
 							l->lumpSize += s->Packedbits();
 
@@ -373,6 +370,8 @@ using namespace GnssMetadata;
 								break;
 							}
 						}
+
+						//TODO throw error if stream could not be reassigned.
 
 					}
 				}
@@ -394,7 +393,7 @@ using namespace GnssMetadata;
 
 	void GNSSReader::changeWD(const char* pathToFile)
 	{
-		
+		//Simply change the working directory.
 		std::string fname = std::string(pathToFile,strlen(pathToFile));
 		std::string dir;
 		const size_t last_slash_idx = fname.rfind('\\');
@@ -426,13 +425,13 @@ using namespace GnssMetadata;
 		
 		int64_t read= cb->readBits(s->Quantization(),s->Encoding());	
 
-		//This should not work?
+		//TODO this won't work on negated floating point samples.
 		if(negate) 
 			read = -read;
 
+		//TODO No support for FP-16
 		if(cb->wasSampleFloat())
 		{
-		//need to convert read here! putSample takes a double.
 			if(s->Quantization() == 64)
 				decStreamArray[i]->putSample(*(reinterpret_cast<double*>(&read)));
 			if(s->Quantization() == 32)
@@ -463,7 +462,7 @@ using namespace GnssMetadata;
 	
 	void GNSSReader::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
 		{
-			
+			//based on format, skip bits
 			switch(stream->Format())
 			{
 
@@ -526,29 +525,16 @@ using namespace GnssMetadata;
 					break;
 									
 				default:
+					//should probably throw instead of print
 					printf("Format error");
 
 	}
 }
 
-	//zero-indexed.
 	void GNSSReader::startAtBlock(uint64_t targetBlock)
 	{
-	
-
-		//tell the filereader where to start
-		//ok this is where it gets tricky.
-
-		//First, I need to consider each metadata w/ associated data
-
-	//std::vector<Metadata*>* mdList;	//List of all metadata objects.
-	//std::vector<int*>* mdBlockSizes;//Length of a repeating block cycle for the associated metadata. Needed for skipping to an exact block.
-	//std::vector<int>* mdBlockSizesCount;//Length of a repeating block cycle for the associated metadata. Needed for skipping to an exact block.
-
-	//unsigned int mdPtr; //Pointer to metadata object we are currently decoding.
-
-	//std::vector<std::string>* sdrFileNames; //List of all SDR file names to decode, in order. 
-	//std::vector<uint64_t>* sdrFileSize; //Length of the SDR file. Needed for block skipping.
+		//go from one-indexed to zero indexed
+		targetBlock--;
 		if(targetBlock == 0)
 		{
 			return;
@@ -563,6 +549,9 @@ using namespace GnssMetadata;
 			{
 				targetBlock--;
 				bytesToSkip = bytesToSkip + mdBlockSizes->at(fileNo)[block];
+				
+				//we found the target block!
+				//TODO Metadata will still not start at the correct block
 				if(targetBlock == 0)
 				{
 					fr->setStartLocation(fileNo,bytesToSkip);
@@ -574,12 +563,13 @@ using namespace GnssMetadata;
 				continue;
 			else
 				fileNo++;
-			//Error if we skipped more bytes than in file. 
+			//TODO Error if we skipped more bytes than in file. 
 		}
 	}
 
 	int* GNSSReader::generateBlockSizeArray(GnssMetadata::Lane * l)
 	{
+		//we need all the block sizes to quickly skip to the correct block
 		int * blockSizeArray = new int[l->blockCount];
 		int size = 0;
 		//for each block
@@ -592,10 +582,13 @@ using namespace GnssMetadata;
 				Chunk* c = b->chunkArray[j];
 				size += b->SizeFooter() + b->SizeHeader() + (c->CountWords() * c->SizeWord() * b->Cycles());
 			}
-			//add to array.
 			blockSizeArray[i] = size;
 		}
 		return blockSizeArray;
+	}
+	
+	DecStream** GNSSReader::getDecStreamArray(){
+		return decStreamArray;
 	}
 
 

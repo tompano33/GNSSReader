@@ -1,9 +1,9 @@
-//Tests the GnssReader using files in the Tests/ directory
+//Tests the GnssReader using files in the Test directory
 
 #include "GnssReader.h"
 #include <iostream>
 void testSuite()
-{/**
+{
 
 	//alignment: Tests quantization and aligned bits. 
 	{
@@ -110,7 +110,7 @@ void testSuite()
 		while(!test.isDone()){;}
 	}
 
-	// padding: Tests Padding 
+	//padding: Tests Padding 
 	{
 		printf("Expecting repeated pattern\n");
 		GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padding\\test.xml",50L,1000L,1000000L,-1);
@@ -183,7 +183,6 @@ void testSuite()
 			
 	}
 
-	*/
 
 	//SingleStream
 	{
@@ -191,7 +190,8 @@ void testSuite()
 		test.makeDecStreams();
 		test.setPrintOptions(true,false);
 
-		//94697
+		//This won't always work on multi-blocked chunks
+		//Also add support for repeating blocks
 		test.startAtBlock(90);
 		test.startAsThread();
 		while(!test.isDone()){;}

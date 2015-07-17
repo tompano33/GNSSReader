@@ -14,7 +14,7 @@
 		finish = false;
 		bufPtr = preBufferSize;
 		oldPtr = preBufferSize;
-		
+		filesFullyRead = 0;
 		InitializeCriticalSection(&crit);
 	}
 
@@ -174,12 +174,14 @@
 				bufPtr = preBufferSize;
 				oldPtr = preBufferSize;
 				finish = false;
+				filesFullyRead++;
 			}
 			else if(oldPtr == bufPtr +- writeBlockSize + bytesInFinish)
 			{
 				bufPtr = preBufferSize;
 				oldPtr = preBufferSize;
 				finish = false;
+				filesFullyRead++;
 			}
 		}
 		LeaveCriticalSection(&crit);
@@ -212,4 +214,9 @@
 	bool IBuffer::isFinished()
 	{
 		return finish;
+	}
+
+	int IBuffer::getFileReadCount()
+	{
+		return filesFullyRead;
 	}

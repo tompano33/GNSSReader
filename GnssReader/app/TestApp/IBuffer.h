@@ -27,6 +27,8 @@ class IBuffer{
 
 	volatile bool finish;
 
+	int filesFullyRead;
+
 
 	//do not write and read
 	CRITICAL_SECTION crit; 
@@ -59,6 +61,8 @@ public:
 	bool isFinished();
 
 	double getPercent();
+
+	int getFileReadCount();
 
 };
 #endif

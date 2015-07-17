@@ -171,8 +171,7 @@
 	}
 
 	bool FileReader::hasReadWholeFile(){
-
-		return (bytesRead == fileSize.QuadPart && ib->getNumBytesStored() == 0);
+		return (bytesRead == fileSize.QuadPart && (ib->getFileReadCount() == filePtr));
 	}
 
 	uint64_t FileReader::numBytesLeftToReadFromFile(){
