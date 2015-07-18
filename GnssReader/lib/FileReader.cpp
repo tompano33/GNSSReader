@@ -254,7 +254,8 @@
 			return tempFileSize.QuadPart;
 		}
 
-		printf("Error: Could not open datafile to skip to");
+		//throw error
+		printf("Error: Could not finding a file \n");
 		return 0;
 	}
 
@@ -262,6 +263,11 @@
 	{
 		filePtr = loc;
 		startByteLocation = bytesSkip;
+	}
+
+	uint64_t FileReader::filesFullyReadCount()
+	{
+		return ib->getFileReadCount();
 	}
 
 

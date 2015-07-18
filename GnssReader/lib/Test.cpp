@@ -44,18 +44,20 @@ void testSuite()
 		{
 			printf("Expecting: A nice introduction \n");
 
-			char** paths = new char*[3];
-			paths[0] = const_cast<char*>(pathTo("altPaths\\storage"));
-			paths[1] = const_cast<char*>(pathTo("altPaths\\storage\\superstorage\\"));
-			paths[2] = const_cast<char*>(pathTo("altPaths\\storage\\superstorage\\extremestorage\\"));
+			const char** paths = new const char*[3];
+			paths[0] = (pathTo("altPaths\\storage\\"));
+			paths[1] = (pathTo("altPaths\\storage\\superstorage\\"));
+			paths[2] = (pathTo("altPaths\\storage\\superstorage\\extremestorage\\"));
 		
-			GNSSReader test (pathTo("altPaths\\test.xml"),6L,3L,1000000L,-1,(const char**)paths,3);
+			GNSSReader test (pathTo("altPaths\\test.xml"),6L,3L,1000000L,-1,paths,3);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
 			while(!test.isDone()){;}
 		}
 		
+		/**
+
 		//exception: throws error if invalid XML exists.
 		{
 			try{
@@ -194,7 +196,7 @@ void testSuite()
 
 				uint64_t count = 0; 
 				test.getDecStreamArray()[0]->flushOutputStream(&count);				
-				std::cout << "Count is" << count << std::endl;
+			//	std::cout << "Count is" << count << std::endl;
 			
 		//			for(int i = 0; i != count; i++)
 		//			{
@@ -220,6 +222,7 @@ void testSuite()
 			while(!test.isDone()){;}
 			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 		}
+		*/
 	} catch (std::exception& e) {
 		printf("\n\n ***TEST FAILED*** \n\n");
 		printf(e.what());

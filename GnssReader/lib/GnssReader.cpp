@@ -207,28 +207,37 @@ using namespace GnssMetadata;
 			//TODO: add nLane to API. nLane points to the non referenced lane of this file.
 			Lane* singleLane =  md->Files().front().nLane;
 
-			//for each block in lane
-			for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
+			//keep reading blocks until the amount in the file has expired
+			//test!! will not work on a multi-file approach
+			//also fr might read the whole file, but the ibuffer might still have something in it.
+
+			//Continue if there are still samples in the file, or there still bytes left in the ibuffer.
+		//	while(fr->filesFullyReadCount() < mdPtr)
 			{
-				
-				if(blocksLeftToRead > 0)
-					blocksLeftToRead--;
-
-				Block* block = singleLane->blockArray[i];
+		//		std::cout << "Pairing " << mdPtr - 1 << " with " << fr->filesFullyReadCount() << "\n";
 			
-				//how many chunk cycles are there?
-				uint32_t cycles = block->Cycles();
-				
-				//skip headers/footers
+			//for each block in lane
+				for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
+				{
 
-				uint32_t headerSize = block->SizeHeader();
-				uint32_t footerSize = block->SizeFooter();
+					if(blocksLeftToRead > 0)
+						blocksLeftToRead--;
+
+					Block* block = singleLane->blockArray[i];
 			
-				fr->skipBufferedBytes(headerSize);
-				readChunkCycles(block, cycles);
-				fr->skipBufferedBytes(footerSize);
+					//how many chunk cycles are there?
+					uint32_t cycles = block->Cycles();
 				
+					//skip headers/footers
 
+					uint32_t headerSize = block->SizeHeader();
+					uint32_t footerSize = block->SizeFooter();
+			
+					fr->skipBufferedBytes(headerSize);
+					readChunkCycles(block, cycles);
+					fr->skipBufferedBytes(footerSize);
+				}
+				
 				//In order to test, this class will print data from a block.
 				//This will be discarded when code is fully tests.
 
@@ -324,7 +333,7 @@ using namespace GnssMetadata;
 		return decStreamCount;
 	}
 
-	//TODO Do actually try to prevent memory leaks
+	//TODO Do actually try to prevent memory leaks. Complicated becuase others may use my decoder
 	GNSSReader::~GNSSReader(){
 	//	delete fr;
 	//	for(int i = 0; i != decStreamCount; i++)

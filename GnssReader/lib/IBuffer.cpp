@@ -174,6 +174,7 @@
 				bufPtr = preBufferSize;
 				oldPtr = preBufferSize;
 				finish = false;
+				numBytesStored = 0;
 				filesFullyRead++;
 			}
 			else if(oldPtr == bufPtr +- writeBlockSize + bytesInFinish)
@@ -181,6 +182,7 @@
 				bufPtr = preBufferSize;
 				oldPtr = preBufferSize;
 				finish = false;
+				numBytesStored = 0;
 				filesFullyRead++;
 			}
 		}

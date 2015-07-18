@@ -91,6 +91,9 @@ public:
 	//sets the start file and start byte of the file. Used if blocks want to be skipped
 	void setStartLocation(int file, uint64_t bytesToSkip);
 
+	//count of all files read.
+	uint64_t filesFullyReadCount();
+
 	//Kills off all buffers
 	~FileReader();
 
