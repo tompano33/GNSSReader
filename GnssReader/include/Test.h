@@ -1,0 +1,1 @@
+static volatile DecStream* d;
