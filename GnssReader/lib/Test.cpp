@@ -2,6 +2,17 @@
 #include "GnssReader.h"
 #include <iostream>
 
+std::string pathToTests;
+
+//TODO memory leaks, but it's just a test so it's ok
+const char* pathTo(char * address)
+{
+	std::string * localPath = new std::string;
+	localPath->append(std::string (pathToTests));
+	localPath->append(std::string (address));
+	return (localPath->c_str());
+}
+
 void testSuite()
 {
 	std::cout << "Enter the path to your 'Tests' Directory:\n";
@@ -9,7 +20,7 @@ void testSuite()
 	std::getline (std::cin, path);
 	
 	//Change this to the path to your test suite if you want to set a default directory
-	std::string pathToTests ("C:\\Users\\ANTadmin\\Desktop\\SDR\ STANDARD\\Tests\\");
+	pathToTests = ("C:\\Users\\ANTadmin\\Desktop\\SDR\ STANDARD\\Tests\\");
 	if(path.size() != 0)
 	{
 		pathToTests = path; 
@@ -21,9 +32,7 @@ void testSuite()
 		//alignment: Tests quantization and aligned bits. 
 		{
 			printf("Expecting: [5, -2, -16, 15]\n");
-			std::string localPath;
-			pathToTests.append(std::string ("alignment\\test.xml"));
-			GNSSReader test (pathToTests.c_str(),50L,1000L,1000000L);
+			GNSSReader test (pathTo("alignment\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -36,11 +45,11 @@ void testSuite()
 			printf("Expecting: A nice introduction \n");
 
 			char** paths = new char*[3];
-			paths[0] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\";
-			paths[1] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\";
-			paths[2] = "C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\storage\\superstorage\\extremestorage\\";
+			paths[0] = const_cast<char*>(pathTo("altPaths\\storage"));
+			paths[1] = const_cast<char*>(pathTo("altPaths\\storage\\superstorage\\"));
+			paths[2] = const_cast<char*>(pathTo("altPaths\\storage\\superstorage\\extremestorage\\"));
 		
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\altPaths\\test.xml",6L,3L,1000000L,-1,(const char**)paths,3);
+			GNSSReader test (pathTo("altPaths\\test.xml"),6L,3L,1000000L,-1,(const char**)paths,3);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -51,7 +60,7 @@ void testSuite()
 		{
 			try{
 				printf("Expecting: Printed 'foostream1' \n");
-				GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\exception\\test.xml",50L,1000L,1000000L);
+				GNSSReader test (pathTo("exception\\test.xml"),50L,1000L,1000000L);
 				test.makeDecStreams();
 				test.setPrintOptions(false,true);
 				test.startAsThread();
@@ -65,7 +74,7 @@ void testSuite()
 		//floatingpoint: tests reading of floating point numbers
 		{
 			printf("Expecting: [-5.168466E29 -2.4479542E-19 6.3108872E-30 0 ] and two doubles. \n");
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\floatingPoint\\test.xml",50L,1000L,1000000L);
+			GNSSReader test (pathTo("floatingPoint\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -75,7 +84,7 @@ void testSuite()
 		//formatOne: tests IQ, IF formats
 		{
 			printf("Expecting reals of 10, complexes of -2\n");
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\formatOne\\test.xml",50L,1000L,1000000L,-1);
+			GNSSReader test (pathTo("formatOne\\test.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -85,7 +94,7 @@ void testSuite()
 		//header: tests skipping of headers and footers of various sizes.
 		{
 			printf("Expecting: [HELLO___SDR_WORLD___THISIS__A___TEST_!_]  \n");
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\header\\test.xml",50L,1000L,1000000L);
+			GNSSReader test (pathTo("header\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -97,7 +106,7 @@ void testSuite()
 		//multistream: outputs four 1-bit streams.
 		//INVESTIGATE the mean & variance are wrong
 		{
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\multiStream\\test.xml",50L,1000L,1000000L,1);
+			GNSSReader test (pathTo("multiStream\\test.xml"),50L,1000L,1000000L,1);
 			test.makeDecStreams();
 			test.setPrintOptions(true,false);
 			test.startAsThread();
@@ -107,7 +116,7 @@ void testSuite()
 		//offset-binary
 		{
 			printf("Expecting 0100 0101 0100 1100 0100 1111  -2 -3 -2 0 2 -3 -3 3 -4 -3 -4 4 -4 7\n");
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\offsetBin\\test.xml",50L,1000L,1000000L,-1);
+			GNSSReader test (pathTo("offsetBin\\test.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -117,7 +126,7 @@ void testSuite()
 		//padAndShift: Tests padding and shifting.
 		{
 			printf("Expecting repeated pattern\n");
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padAndShift\\lshp.xml",50L,1000L,1000000L,-1);
+			GNSSReader test (pathTo("padAndShift\\lshp.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -127,7 +136,7 @@ void testSuite()
 		//padding: Tests Padding 
 		{
 			printf("Expecting repeated pattern\n");
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\padding\\test.xml",50L,1000L,1000000L,-1);
+			GNSSReader test (pathTo("padding\\test.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -136,7 +145,7 @@ void testSuite()
 
 		//SampleBits: tests samples of various sizes
 		{
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sampleBits\\test.xml",50L,1000L,1000000L);
+			GNSSReader test (pathTo("sampleBits\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -145,7 +154,7 @@ void testSuite()
 
 		//Seven Eight: a 7 bit and 8 bit stream
 		{
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sevenEight\\test.xml",50L,1000L,1000000L);
+			GNSSReader test (pathTo("sevenEight\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -154,7 +163,7 @@ void testSuite()
 
 		//Sign-Magnitude:
 		{
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\signMag\\test.xml",50L,1000L,1000000L);
+			GNSSReader test ( pathTo("signMag\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -163,7 +172,7 @@ void testSuite()
 
 		//SixtyFour
 		{
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sixtyFour\\test.xml",50L,1000L,1000000L);
+			GNSSReader test (pathTo("sixtyFour\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -176,7 +185,7 @@ void testSuite()
 		//Sine as does work, but if you try to open the file again later an error is thrown. Perhaps the handle is not closed as i thought?
 		{
 			//fix a chunkbuffer that is too small
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\sine\\test.xml",5000L,10L,1000000L);
+			GNSSReader test (pathTo("sine\\test.xml"),5000L,10L,1000000L);
 		
 			test.makeDecStreams();
 			//test.setPrintOptions(true,false);
@@ -200,7 +209,7 @@ void testSuite()
 
 		//SingleStream
 		{
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\GNSSReader\\Tests\\singleStream\\test.xml",5000L,5L,1000000L,5);
+			GNSSReader test (pathTo("singleStream\\test.xml"),5000L,5L,1000000L,5);
 			test.makeDecStreams();
 			test.setPrintOptions(true,false);
 
