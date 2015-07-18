@@ -1,0 +1,76 @@
+﻿Build started 7/17/2015 4:54:08 PM.
+     1>Project "C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\GnssReader\GnssReader.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\GnssReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\GnssReader\\..\include" /I"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\GnssReader\\..\..\GnssMetadata\include" /I"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\GnssReader\\..\..\GnssMetadata\lib\GnssMetadata" /I"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\GnssReader\\..\..\GnssMetadata\lib\tinyxml2" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\lib\Test.cpp
+         Test.cpp
+     1>c:\users\antadmin\desktop\sdr standard\gnssreader\lib\test.cpp(12): warning C4129: ' ' : unrecognized character escape sequence
+       ManifestResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\Debug\GnssReader.exe" /INCREMENTAL /NOLOGO /MANIFEST /ManifestFile:"Debug\GnssReader.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\Debug\GnssReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\Debug\GnssReader.lib" /MACHINE:X86 Debug\GnssReader.exe.embed.manifest.res
+         Debug\AnyUri.obj
+         Debug\AttributedObject.obj
+         Debug\Band.obj
+         Debug\BaseTypes.obj
+         Debug\Block.obj
+         Debug\Chunk.obj
+         Debug\Cluster.obj
+         Debug\Comment.obj
+         Debug\Date.obj
+         Debug\Duration.obj
+         Debug\File.obj
+         Debug\Frequency.obj
+         Debug\Lane.obj
+         Debug\Lump.obj
+         Debug\Metadata.obj
+         Debug\Position.obj
+         Debug\Session.obj
+         Debug\Source.obj
+         Debug\Stream.obj
+         Debug\System.obj
+         Debug\AnyUriTranslator.obj
+         Debug\BandTranslator.obj
+         Debug\BlockTranslator.obj
+         Debug\ChunkTranslator.obj
+         Debug\ClusterTranslator.obj
+         Debug\DurationTranslator.obj
+         Debug\FileSetTranslator.obj
+         Debug\FileTranslator.obj
+         Debug\FrequencyTranslator.obj
+         Debug\LaneTranslator.obj
+         Debug\LumpTranslator.obj
+         Debug\MetadataTranslator.obj
+         Debug\OscillatorTranslator.obj
+         Debug\PositionTranslator.obj
+         Debug\RfConfigTranslator.obj
+         Debug\SessionTranslator.obj
+         Debug\SourceTranslator.obj
+         Debug\StreamTranslator.obj
+         Debug\SystemTranslator.obj
+         Debug\Translator.obj
+         Debug\XmlProcessor.obj
+         Debug\tinyxml2.obj
+         Debug\ChunkBuffer.obj
+         Debug\DecStream.obj
+         Debug\FileReader.obj
+         Debug\GnssReader.obj
+         Debug\IBuffer.obj
+         Debug\StreamAnalytics.obj
+         Debug\Test.obj
+         Debug\XMLtoMeta.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\GnssReader.exe.embed.manifest" /manifest Debug\GnssReader.exe.intermediate.manifest
+         All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         GnssReader.vcxproj -> C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\Debug\GnssReader.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\GnssReader.unsuccessfulbuild".
+         Touching "Debug\GnssReader.lastbuildstate".
+     1>Done Building Project "C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\GnssReader\GnssReader.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.69
