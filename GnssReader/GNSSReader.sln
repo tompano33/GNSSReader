@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GnssReader", "GnssReader\GnssReader.vcxproj", "{0294B9A3-E78D-4157-881D-60BEEDF776CC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GnssReader", "GnssReader\GnssReader.vcxproj", "{6B54DAC2-0B34-46DB-BAA7-79379B234DE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0294B9A3-E78D-4157-881D-60BEEDF776CC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0294B9A3-E78D-4157-881D-60BEEDF776CC}.Debug|Win32.Build.0 = Debug|Win32
-		{0294B9A3-E78D-4157-881D-60BEEDF776CC}.Release|Win32.ActiveCfg = Release|Win32
-		{0294B9A3-E78D-4157-881D-60BEEDF776CC}.Release|Win32.Build.0 = Release|Win32
+		{6B54DAC2-0B34-46DB-BAA7-79379B234DE0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6B54DAC2-0B34-46DB-BAA7-79379B234DE0}.Debug|Win32.Build.0 = Debug|Win32
+		{6B54DAC2-0B34-46DB-BAA7-79379B234DE0}.Release|Win32.ActiveCfg = Release|Win32
+		{6B54DAC2-0B34-46DB-BAA7-79379B234DE0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

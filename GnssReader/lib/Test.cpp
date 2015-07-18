@@ -21,7 +21,7 @@ void testSuite()
 		//alignment: Tests quantization and aligned bits. 
 		{
 			printf("Expecting: [5, -2, -16, 15]\n");
-			std::string localPath
+			std::string localPath;
 			pathToTests.append(std::string ("alignment\\test.xml"));
 			GNSSReader test (pathToTests.c_str(),50L,1000L,1000000L);
 			test.makeDecStreams();
