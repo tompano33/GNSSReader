@@ -2,13 +2,13 @@ Major:
 Fix one metadata/multiple files
 Endianness.
 Improved error handling.
-Search Function
+Search Function, almost done
 Limited block reads, localised paths
 Throw error if invalid path to metadata file is given (this is detected, just throw a std:error)
 Finish writing test cases.
 DataFileCouldNotBeFound
-Linux 
-Progress Bar
+Linux - Download the latest and start converting
+pass SAMPLERATE, others
 
 [wait]
 Peg data to decstream 
@@ -19,8 +19,6 @@ Make IntermediateBuffer a friendclass of FileReader.
 xproc.Load(metadataFile, false, md); throws any errors?
 Ibuffer.write and Ibuffer.read inconsistent
 Assure readfile is synchronous
-Ascii-mode
-What is 'Alignment' (comment in document)
 Support more data types in decStream than just doubles.
 
 
