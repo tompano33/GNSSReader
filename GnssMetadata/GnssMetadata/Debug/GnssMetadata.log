@@ -1,10 +1,9 @@
-﻿Build started 7/18/2015 4:30:59 PM.
+﻿Build started 7/20/2015 1:42:48 PM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\GnssMetadata\GnssMetadata.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Touching "Debug\GnssMetadata.unsuccessfulbuild".
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\GnssMetadata\\..\lib\tinyxml2" /I"C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\GnssMetadata\\..\include\\" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\lib\tinyxml2\tinyxml2.cpp
-         tinyxml2.cpp
+         All outputs are up-to-date.
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -57,4 +56,4 @@
 
 Build FAILED.
 
-Time Elapsed 00:00:00.55
+Time Elapsed 00:00:00.16

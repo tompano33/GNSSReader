@@ -236,8 +236,7 @@ using namespace GnssMetadata;
 					fr->skipBufferedBytes(headerSize);
 					readChunkCycles(block, cycles);
 					fr->skipBufferedBytes(footerSize);
-				}
-				
+							
 				//In order to test, this class will print data from a block.
 				//This will be discarded when code is fully tests.
 
@@ -250,6 +249,8 @@ using namespace GnssMetadata;
 							sa.printAllSamples();
 						if(printStats)
 							sa.printMeanAndVar();
+				}
+
 				}
 				
 			}

@@ -56,7 +56,6 @@ void testSuite()
 			while(!test.isDone()){;}
 		}
 		
-		/**
 
 		//exception: throws error if invalid XML exists.
 		{
@@ -217,12 +216,12 @@ void testSuite()
 
 			//This won't always work on multi-blocked chunks
 			//Also add support for repeating blocks
-			test.startAtBlock(90);
+			test.startAtBlock(1);
 			test.startAsThread();
 			while(!test.isDone()){;}
 			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 		}
-		*/
+
 	} catch (std::exception& e) {
 		printf("\n\n ***TEST FAILED*** \n\n");
 		printf(e.what());
