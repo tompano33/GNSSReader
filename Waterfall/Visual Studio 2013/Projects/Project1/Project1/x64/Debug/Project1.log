@@ -1,0 +1,14 @@
+﻿Build started 6/29/2015 3:50:44 PM.
+     1>Project "c:\Users\ANTuser\documents\visual studio 2013\Projects\Project1\Project1\Project1.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt tinyxml2.cpp
+         tinyxml2.cpp
+     1>tinyxml2.cpp(2101): warning C4267: 'initializing' : conversion from 'size_t' to 'const int', possible loss of data
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"c:\users\antuser\documents\visual studio 2013\Projects\Project1\x64\Debug\TinyXML2.lib" /NOLOGO /MACHINE:X64 x64\Debug\tinyxml2.obj
+         Project1.vcxproj -> c:\users\antuser\documents\visual studio 2013\Projects\Project1\x64\Debug\TinyXML2.lib
+     1>Done Building Project "c:\Users\ANTuser\documents\visual studio 2013\Projects\Project1\Project1\Project1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.59
