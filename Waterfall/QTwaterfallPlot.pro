@@ -58,7 +58,7 @@ FORMS    += mainwindow.ui \
 
 
 
-win32: LIBS += -L$$PWD/fftw/ -llibfftw3-3
+LIBS += -L$$PWD/fftw/ -llibfftw3-3
 
 INCLUDEPATH += $$PWD/fftw
 DEPENDPATH += $$PWD/fftw
@@ -93,7 +93,7 @@ DISTFILES += \
 RESOURCES += \
     icons.qrc
 
-win32: LIBS += -L$$PWD/../GnssLib/ -lGnssReader
+LIBS += -L$$PWD/../GnssLib/ -lGnssReader
 
 INCLUDEPATH += $$PWD/../GnssLib
 DEPENDPATH += $$PWD/../GnssLib

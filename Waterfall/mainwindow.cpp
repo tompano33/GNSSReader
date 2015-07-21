@@ -51,7 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(open()));
 
     // Default file:
-    load("C:\\Users\\ANTuser\\Documents\\Tests\\singleStream\\test.xml");
+    load("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\singleStream\\test.xml");
+
 
     // Maximize window
     this->showMaximized();
