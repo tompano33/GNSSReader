@@ -466,7 +466,6 @@ debug\moc_mainwindow.cpp: C:\Qt\5.5\msvc2010\include\QtWidgets\QMainWindow \
 		..\..\GnssLib\include\DecStream.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\XmlProcessor.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\Context.h \
-		..\..\GnssLib\include\tinyxml2.h \
 		..\..\GnssLib\include\FileReader.h \
 		..\..\GnssLib\include\IBuffer.h \
 		..\..\GnssLib\include\ChunkBuffer.h \
@@ -1162,7 +1161,6 @@ debug\moc_multiplot.cpp: C:\Qt\5.5\msvc2010\include\QtWidgets\QMainWindow \
 		..\..\GnssLib\include\DecStream.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\XmlProcessor.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\Context.h \
-		..\..\GnssLib\include\tinyxml2.h \
 		..\..\GnssLib\include\FileReader.h \
 		..\..\GnssLib\include\IBuffer.h \
 		..\..\GnssLib\include\ChunkBuffer.h \
@@ -2696,7 +2694,6 @@ debug\main.obj: ..\main.cpp ../mainwindow.h \
 		..\..\GnssLib\include\DecStream.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\XmlProcessor.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\Context.h \
-		..\..\GnssLib\include\tinyxml2.h \
 		..\..\GnssLib\include\FileReader.h \
 		..\..\GnssLib\include\IBuffer.h \
 		..\..\GnssLib\include\ChunkBuffer.h \
@@ -2868,7 +2865,6 @@ debug\mainwindow.obj: ..\mainwindow.cpp ../mainwindow.h \
 		..\..\GnssLib\include\DecStream.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\XmlProcessor.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\Context.h \
-		..\..\GnssLib\include\tinyxml2.h \
 		..\..\GnssLib\include\FileReader.h \
 		..\..\GnssLib\include\IBuffer.h \
 		..\..\GnssLib\include\ChunkBuffer.h \
@@ -3606,7 +3602,6 @@ debug\multiplot.obj: ..\multiplot.cpp ../multiplot.h \
 		..\..\GnssLib\include\DecStream.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\XmlProcessor.h \
 		..\..\GnssLib\include\GnssMetadata\Xml\Context.h \
-		..\..\GnssLib\include\tinyxml2.h \
 		..\..\GnssLib\include\FileReader.h \
 		..\..\GnssLib\include\IBuffer.h \
 		..\..\GnssLib\include\ChunkBuffer.h \

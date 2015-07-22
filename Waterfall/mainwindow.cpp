@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     // File filters for loading dialog.
     fileFilters = tr("XML files (*.xml)\n"
                      "SDRX files (*.sdrx)\n"
@@ -51,11 +52,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(open()));
 
     // Default file:
-    load("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\singleStream\\test.xml");
 
+    load("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\singleStream\\test.xml");
 
     // Maximize window
     this->showMaximized();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -189,7 +192,9 @@ void MainWindow::load(const char* file)
         numStreams = fileReader->getDecStreamCount();
         for(int i=0; i < numStreams; i++)
         {
+            printf("MULTIPLOT '1' \n");
             MultiPlot* mplot = new MultiPlot;
+            printf("MULTIPLOT '2' \n");
             mplot->setBuffer(fileReader, i);
             QString winTitle;
             winTitle.sprintf("Stream #%i", i+1);
@@ -204,6 +209,8 @@ void MainWindow::load(const char* file)
         }
         numStreams = fileReader->getDecStreamCount();
     } catch (std::exception& e) {
+
+        printf("Eh? Error? ");
         printf(e.what());
     }
 

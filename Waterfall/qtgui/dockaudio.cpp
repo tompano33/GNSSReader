@@ -27,7 +27,12 @@ DockAudio::DockAudio(QWidget *parent) :
     ui(new Ui::DockAudio),
     autoSpan(true)
 {
+
+    printf("\n CRASH HERE \n");
+
     ui->setupUi(this);
+
+    printf("\n DONE \n");
 
 #ifdef Q_WS_MAC
     // Workaround for Mac, see http://stackoverflow.com/questions/3978889/why-is-qhboxlayout-causing-widgets-to-overlap

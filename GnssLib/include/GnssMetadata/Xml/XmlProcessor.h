@@ -25,7 +25,7 @@
 #include "../BaseTypes.h"
 #include "../Metadata.h"
 #include "Context.h"
-#include <tinyxml2.h>
+#include "tinyxml2.h"
 
 namespace GnssMetadata
 {

@@ -11,16 +11,27 @@ MultiPlot::MultiPlot(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MultiPlot)
 {
+
     setAttribute(Qt::WA_DeleteOnClose);
+
+    printf("START OF PROBLEMS");
+
     ui->setupUi(this);
 
-    // Setup dockable widgets
     uiDockFft = new DockFft();
     uiDockRxOpt = new DockRxOpt();
+
+    printf("THIS NEXT COMMAND CRASHES IT ALL \n");
+
     uiDockAudio = new DockAudio();
+
+    printf("NO EXECUTION PAST THIS POINT");
+
     addDockWidget(Qt::RightDockWidgetArea, uiDockFft);
     addDockWidget(Qt::RightDockWidgetArea, uiDockRxOpt);
     tabifyDockWidget(uiDockRxOpt,uiDockFft);
+
+
 
     // For now, hide Receiver dockable wiget
     uiDockRxOpt->hide();
@@ -31,6 +42,8 @@ MultiPlot::MultiPlot(QWidget *parent) :
 
     /* Audio timer */
     audio_fft_timer = new QTimer(this);
+
+
 
     QToolBar *toolbar = addToolBar(tr("Waterfall"));
     toolbar->addWidget(ui->freqCtrl);
@@ -108,6 +121,8 @@ MultiPlot::MultiPlot(QWidget *parent) :
     ui->plotter->setCenterFreq(14500000);
 
     ui->numBlocksLabel->setText(" Number of Blocks");
+
+
 
     // FFT Initializations and memory allocation
     inputData = (double*) malloc(sizeof(double)*defaultFFTsize);

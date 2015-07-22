@@ -133,7 +133,7 @@ public:
         audioRecConfButton->setMinimumSize(QSize(32, 32));
         audioRecConfButton->setMaximumSize(QSize(32, 32));
         QIcon icon;
-        icon.addFile(QStringLiteral(":/icons/settings.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QStringLiteral("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Waterfall\\icons\\settings.svg"), QSize(), QIcon::Normal, QIcon::Off);
         audioRecConfButton->setIcon(icon);
 
         audioRecLayout->addWidget(audioRecConfButton);
@@ -147,7 +147,7 @@ public:
         audioRecButton->setSizePolicy(sizePolicy6);
         audioRecButton->setMaximumSize(QSize(32, 32));
         QIcon icon1;
-        icon1.addFile(QStringLiteral(":/icons/record.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QStringLiteral("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Waterfall\\icons\\record.svg"), QSize(), QIcon::Normal, QIcon::Off);
         audioRecButton->setIcon(icon1);
         audioRecButton->setCheckable(true);
 
@@ -161,7 +161,7 @@ public:
         audioPlayButton->setMinimumSize(QSize(32, 32));
         audioPlayButton->setMaximumSize(QSize(32, 32));
         QIcon icon2;
-        icon2.addFile(QStringLiteral(":/icons/play.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QStringLiteral("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Waterfall\\icons\\play.svg"), QSize(), QIcon::Normal, QIcon::Off);
         audioPlayButton->setIcon(icon2);
         audioPlayButton->setCheckable(true);
 
