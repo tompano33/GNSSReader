@@ -46,6 +46,7 @@ public:
     {
         if (DockAudio->objectName().isEmpty())
             DockAudio->setObjectName(QStringLiteral("DockAudio"));
+
         DockAudio->resize(200, 239);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
         sizePolicy.setHorizontalStretch(200);
@@ -54,13 +55,22 @@ public:
         DockAudio->setSizePolicy(sizePolicy);
         DockAudio->setMinimumSize(QSize(200, 220));
         DockAudio->setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+
         dockWidgetContents = new QWidget();
         dockWidgetContents->setObjectName(QStringLiteral("dockWidgetContents"));
         verticalLayout = new QVBoxLayout(dockWidgetContents);
+
         verticalLayout->setSpacing(1);
         verticalLayout->setContentsMargins(5, 5, 5, 5);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+
+
+        printf("\nSTART\n");
         audioSpectrum = new CPlotter(dockWidgetContents);
+
+        printf("\nCRASH\n");
+
+
         audioSpectrum->setObjectName(QStringLiteral("audioSpectrum"));
         QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy1.setHorizontalStretch(0);

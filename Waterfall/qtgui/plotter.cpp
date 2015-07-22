@@ -56,7 +56,6 @@ CPlotter::CPlotter(QWidget *parent) :
     setAttribute(Qt::WA_NoSystemBackground, true);
     setMouseTracking(true);
 
-
 // File input for jet color map
     // ??? Doesn't work quite right
 // On/off for jetColorMap
@@ -64,10 +63,12 @@ m_jetColorMap = true;
 
 if(m_jetColorMap)
 {
-    QFile colorMap("C:/Users/ANTuser/Documents/QTwaterfallPlot/jetColorMap.txt");
+
+    printf("ayy");
+
+    QFile colorMap("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Waterfall\\jetColorMap.txt");
     if (!colorMap.open(QIODevice::ReadOnly| QIODevice::Text)) {
-        std::cerr << "Cannot open file for reading: "
-             << qPrintable(colorMap.errorString()) << std::endl;
+        std::cerr << "Cannot open file for reading: ColorMap.txt " << std::endl;
         return;
     }
     else
