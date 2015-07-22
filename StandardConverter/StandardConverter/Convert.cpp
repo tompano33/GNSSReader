@@ -2,9 +2,36 @@
 #include <GnssMetadata/Metadata.h>
 #include <GnssMetadata/XML/XmlProcessor.h>
 #include <iostream>
+#include <vector>
 
 using namespace tinyxml2;
 using namespace GnssMetadata;
+using namespace std;
+
+struct XStream {
+
+	const char* index;
+	const char* name;
+	const char* carrier;
+	const char* intermediate;
+
+};
+
+struct XMetadata {
+
+	const char* numStreams;
+	const char* bitsPerSample;
+	const char* blockOffsetDWords;
+	const char* footerMask;
+	const char* sampleRateHz;
+	const char* nextFile;
+	vector <XStream> streams;
+
+};
+
+
+
+struct XMetadata toConvert;
 
 void WriteXmlFile(const char* pszFilename)
 {
@@ -110,66 +137,84 @@ void WriteXmlFile(const char* pszFilename)
 
 	////////////////////////////////
 	//Assemble the Metadata object and write XML 
-	Metadata md;
-	XmlProcessor proc;
-	md.Lanes().push_back(lane);
-	md.Files().push_back( df);
-	md.Systems().push_back(sys);
-	md.Streams().push_back(sm2);
 
-	try
-	{
-		proc.Save( sfilemd.c_str(),  md);
-	}
-	catch( ApiException& e)
-	{
-		printf("An error occurred while saving the xml file: %s\n", e.what() );
-	}
 }
+
+bool pullXMetadata(XMLDocument*);
+
 void main()
 {
 
-	const char * fileName = "C:\\Users\\ANTadmin\\Desktop\\convertMe\\Trigger\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx";
+	std::string * XFile = new std::string("C:\\Users\\ANTadmin\\Desktop\\convertMe\\Trigger\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
 
-	tinyxml2::XMLDocument doc;
-	doc.LoadFile( fileName );
+	while(XFile != NULL)
+	{
+		//Pulls all data from X-XML file.
+		XMLDocument XDoc;
+		XDoc.LoadFile( XFile->c_str());
+		pullXMetadata(&XDoc);
 	
+		std::cout << "---FILE SUMMARY---\n";
+		std::cout << " Streams: " <<  toConvert.numStreams <<"\n";
+		std::cout << " Bits/Sample: " <<  toConvert.bitsPerSample <<"\n";
+		std::cout << " BlockOffset(DWORD): " <<  toConvert.blockOffsetDWords <<"\n";
+		std::cout << " FooterMask: " <<  toConvert.footerMask <<"\n";
+		std::cout << " SampleRate (Hz): " <<  toConvert.sampleRateHz <<"\n";
+		std::cout << " Next File: " <<  toConvert.nextFile <<"\n";
+
+
+
+		Metadata md;
+		XmlProcessor proc;
+		//md.Lanes().push_back(lane);
+		//md.Files().push_back( df);
+		//md.Systems().push_back(sys);
+		//md.Streams().push_back(sm2);
+
+		//try
+		//{
+		//	proc.Save( sfilemd.c_str(),  md);
+		//}
+		//catch( ApiException& e)
+		//{
+		//	printf("An error occurred while saving the xml file: %s\n", e.what() );
+		//}
+		delete XFile;
+		XFile = NULL;
+	}
+}
+
+bool pullXMetadata(tinyxml2::XMLDocument * doc)
+{	
 	//doc.ErrorID();
 
-	XMLElement* titleElement = doc.FirstChildElement();
+	XMLElement* titleElement = doc->FirstChildElement();
 
-	const char* numStreams = titleElement->FirstChildElement("NUMSTREAMS")->GetText();
+	toConvert.numStreams = titleElement->FirstChildElement("NUMSTREAMS")->GetText();
+	toConvert.bitsPerSample = titleElement->FirstChildElement("BITSPERSAMPLE")->GetText();
+	toConvert.blockOffsetDWords = titleElement->FirstChildElement("BLOCKOFFSETDWORDS")->GetText();
+	toConvert.footerMask = titleElement->FirstChildElement("FOOTERMASK")->GetText();
+	toConvert.sampleRateHz = titleElement->FirstChildElement("SAMPLERATEHZ")->GetText();
+	toConvert.nextFile = titleElement->FirstChildElement("NEXTFILENAME")->GetText();
 
-	const char* bitsPerSample = titleElement->FirstChildElement("BITSPERSAMPLE")->GetText();
+	int streamCount = atoi(toConvert.numStreams);
+
+	XMLElement * streamNode = titleElement->FirstChildElement("STREAM");
+
+	for(int i = 0; i != streamCount; i++)
+	{
+		//for each stream
+		struct XStream * stream = new struct XStream;
+
+		stream->index = streamNode->Attribute("INDEX");
+		stream->name = streamNode->Attribute("NAME");
+		stream->carrier = streamNode->Attribute("FCAR");
+		stream->intermediate = streamNode->Attribute("FIF");
+
+		streamNode = streamNode->NextSibling()->ToElement();
 	
-	const char* blockOffsetDWords = titleElement->FirstChildElement("BLOCKOFFSETDWORDS")->GetText();
-	
-	const char* footerMask = titleElement->FirstChildElement("FOOTERMASK")->GetText();
-
-	const char* sampleRateHz = titleElement->FirstChildElement("SAMPLERATEHZ")->GetText();
-	
-	const char* nextFile = titleElement->FirstChildElement("NEXTFILENAME")->GetText();
-
-	std::cout << "---FILE SUMMARY---\n";
-	std::cout << " Streams: " << numStreams <<"\n";
-	std::cout << " Bits/Sample: " << bitsPerSample <<"\n";
-	std::cout << " BlockOffset(DWORD): " << blockOffsetDWords <<"\n";
-	std::cout << " FooterMask: " << footerMask <<"\n";
-	std::cout << " SampleRate (Hz): " << sampleRateHz <<"\n";
-	std::cout << " Next File: " << nextFile <<"\n";
-
-	//for each stream
-	const char* index = titleElement->FirstChildElement("STREAM")->Attribute("INDEX");
-	const char* name = titleElement->FirstChildElement("STREAM")->Attribute("NAME");
-	const char* carrier = titleElement->FirstChildElement("STREAM")->Attribute("FCAR");
-	const char* intermediate = titleElement->FirstChildElement("STREAM")->Attribute("FIF");
-	std::cout << " Stream 1: " << index <<"\n";
-	std::cout << " Stream 1: " << name <<"\n";
-	std::cout << " Stream 1: " << carrier <<"\n";
-	std::cout << " Stream 1: " << intermediate <<"\n";
+	}
 
 
-	std::cin.get();
-
-
+	return true;
 }
