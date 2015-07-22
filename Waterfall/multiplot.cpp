@@ -14,18 +14,18 @@ MultiPlot::MultiPlot(QWidget *parent) :
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    printf("START OF PROBLEMS");
+    printf("1");
 
     ui->setupUi(this);
 
     uiDockFft = new DockFft();
     uiDockRxOpt = new DockRxOpt();
 
-    printf("THIS NEXT COMMAND CRASHES IT ALL \n");
+    printf("2");
 
     uiDockAudio = new DockAudio();
 
-    printf("NO EXECUTION PAST THIS POINT");
+    printf("3");
 
     addDockWidget(Qt::RightDockWidgetArea, uiDockFft);
     addDockWidget(Qt::RightDockWidgetArea, uiDockRxOpt);
