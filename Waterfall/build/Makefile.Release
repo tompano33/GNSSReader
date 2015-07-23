@@ -216,7 +216,7 @@ $(OBJECTS) $(LIBS)
 	mt.exe /nologo /manifest release\QTwaterfallPlot.exe.embed.manifest /outputresource:$(DESTDIR_TARGET);1
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-msvc2010 "CONFIG+=debug" -o Makefile.Release ..\QTwaterfallPlot.pro
+	@$(QMAKE) -spec win32-msvc2010 -o Makefile.Release ..\QTwaterfallPlot.pro
 
 qmake_all: FORCE
 

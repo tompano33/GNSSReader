@@ -227,7 +227,7 @@ $(OBJECTS) $(LIBS) debug\QTwaterfallPlot.exe_manifest.res
 	if exist debug\QTwaterfallPlot.exe_manifest.bak del debug\QTwaterfallPlot.exe_manifest.bak
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-msvc2010 "CONFIG+=debug" -o Makefile.Debug ..\QTwaterfallPlot.pro
+	@$(QMAKE) -spec win32-msvc2010 -o Makefile.Debug ..\QTwaterfallPlot.pro
 
 qmake_all: FORCE
 
