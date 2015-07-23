@@ -19,50 +19,32 @@ TEMPLATE = app
 # make clean target
 QMAKE_CLEAN += QTwaterfallPlot
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    qtgui/plotter.cpp \
+SOURCES += qtgui/plotter.cpp \
     qtgui/dockfft.cpp \
     qtgui/qtcolorpicker.cpp \
-    multiplot.cpp \
     qtgui/freqctrl.cpp \
     qtgui/meter.cpp \
-    qtgui/dockrxopt.cpp \
-    qtgui/agc_options.cpp \
-    qtgui/demod_options.cpp \
-    qtgui/nb_options.cpp \
-    qtgui/dockaudio.cpp
+    app/main.cpp \
+    app/mainwindow.cpp \
+    app/multiplot.cpp
 
-HEADERS  += mainwindow.h \
-    qtgui/plotter.h \
+HEADERS  += qtgui/plotter.h \
     qtgui/dockfft.h \
     qtgui/qtcolorpicker.h \
-    fft.h \
-    multiplot.h \
     qtgui/freqctrl.h \
     qtgui/meter.h \
-    qtgui/dockrxopt.h \
-    qtgui/agc_options.h \
-    qtgui/demod_options.h \
-    qtgui/nb_options.h \
-    qtgui/dockaudio.h
+    app/fft.h \
+    app/mainwindow.h \
+    app/multiplot.h
 
-FORMS    += mainwindow.ui \
-    qtgui/dockfft.ui \
-    multiplot.ui \
-    qtgui/dockrxopt.ui \
-    qtgui/agc_options.ui \
-    qtgui/demod_options.ui \
-    qtgui/nb_options.ui \
-    qtgui/dockaudio.ui
+FORMS    += qtgui/dockfft.ui \
+    app/mainwindow.ui \
+    app/multiplot.ui
 
 
-
-LIBS += -L$$PWD/fftw/ -llibfftw3-3
-
-INCLUDEPATH += $$PWD/fftw
-DEPENDPATH += $$PWD/fftw
-
+# Libs and include path for FFTW
+win32: LIBS += -L$$PWD/fftw/ -llibfftw3-3
+INCLUDEPATH += $$PWD/fftw/
 
 DISTFILES += \
     icons/audio-card.svg \
@@ -91,12 +73,13 @@ DISTFILES += \
     jetColorMap.txt
 
 RESOURCES += \
-    icons.qrc
+    icons.qrc \
+    jet.qrc
 
-LIBS += -L$$PWD/../GnssLib/ -lGnssReader
+unix|win32: LIBS += -L$$PWD/GnssLib/ -lGnssReader
 
-INCLUDEPATH += $$PWD/../GnssLib
-DEPENDPATH += $$PWD/../GnssLib
+INCLUDEPATH += $$PWD/GnssLib/include
+DEPENDPATH += $$PWD/GnssLib/include
 
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../GnssLib/GnssReader.lib
-else:win32-g++: PRE_TARGETDEPS += $$PWD/../GnssLib/libGnssReader.a
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/GnssLib/GnssReader.lib
+else:unix|win32-g++: PRE_TARGETDEPS += $$PWD/GnssLib/include/libGnssReader.a
