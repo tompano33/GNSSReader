@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BadID" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQCQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\lib\XMLtoMeta.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChunkBuffer" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgBEEAAAAAABAAAAAAACAAAIAAAAIAAAAAAAAABAQAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\include\ChunkBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DecStream" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEgAQAQGAkIACAAAAABAGAAAAAAAAAIAACAgAgAhc=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\include\DecStream.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileReader" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BCAQAABGhEARgFAIAEBAAAECAAQKIAAIACAEAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\include\FileReader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GNSSReader" Collapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBEQAAAAaAggIEBkAAJACAExSAiEAAAIgAAAAABAgiQ=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\include\GnssReader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IBuffer" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAABAAMAOAQAAAEIABgIAAAICaQICAECAQAAAg=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\include\IBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StreamAnalytics" Collapsed="true">
+    <Position X="5.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAABAAAAAAAAAACAAQIAAAAAIAAAIAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\include\StreamAnalytics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XMLtoMeta" Collapsed="true">
+    <Position X="11" Y="4.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAgAAAAEAAAAAAAAAAAAAAAAACAAoAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssReader\include\XMLtoMeta.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::AnyUriTranslator" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAEAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\AnyUriTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::BandTranslator" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAABCAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\BandTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::BlockTranslator" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAgAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\BlockTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::ChunkTranslator" Collapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAACAAAAAACAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\ChunkTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::ClusterTranslator" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAACAAAAAAACAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\ClusterTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::DurationTranslator" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAwAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\DurationTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::FileSetTranslator" Collapsed="true">
+    <Position X="14" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAgAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\FileSetTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::FileTranslator" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAACCAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\FileTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::FrequencyTranslator" Collapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\FrequencyTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::LaneTranslator" Collapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAgAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\LaneTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::LumpTranslator" Collapsed="true">
+    <Position X="14" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAEAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\LumpTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::MetadataTranslator" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAACAAAgAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\MetadataTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::OscillatorTranslator" Collapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAgAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\OscillatorTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::PositionTranslator" Collapsed="true">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAgAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\PositionTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::RfConfigTranslator" Collapsed="true">
+    <Position X="10.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAEAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\RfConfigTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::SessionTranslator" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAgAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\SessionTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::SourceTranslator" Collapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAIAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\SourceTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::StreamTranslator" Collapsed="true">
+    <Position X="7" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAgAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\StreamTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::SystemTranslator" Collapsed="true">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgIAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\SystemTranslator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GnssMetadata::Context" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAgAIAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>c:\users\antadmin\desktop\sdr standard\gnssmetadata\include\gnssmetadata\xml\context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="TranslatorEntry" Collapsed="true">
+    <Position X="8.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\XmlProcessor.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="tinyxml2::Entity" Collapsed="true">
+    <Position X="5.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAECAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\tinyxml2\tinyxml2.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GnssMetadata::NodeEntry" Collapsed="true">
+    <Position X="7" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\XmlDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GnssMetadata::AccessorAdaptorBase" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\XmlDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GnssMetadata::AccessorAdaptor&lt;Tobj, Tmember&gt;" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAADQAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\XmlDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GnssMetadata::ListAdaptor&lt;Tobj&gt;" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAQAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\XmlDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="GnssMetadata::TranslatorId" Collapsed="true">
+    <Position X="5.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAACAAkgABAggBGAAACEAAAAAUAAAAAAQEIAA=</HashCode>
+      <FileName>C:\Users\ANTadmin\Desktop\SDR STANDARD\GnssMetadata\lib\GnssMetadata\Xml\XmlDefs.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

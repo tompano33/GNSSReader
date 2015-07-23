@@ -1,7 +1,7 @@
-﻿Build started 7/22/2015 12:26:43 AM.
+﻿Build started 7/22/2015 1:06:43 AM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverter\StandardConverter\StandardConverter.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\StandardConverter.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\StandardConverter.unsuccessfulbuild".
        ClCompile:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverter\StandardConverter\..\..\GnssMetadata\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverter\StandardConverter\..\..\GnssMetadata\lib\tinyxml2 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Convert.cpp
          Convert.cpp
@@ -65,4 +65,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.19
+Time Elapsed 00:00:01.27

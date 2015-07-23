@@ -141,11 +141,12 @@ void WriteXmlFile(const char* pszFilename)
 }
 
 bool pullXMetadata(XMLDocument*);
+string * changeExt(string*,const char *);
 
 void main()
 {
 
-	std::string * XFile = new std::string("C:\\Users\\ANTadmin\\Desktop\\convertMe\\Trigger\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
+	string * XFile = new std::string("C:\\Users\\ANTadmin\\Desktop\\convertMe\\Trigger\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
 
 	while(XFile != NULL)
 	{
@@ -162,23 +163,46 @@ void main()
 		std::cout << " SampleRate (Hz): " <<  toConvert.sampleRateHz <<"\n";
 		std::cout << " Next File: " <<  toConvert.nextFile <<"\n";
 
-
-
 		Metadata md;
 		XmlProcessor proc;
+
+		//let us first input the file.
+		File mFile;
+		std::string * SDRName = changeExt(XFile,"tgd");
+		mFile.Url(*SDRName);
+		mFile.(4*atoi(toConvert.blockOffsetDWords));
+		mLane.Blocks().push_front(b);
+
+		Lane mLane;
+
+		//first, write system to lane.
+		System mSystem;
+		Frequency mFreq (atof(toConvert.sampleRateHz));
+		mSystem.BaseFrequency() = mFreq;
+		mLane.Systems().push_back(mSystem);
+
+		//then, write block to lane.
+		Block b;
+
+		mFile.Lane(mLane);
+
+		md.Files().push_back(mFile);
+
 		//md.Lanes().push_back(lane);
 		//md.Files().push_back( df);
 		//md.Systems().push_back(sys);
 		//md.Streams().push_back(sm2);
 
-		//try
-		//{
-		//	proc.Save( sfilemd.c_str(),  md);
-		//}
-		//catch( ApiException& e)
-		//{
-		//	printf("An error occurred while saving the xml file: %s\n", e.what() );
-		//}
+		std::string * SDRXName = changeExt(XFile,"sdrx");
+		try
+		{
+			proc.Save( SDRXName->c_str(),  md);
+		}
+		catch( ApiException& e)
+		{
+			printf("An error occurred while saving the xml file: %s\n", e.what() );
+		}
+
 		delete XFile;
 		XFile = NULL;
 	}
@@ -218,3 +242,27 @@ bool pullXMetadata(tinyxml2::XMLDocument * doc)
 
 	return true;
 }
+
+//So we know the file to decode.
+std::string * changeExt(std::string * XFilePtr, const char * ext)
+{
+	std::string * retString = new std::string;
+	retString->assign(*XFilePtr);
+
+	while(retString->at(retString->size() - 1) != '.')
+	{
+		retString->pop_back();
+	}
+
+	retString->append(ext);
+	return retString;
+}
+
+/**
+First tgx file name
+PathsCsv (where to find the files, paths separated by commas – similar to the decoder)
+Splice Mode (int_32): 0: convert this file only, >0: attempt to find this many concurrent files and convert, <0: keep converting files until concurrent sequence ends
+Write Mode (bool): 0: write converted files to source dir and rename old file.tgx file to file.tgx_old; 1: write all converted files to app home directory
+Output log file of converter activity (session report in text format).
+NOTE: care should be taken to ‘do no harm’ to existing files. This app will be used to convert hundreds of thousands of files, some of which are the only copies we have.
+*/
