@@ -8,6 +8,7 @@ using namespace tinyxml2;
 using namespace GnssMetadata;
 using namespace std;
 
+//Stream information pulled from old XML
 struct XStream {
 
 	const char* index;
@@ -17,6 +18,7 @@ struct XStream {
 
 };
 
+//Metadata information pulled from old XML
 struct XMetadata {
 
 	const char* numStreams;
@@ -29,10 +31,10 @@ struct XMetadata {
 
 };
 
-
-
+//Current set of Metadata that has been pulled
 struct XMetadata toConvert;
 
+//temp function: ignore.
 void WriteXmlFile(const char* pszFilename)
 {
     printf("\nWriting GNSS Metadata to xml file: %s\n", pszFilename);
@@ -140,19 +142,55 @@ void WriteXmlFile(const char* pszFilename)
 
 }
 
+//Given an old XML document, pulls metadata to be put in toConvert.
 bool pullXMetadata(XMLDocument*);
+
+//Given a string and extension, changes the file extension.
 string * changeExt(string*,const char *);
 
 void main()
 {
+	//pass nothing? Get this dialogue.
+	//pass 1 arg? Well, that's an XML file holding all these parameters.
+	//pass 5 args? That's all the arguments we need.
 
-	string * XFile = new std::string("C:\\Users\\ANTadmin\\Desktop\\convertMe\\Trigger\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
+	//First tgx file name
+	cout << "Enter the name of the first tgx file\n";
+	std::string f1;
+	getline (cin, f1);
+
+	//quick and dirty test
+	if(f1.at(0) == '*')
+	{
+		std::string def ("C:\\Users\\ANTadmin\\Desktop\\convertMe\\Trigger\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
+		f1 = def;
+	}
+
+	//PathsCsv (where to find the files, paths separated by commas – similar to the decoder)
+	cout << "Enter the list of paths to search, seperated by commas. \n";
+	String paths;
+	cin >> paths;
+
+	//Splice Mode (int_32): 0: convert this file only, >0: attempt to find this many concurrent files and convert, <0: keep converting files until concurrent sequence ends
+	cout << "Enter the count of files to convert. '0' means convert all that are found. \n";
+	String convertCount;
+	cin >> convertCount;
+
+	//Write Mode (bool): 0: write converted files to source dir and rename old file.tgx file to file.tgx_old; 1: write all converted files to app home directory
+	cout << "Would you like to write the converted files to the source directory? Otherwise they will be written to this app directory. ( Y / N ) \n";
+	String writeAtHome;
+	cin >> writeAtHome;
+
+	//Output log file of converter activity (session report in text format).
+	//TODO
+
+	string * XFile = &f1; 
 
 	while(XFile != NULL)
 	{
 		//Pulls all data from X-XML file.
 		XMLDocument XDoc;
-		XDoc.LoadFile( XFile->c_str());
+		XDoc.LoadFile(XFile->c_str());
 		pullXMetadata(&XDoc);
 	
 		std::cout << "---FILE SUMMARY---\n";
@@ -166,32 +204,73 @@ void main()
 		Metadata md;
 		XmlProcessor proc;
 
-		//let us first input the file.
+		//let us first input the file into the metadata.
 		File mFile;
 		std::string * SDRName = changeExt(XFile,"tgd");
 		mFile.Url(*SDRName);
-		mFile.(4*atoi(toConvert.blockOffsetDWords));
-		mLane.Blocks().push_front(b);
+		//we also shall tell it the blockoffset. A Dword is 4bytes.
+		mFile.Offset(4 * atoi(toConvert.blockOffsetDWords));
+		//TODO: declare next, and lane.
 
+		//Done with file! now make a lane.
 		Lane mLane;
 
-		//first, write system to lane.
+		//Make lane's system. freqbase is the most critical field.
 		System mSystem;
 		Frequency mFreq (atof(toConvert.sampleRateHz));
 		mSystem.BaseFrequency() = mFreq;
+
+		//then, write a block to the lane.
+		Block mBlock;
+		Chunk mChunk;
+
+		//construct the hierarchy.
+		
+		mBlock.Chunks().push_back(mChunk);
+		mLane.Blocks().push_back(mBlock);
 		mLane.Systems().push_back(mSystem);
-
-		//then, write block to lane.
-		Block b;
-
 		mFile.Lane(mLane);
-
 		md.Files().push_back(mFile);
 
-		//md.Lanes().push_back(lane);
-		//md.Files().push_back( df);
-		//md.Systems().push_back(sys);
-		//md.Streams().push_back(sm2);
+		/**
+		LUMP
+One or more lumps (specified in order) present in this chunk.
+Lump
+Required
+SIZEWORD
+Bytes of unsigned integer datatype that data shall be read as
+UINT8
+1, 2, 4, 8 (Corresponds to UINT8, UINT16, UINT32 and UINT64)
+Required
+COUNTWORDS
+Total number of words to be read in order to read/decode this chunk
+UINT8
+Required
+ENDIAN
+Endianness of words stored in chunk
+Endian
+‘L’ – Little
+‘B’ – Big
+‘N’ – not applicable
+yes
+‘N’
+PADDING
+Padding applied during encoding
+Padding
+‘H’ – head padding
+‘T’ – Tail padding
+‘N’ – No padding
+yes
+‘N’
+SHIFT
+Word shift direction
+WordShift
+‘L’ – Left shift
+‘R’ – Right shift
+Required
+		
+		*/
+		
 
 		std::string * SDRXName = changeExt(XFile,"sdrx");
 		try
@@ -203,7 +282,6 @@ void main()
 			printf("An error occurred while saving the xml file: %s\n", e.what() );
 		}
 
-		delete XFile;
 		XFile = NULL;
 	}
 }
