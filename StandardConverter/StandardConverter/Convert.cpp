@@ -34,7 +34,6 @@ struct XMetadata {
 //Current set of Metadata that has been pulled
 struct XMetadata toConvert;
 
-
 //Given an old XML document, pulls metadata to be put in toConvert.
 bool pullXMetadata(XMLDocument*);
 
@@ -53,9 +52,9 @@ void main()
 	getline (cin, f1);
 
 	//quick and dirty test
-	if(f1.at(0) == '*')
+	if(f1.size() == 0)
 	{
-		std::string def ("C:\\Users\\ANTadmin\\Desktop\\convertMe\\Trigger\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
+		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
 		f1 = def;
 	}
 
@@ -98,7 +97,7 @@ void main()
 		XmlProcessor proc;
 
 		//let us first input the file into the metadata.
-		File mFile;
+		File mFile ("Converted Trig File");
 		std::string * SDRName = changeExt(XFile,"tgd");
 		mFile.Url(*SDRName);
 		//we also shall tell it the blockoffset. A Dword is 4bytes.
@@ -106,33 +105,39 @@ void main()
 		//TODO: declare next, and lane.
 
 		//Done with file! now make a lane.
-		Lane mLane;
+		Lane mLane ("Converted Lane");
 
 		//Make lane's system. freqbase is the most critical field.
-		System mSystem;
+		System mSystem("Converted System");
 		Frequency mFreq (atof(toConvert.sampleRateHz));
 		mSystem.BaseFrequency() = mFreq;
 
 		//then, write a block to the lane.
-		Block mBlock;
+		Block mBlock ("Converted Block");
+
 		//how big is a block? one ms?
+		//TODO calculate
 		mBlock.Cycles(1337);
-		Chunk mChunk;
+
+		Chunk mChunk ("Converted Chunk");
 		//Sloppy but works for this case
 		mChunk.SizeWord((atoi(toConvert.bitsPerSample) * atoi(toConvert.numStreams)) / 8);
 		mChunk.CountWords(1);
 
-		Lump mLump;
+		Lump mLump ("Converted Lump");
 		
 		//now the fun part: adding streams.
 		for(std::vector<XStream * >::iterator stritr = toConvert.streams->begin(); stritr != toConvert.streams->end(); ++stritr) 
 		{
-			Stream * mStream = new Stream();
-
-			mStream->Id((*stritr)->name);
+			Stream * mStream = new Stream( (*stritr)->name);
 
 			mStream->Packedbits(atoi(toConvert.bitsPerSample));
 			mStream->Quantization(atoi(toConvert.bitsPerSample));
+			mStream->Encoding("INT8");
+			mStream->Format(Stream::IF);
+			
+	//sm1.Encoding("INT8");
+	//sm1.Format(Stream::IQ);
 			
 			Band * bs = new Band( ((*stritr)->index) );
 			bs->CenterFrequency(*( new Frequency ( atof((*stritr)->carrier) , Frequency::Hz )) );

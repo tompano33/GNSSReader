@@ -1,4 +1,4 @@
-﻿Build started 8/3/2015 8:38:17 PM.
+﻿Build started 8/3/2015 9:11:08 PM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverter\StandardConverter\StandardConverter.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Touching "Debug\StandardConverter.unsuccessfulbuild".
@@ -65,4 +65,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.53
+Time Elapsed 00:00:01.65
