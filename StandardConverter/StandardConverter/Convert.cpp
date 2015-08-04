@@ -3,6 +3,8 @@
 #include <GnssMetadata/XML/XmlProcessor.h>
 #include <iostream>
 #include <vector>
+#include <sys/stat.h>
+#include <direct.h>
 
 using namespace tinyxml2;
 using namespace GnssMetadata;
@@ -39,6 +41,25 @@ bool pullXMetadata(XMLDocument*);
 
 //Given a string and extension, changes the file extension.
 string * changeExt(string*,const char *);
+
+
+void changeWD(const char* pathToFile)
+{
+	//Simply change the working directory.
+	std::string fname = std::string(pathToFile,strlen(pathToFile));
+	std::string dir;
+	const size_t last_slash_idx = fname.rfind('\\');
+	if (std::string::npos != last_slash_idx)
+	{
+		 dir = fname.substr(0, last_slash_idx);
+	}
+		chdir(dir.c_str());
+}
+
+bool fileExists(const char* file) {
+    struct stat buf;
+    return (stat(file, &buf) == 0);
+}
 
 void main()
 {
@@ -102,7 +123,9 @@ void main()
 		mFile.Url(*SDRName);
 		//we also shall tell it the blockoffset. A Dword is 4bytes.
 		mFile.Offset(4 * atoi(toConvert.blockOffsetDWords));
-		//TODO: declare next, and lane.
+		std::string nextFile (toConvert.nextFile);
+		nextFile = *changeExt(&nextFile,"tgx");
+		mFile.Next(AnyUri(nextFile));
 
 		//Done with file! now make a lane.
 		Lane mLane ("Converted Lane");
@@ -135,10 +158,7 @@ void main()
 			mStream->Quantization(atoi(toConvert.bitsPerSample));
 			mStream->Encoding("INT8");
 			mStream->Format(Stream::IF);
-			
-	//sm1.Encoding("INT8");
-	//sm1.Format(Stream::IQ);
-			
+
 			Band * bs = new Band( ((*stritr)->index) );
 			bs->CenterFrequency(*( new Frequency ( atof((*stritr)->carrier) , Frequency::Hz )) );
 			bs->TranslatedFrequency(*(new Frequency ( atof((*stritr)->intermediate) , Frequency::Hz) ) );
@@ -157,9 +177,8 @@ void main()
 		mFile.Lane(mLane);
 		md.Files().push_back(mFile);
 
-		cin.get();cin.get();
-
 		std::string * SDRXName = changeExt(XFile,"sdrx");
+
 		try
 		{
 			proc.Save( SDRXName->c_str(),  md);
@@ -169,8 +188,23 @@ void main()
 			printf("An error occurred while saving the xml file: %s\n", e.what() );
 		}
 
-		XFile = NULL;
+		changeWD(XFile->c_str());
+		//TODO destroy metadata if I need to
+		if(fileExists(md.Files().front().Next().Value().c_str()))
+		{
+			printf("Continue!");
+			XFile = (new String(nextFile));
+		}
+		else
+		{
+			printf("Finish!");
+			printf(toConvert.nextFile);
+			XFile = NULL;
+		}
 	}
+
+	
+		cin.get();cin.get();
 }
 
 bool pullXMetadata(tinyxml2::XMLDocument * doc)
@@ -203,6 +237,8 @@ bool pullXMetadata(tinyxml2::XMLDocument * doc)
 
 		toConvert.streams->push_back(stream);
 		streamNode = streamNode->NextSibling()->ToElement();
+
+
 	
 	}
 
