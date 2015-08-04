@@ -125,7 +125,8 @@ void main()
 		mFile.Offset(4 * atoi(toConvert.blockOffsetDWords));
 		std::string nextFile (toConvert.nextFile);
 		nextFile = *changeExt(&nextFile,"tgx");
-		mFile.Next(AnyUri(nextFile));
+		std::string nextFileSDRX = *changeExt(&nextFile,"sdrx");
+		mFile.Next(AnyUri(nextFileSDRX));
 
 		//Done with file! now make a lane.
 		Lane mLane ("Converted Lane");
@@ -190,10 +191,11 @@ void main()
 
 		changeWD(XFile->c_str());
 		//TODO destroy metadata if I need to
-		if(fileExists(md.Files().front().Next().Value().c_str()))
+		if(fileExists(nextFile.c_str()))
 		{
 			printf("Continue!");
-			XFile = (new String(nextFile));
+			printf(nextFile.c_str());
+			XFile = (new String(nextFile.c_str()));
 		}
 		else
 		{

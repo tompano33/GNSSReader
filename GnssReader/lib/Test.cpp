@@ -13,6 +13,13 @@ const char* pathTo(char * address)
 	return (localPath->c_str());
 }
 
+void profile()
+{
+
+
+
+}
+
 void testSuite()
 {
 	std::cout << "Enter the path to your 'Tests' Directory:\n";
@@ -20,7 +27,7 @@ void testSuite()
 	std::getline (std::cin, path);
 	
 	//Change this to the path to your test suite if you want to set a default directory
-	pathToTests = ("C:\\Users\\ANTadmin\\Desktop\\SDR\ STANDARD\\Tests\\");
+	pathToTests = ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\");
 	if(path.size() != 0)
 	{
 		pathToTests = path; 
@@ -221,6 +228,22 @@ void testSuite()
 			while(!test.isDone()){;}
 			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 		}
+
+		{
+			GNSSReader test (pathTo("trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.sdrx"),5000L,5L,1000000L,5);
+			test.makeDecStreams();
+			test.setPrintOptions(true,false);
+
+			printf("\ntest!\n");
+			//This won't always work on multi-blocked chunks [offset could be wrong]
+			//Also add support for repeating blocks
+			test.startAtBlock(1);
+			test.startAsThread();
+			while(!test.isDone()){;}
+			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
+		}
+
+
 
 	} catch (std::exception& e) {
 		printf("\n\n ***TEST FAILED*** \n\n");

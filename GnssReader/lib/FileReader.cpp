@@ -255,7 +255,7 @@
 		}
 
 		//throw error
-		printf("Error: Could not finding a file \n");
+		printf("Error: Could not find a file \n");
 		return 0;
 	}
 
