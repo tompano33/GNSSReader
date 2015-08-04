@@ -35,6 +35,12 @@ struct XMetadata {
 
 //Current set of Metadata that has been pulled
 struct XMetadata toConvert;
+vector <String> paths;
+//arguments
+String f1;
+String pathsCSV;
+String convertCount;
+String writeAtHome;
 
 //Given an old XML document, pulls metadata to be put in toConvert.
 bool pullXMetadata(XMLDocument*);
@@ -42,6 +48,18 @@ bool pullXMetadata(XMLDocument*);
 //Given a string and extension, changes the file extension.
 string * changeExt(string*,const char *);
 
+void extractPaths()
+{
+	std::string delimiter = ",";
+	size_t pos = 0;
+	std::string token;
+	while ((pos = pathsCSV.find(delimiter)) != std::string::npos) {
+		token = pathsCSV.substr(0, pos);
+		paths.push_back(token);
+		pathsCSV.erase(0, pos + delimiter.length());	
+	}
+	paths.push_back(pathsCSV);
+}
 
 void changeWD(const char* pathToFile)
 {
@@ -61,15 +79,18 @@ bool fileExists(const char* file) {
     return (stat(file, &buf) == 0);
 }
 
+	
+
 void main()
 {
+
+
 	//pass nothing? Get this dialogue.
 	//pass 1 arg? Well, that's an XML file holding all these parameters.
 	//pass 5 args? That's all the arguments we need.
 
 	//First tgx file name
 	cout << "Enter the name of the first tgx file\n";
-	std::string f1;
 	getline (cin, f1);
 
 	//quick and dirty test
@@ -81,18 +102,21 @@ void main()
 
 	//PathsCsv (where to find the files, paths separated by commas – similar to the decoder)
 	cout << "Enter the list of paths to search, seperated by commas. \n";
-	String paths;
-	cin >> paths;
+	getline (cin, pathsCSV);
 
 	//Splice Mode (int_32): 0: convert this file only, >0: attempt to find this many concurrent files and convert, <0: keep converting files until concurrent sequence ends
 	cout << "Enter the count of files to convert. '0' means convert all that are found. \n";
-	String convertCount;
-	cin >> convertCount;
+	getline (cin, convertCount);
 
 	//Write Mode (bool): 0: write converted files to source dir and rename old file.tgx file to file.tgx_old; 1: write all converted files to app home directory
 	cout << "Would you like to write the converted files to the source directory? Otherwise they will be written to this app directory. ( Y / N ) \n";
-	String writeAtHome;
-	cin >> writeAtHome;
+	getline (cin, writeAtHome);
+
+	extractPaths();
+
+	cout << paths.at(0);
+	//cout << paths.at(2);
+	//cout << paths.at(3);
 
 	//Output log file of converter activity (session report in text format).
 	//TODO
