@@ -82,6 +82,11 @@ class GNSSReader {
 	//From a lane, generates the size of all of the blocks in the lane. Needed for skipping.
 	int* generateBlockSizeArray(GnssMetadata::Lane*);
 
+	bool TRIGRmode;
+	bool TRIGRlastFooterValSet;
+	uint64_t TRIGRmask ;//= 0x00FFFFFF;
+	uint64_t TRIGRlastFooterVal ;//= 0x00FFFFFF;
+
 public:
 
 	//Takes a path to an XML file, the size of the readbuffer, the size of the intermediate buffer, the output streamsize, any additional paths to search, and count of blocks to read.

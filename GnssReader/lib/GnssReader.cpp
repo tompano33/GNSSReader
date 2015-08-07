@@ -61,6 +61,15 @@ using namespace GnssMetadata;
 			throw std::exception("File was not read\n");
 		}
 
+		TRIGRmode = false;
+		if(sdrFileNames->at(0).substr(sdrFileNames->at(0).find_last_of(".") + 1) == "tgd")
+			{
+				TRIGRmode = true;
+				TRIGRlastFooterValSet = false;
+				//To be read from XML somewhere.
+				TRIGRmask = 0x00FFFFFF;
+			}
+
 	}
 
 	void GNSSReader::readChunkCycles(Block * block, uint32_t cycles)
@@ -197,7 +206,11 @@ using namespace GnssMetadata;
 		
 			//repair the decoded streams, since we use addresses to find the right decoding stream.
 			repairDecStreams(md);
-	
+
+			//Breaks things
+			//TODO filereader should really handle this
+			//fr->skipBufferedBytes(md->Files().front().Offset());
+
 			//we don't do filesets yet, but almost
 			if(md->FileSets().size() > 0 || md->Files().size() != 1)
 			{
@@ -216,6 +229,7 @@ using namespace GnssMetadata;
 			{
 		//		std::cout << "Pairing " << mdPtr - 1 << " with " << fr->filesFullyReadCount() << "\n";
 			
+			uint64_t blockCount = 0; //for testing purposes
 			//for each block in lane
 				for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
 				{
@@ -235,8 +249,57 @@ using namespace GnssMetadata;
 			
 					fr->skipBufferedBytes(headerSize);
 					readChunkCycles(block, cycles);
-					fr->skipBufferedBytes(footerSize);
-							
+
+					if(!TRIGRmode)
+					{
+						fr->skipBufferedBytes(footerSize);
+					} else
+					{
+						//Only in TRIGGERMODE do overlaps exist.
+						//Also, in TRIGGERMODE. loop blocks with overlap
+						//we are in trigger mode. so we need to assure the file has integrity. 
+						//It's still a footer, but we have to mask it with the system.
+						//Write a Generic alrgorithm for footers of any size.
+						//TODO more elegant way
+						blockCount++;
+
+						uint32_t unMaskedFooter = 0;
+						unsigned char* vals = reinterpret_cast<unsigned char*>(fr->getBufferedBytes(4));
+					
+						//This is the only way I could get it to work. Reinterpreting to unsignedint didn't work.
+						unMaskedFooter = (vals[0])*(256*256*256) + (vals[1])*256*256 + (vals[2])*256 + (vals[3]);
+
+						fr->doneReading(4);
+						
+						if(!TRIGRlastFooterValSet)
+						{
+							TRIGRlastFooterVal = unMaskedFooter & TRIGRmask;
+							TRIGRlastFooterValSet= true;
+						}
+						else{
+							uint32_t maskedFooter = unMaskedFooter & TRIGRmask;
+							//increment and compare
+							//wrap-around
+
+							//E06A9C00
+							//E16A9C00
+							//E26A9C00
+
+
+							TRIGRlastFooterVal = ((1+TRIGRlastFooterVal) % (1+TRIGRmask)); 
+
+							std::cout << unMaskedFooter << std::endl;
+							std::cout << maskedFooter << std::endl;
+							std::cout << TRIGRlastFooterVal << std::endl;
+
+							if(maskedFooter != TRIGRlastFooterVal)
+								std::cout << "\n\n Warning: TRIGR footer didn't match for " << blockCount <<"\n\n";
+							}
+
+					
+						//std::cout << "Footer @ " << blockCount << " " << TRIGRlastFooterVal << "\n";
+	
+					}
 				//In order to test, this class will print data from a block.
 				//This will be discarded when code is fully tests.
 

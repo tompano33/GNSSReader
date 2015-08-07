@@ -230,7 +230,21 @@ void testSuite()
 		}
 
 		{
-			GNSSReader test (pathTo("trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.sdrx"),5000L,5L,1000000L,5);
+			GNSSReader test (pathTo("trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.sdrx"),10000L,10L,1000000L,5);
+			test.makeDecStreams();
+			test.setPrintOptions(true,false);
+
+			printf("\ntest!\n");
+			//This won't always work on multi-blocked chunks [offset could be wrong]
+			//Also add support for repeating blocks
+			test.startAtBlock(1);
+			test.startAsThread();
+			while(!test.isDone()){;}
+			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
+		}
+
+		{
+			GNSSReader test (pathTo("trigrBadData\\TRIGRDATA.sdrx"),5000L,10L,1000000L,5);
 			test.makeDecStreams();
 			test.setPrintOptions(true,false);
 
