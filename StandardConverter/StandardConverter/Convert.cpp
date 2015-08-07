@@ -23,6 +23,7 @@ struct XStream {
 //Metadata information pulled from old XML
 struct XMetadata {
 
+	//critical info for decoding
 	const char* numStreams;
 	const char* bitsPerSample;
 	const char* blockOffsetDWords;
@@ -31,13 +32,27 @@ struct XMetadata {
 	const char* nextFile;
 	vector <XStream * > * streams;
 
+	//other info
+	const char* creationTime;
+	const char* scenario;
+	const char* campaign;
+	const char* antenna;
+	const char* location;
+	const char* engineer;
+	const char* company;
+	const char* copyright;
+
 };
 
 //Current set of Metadata that has been pulled
 struct XMetadata toConvert;
 vector <String> paths;
-//arguments
+int convertCountParsed;
+bool writeAtHomeFlag;
+
+//arguments. f1 is the inital file. 
 String f1;
+//all paths, but as CSV.
 String pathsCSV;
 String convertCount;
 String writeAtHome;
@@ -79,16 +94,15 @@ bool fileExists(const char* file) {
     return (stat(file, &buf) == 0);
 }
 
-	
-
-void main()
+long getFileSize(const char* file)
 {
-
-
-	//pass nothing? Get this dialogue.
-	//pass 1 arg? Well, that's an XML file holding all these parameters.
-	//pass 5 args? That's all the arguments we need.
-
+	struct stat stat_buf;
+	int rc = stat(file,&stat_buf);
+	return stat_buf.st_size;
+}
+	
+void noArgDialogue()
+{
 	//First tgx file name
 	cout << "Enter the name of the first tgx file\n";
 	getline (cin, f1);
@@ -96,7 +110,7 @@ void main()
 	//quick and dirty test
 	if(f1.size() == 0)
 	{
-		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
+		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
 		f1 = def;
 	}
 
@@ -104,30 +118,54 @@ void main()
 	cout << "Enter the list of paths to search, seperated by commas. \n";
 	getline (cin, pathsCSV);
 
+	
+	//quick and dirty test
+	if(pathsCSV.size() == 0)
+	{
+		//why... doesn't this get popped off the stack? shouldn't defs constructor be called?
+		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\");
+		pathsCSV = def;
+	}
+
 	//Splice Mode (int_32): 0: convert this file only, >0: attempt to find this many concurrent files and convert, <0: keep converting files until concurrent sequence ends
 	cout << "Enter the count of files to convert. '0' means convert all that are found. \n";
 	getline (cin, convertCount);
 
 	//Write Mode (bool): 0: write converted files to source dir and rename old file.tgx file to file.tgx_old; 1: write all converted files to app home directory
-	cout << "Would you like to write the converted files to the source directory? Otherwise they will be written to this app directory. ( Y / N ) \n";
+	cout << "Would you like to write the converted files to the source directory? Otherwise they will be written to this app directory. (Type 'Y' for yes, otherwise press enter) \n";
 	getline (cin, writeAtHome);
+
+}
+
+void main()
+{
+	//pass nothing? Get this dialogue.
+	//pass 1 arg? Well, that's an XML file holding all these parameters.
+	//pass 5 args? That's all the arguments we need.
+	noArgDialogue();
 
 	extractPaths();
 
-	cout << paths.at(0);
-	//cout << paths.at(2);
-	//cout << paths.at(3);
+	convertCountParsed = atoi(convertCount.c_str());
+
+	writeAtHomeFlag = (writeAtHome.c_str()[0] == 'Y');
+
 
 	//Output log file of converter activity (session report in text format).
 	//TODO
 
 	string * XFile = &f1; 
-
+	
+	//TODO: add 'convertcount'
 	while(XFile != NULL)
 	{
 		//Pulls all data from X-XML file.
 		XMLDocument XDoc;
+
+		//fails? check a different path.
+		//change-wd and file/exists.
 		XDoc.LoadFile(XFile->c_str());
+
 		pullXMetadata(&XDoc);
 	
 		std::cout << "---FILE SUMMARY---\n";
@@ -146,7 +184,8 @@ void main()
 		std::string * SDRName = changeExt(XFile,"tgd");
 		mFile.Url(*SDRName);
 		//we also shall tell it the blockoffset. A Dword is 4bytes.
-		mFile.Offset(4 * atoi(toConvert.blockOffsetDWords));
+		long blockOffsetInBytes = 4 * atoi(toConvert.blockOffsetDWords);
+		mFile.Offset(blockOffsetInBytes);
 		std::string nextFile (toConvert.nextFile);
 		nextFile = *changeExt(&nextFile,"tgx");
 		std::string nextFileSDRX = *changeExt(&nextFile,"sdrx");
@@ -160,13 +199,33 @@ void main()
 		Frequency mFreq (atof(toConvert.sampleRateHz));
 		mSystem.BaseFrequency() = mFreq;
 
+		Session mSession ("Converted Session");
+		mSession.Poc(toConvert.engineer);
+		mSession.Campaign(toConvert.campaign);
+
+
+		/**
+			//other info
+			const char* creationTime;
+			const char* scenario;
+			const char* antenna;
+			const char* location;
+			const char* company;
+			const char* copyright;
+		*/
+
+
+
+
 		//then, write a block to the lane.
 		Block mBlock ("Converted Block");
 
-		//how big is a block? one ms?
-		//TODO calculate
-		mBlock.Cycles(1337);
-
+		//how big is a block? one ms? frequency = cycles/sec. So simply divide frequnecy by 1000.
+		int blockCycles = atoi(toConvert.sampleRateHz) / 1000;
+		mBlock.Cycles(blockCycles);
+		//footer is four bytes
+		mBlock.SizeFooter(4);
+		
 		Chunk mChunk ("Converted Chunk");
 		//Sloppy but works for this case
 		mChunk.SizeWord((atoi(toConvert.bitsPerSample) * atoi(toConvert.numStreams)) / 8);
@@ -177,6 +236,7 @@ void main()
 		//now the fun part: adding streams.
 		for(std::vector<XStream * >::iterator stritr = toConvert.streams->begin(); stritr != toConvert.streams->end(); ++stritr) 
 		{
+
 			Stream * mStream = new Stream( (*stritr)->name);
 
 			mStream->Packedbits(atoi(toConvert.bitsPerSample));
@@ -190,15 +250,42 @@ void main()
 
 			mStream->Bands().push_back(*bs);
 			mLump.Streams().push_back(*mStream);
-			
 		}
 		
 
 		//construct the hierarchy.
 		mChunk.Lumps().push_back(mLump);		
 		mBlock.Chunks().push_back(mChunk);
+		//TODO: Add support so GNSS reader can iterate over blocks instead of explicitly defining each.
 		mLane.Blocks().push_back(mBlock);
+
+		long fileSizeMinusOffset = getFileSize(SDRName->c_str()) - blockOffsetInBytes;
+		//2 bytes per cycle, don't forget the footer
+		long totalBlockCount = fileSizeMinusOffset / ((2*blockCycles) + 4);
+		long totalBlockMod = fileSizeMinusOffset % ((2*blockCycles) + 4);
+
+		cout << totalBlockCount;
+		printf("File size minus Offset: \n");
+		cout << fileSizeMinusOffset;
+		printf("Block Count \n");
+		cout << totalBlockCount;
+		printf("LeftOver Bytes \n");
+		cout << totalBlockMod;
+
+		
+		Block * copy = (new Block("Converted Block"));
+		copy->IsReference(true);
+
+		//this can't be right. But how else can I designate a post-block-stream footer? time to read the draft.
+		//too many, nerfing to 100
+		//need a fix to this
+		for(int i = 0 + 1; i != 100; i++)
+		{
+			mLane.Blocks().push_back(*copy);
+		}
+		
 		mLane.Systems().push_back(mSystem);
+		mLane.Sessions().push_back(mSession);
 		mFile.Lane(mLane);
 		md.Files().push_back(mFile);
 
@@ -213,7 +300,23 @@ void main()
 			printf("An error occurred while saving the xml file: %s\n", e.what() );
 		}
 
-		changeWD(XFile->c_str());
+		
+		bool foundFile = false;
+		//naivgate to a valid directory
+		for(std::vector<String>::iterator fileit = paths.begin(); fileit != paths.end(); ++fileit) {
+			changeWD((*fileit).c_str());
+			if(fileExists(XFile->c_str()))
+			{
+				foundFile = true;
+				break;
+			}
+		}
+		if(!foundFile)
+		{
+			printf(XFile->c_str());
+			printf("Could not be found");
+		}
+
 		//TODO destroy metadata if I need to
 		if(fileExists(nextFile.c_str()))
 		{
@@ -245,6 +348,15 @@ bool pullXMetadata(tinyxml2::XMLDocument * doc)
 	toConvert.footerMask = titleElement->FirstChildElement("FOOTERMASK")->GetText();
 	toConvert.sampleRateHz = titleElement->FirstChildElement("SAMPLERATEHZ")->GetText();
 	toConvert.nextFile = titleElement->FirstChildElement("NEXTFILENAME")->GetText();
+
+	//toConvert.creationTime = titleElemer
+	toConvert.scenario = titleElement->FirstChildElement("SCENARIO")->GetText();
+	toConvert.campaign = titleElement->FirstChildElement("CAMPAIGN")->GetText();
+	//const char* antenna;
+	//const char* location;
+	toConvert.engineer = titleElement->FirstChildElement("ENGINEER")->GetText();
+	toConvert.company = titleElement->FirstChildElement("COMPANY")->GetText();
+	toConvert.copyright = titleElement->FirstChildElement("COPYRIGHT")->GetText();
 	toConvert.streams = new vector <XStream * > ();
 
 	int streamCount = atoi(toConvert.numStreams);
