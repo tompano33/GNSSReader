@@ -123,26 +123,9 @@ void noArgDialogue()
 	cout << "Enter the name of the first tgx file\n";
 	getline (cin, argf1);
 
-	//quick and dirty test
-	if(argf1.size() == 0)
-	{
-	//	std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
-		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
-		argf1 = def;
-	}
-
 	//PathsCsv (where to find the files, paths separated by commas – similar to the decoder)
 	cout << "Enter the list of paths to search, seperated by commas. \n";
 	getline (cin, argPathsCSV);
-
-	
-	//quick and dirty test
-	if(argPathsCSV.size() == 0)
-	{
-		//why... doesn't this get popped off the stack? shouldn't defs constructor be called?
-	//	std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\");
-	//	argPathsCSV = def;
-	}
 
 	//Splice Mode (int_32): 0: convert this file only, >0: attempt to find this many concurrent files and convert, <0: keep converting files until concurrent sequence ends
 	cout << "Enter the count of files to convert. '0' means convert all that are found. \n";
@@ -176,24 +159,26 @@ int main(int argc, char *argv[])
 
 	appDir = argv[0];
 	//pass nothing? Get this dialogue.
-	if(argc == 1)
-		noArgDialogue();
-	else if (argc == 2)
-		parseXMLConfig(argv[1]);
-	else if (argc == 5)
-	{
-		argf1 = *(new String(argv[1]));
-		argPathsCSV  = *(new String(argv[2]));
-		argConvertCount = *(new String(argv[3]));
-		argWriteAtHome = *(new String(argv[4]));
-	} else
-	{
-		printf("Error, please supply 0, 1, or 4 args");
-	}
+	
+	//if(argc == 1)
+	//	noArgDialogue();
+	//else if (argc == 2)
+		parseXMLConfig("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trtest\\folder2\\config.xml");
+	//else if (argc == 5)
+	//{
+	//	argf1 = *(new String(argv[1]));
+	//	argPathsCSV  = *(new String(argv[2]));
+	//	argConvertCount = *(new String(argv[3]));
+	//	argWriteAtHome = *(new String(argv[4]));
+	//} else
+	//{
+	//	printf("Error, please supply 0, 1, or 4 args");
+	//}
 
 	//parse all the data
 	extractPaths();
 	paths.push_back(argf1.c_str());
+
 	convertCountParsed = atoi(argConvertCount.c_str());
 
 	//figure out how many files to convert.
@@ -217,6 +202,20 @@ int main(int argc, char *argv[])
 
 	string * XFile = &argf1; 
 	
+			
+		bool foundFile = false;
+
+		//find the next X_FILE
+
+		for(std::vector<String>::iterator fileit = paths.begin(); fileit != paths.end(); ++fileit) {
+			changeWD((*fileit).c_str());
+			if(fileExists(argf1.c_str()))
+			{
+				foundFile = true;
+				break;
+			}
+		}
+
 	if(!fileExists(XFile->c_str()))
 	{
 		printf("Error: Specified first metadata file does not exist");
