@@ -5,6 +5,7 @@
 #include <vector>
 #include <sys/stat.h>
 #include <direct.h>
+#include <stdio.h>
 
 using namespace tinyxml2;
 using namespace GnssMetadata;
@@ -150,18 +151,32 @@ void noArgDialogue()
 
 }
 
-void main()
+void parseXMLConfig(){;}
+
+int main(int argc, char *argv[])
 {
 	//pass nothing? Get this dialogue.
-	noArgDialogue();
-	//pass 1 arg? Well, that's an XML file holding all these parameters. Parse it.
+	if(argc == 1)
+		noArgDialogue();
+	else if (argc == 2)
+		parseXMLConfig();
+	else if (argc == 5)
+	{
+		argf1 = *(new String(argv[1]));
+		argPathsCSV  = *(new String(argv[2]));
+		argConvertCount = *(new String(argv[3]));
+		argWriteAtHome = *(new String(argv[4]));
+	} else
+	{
+		printf("Error, please supply 0, 1, or 4 args");
+	}
 
-	//pass 5 args? That's all the arguments we need.
 	//parse all the data
 	extractPaths();
 	paths.push_back(argf1.c_str());
 	convertCountParsed = atoi(argConvertCount.c_str());
 
+	//figure out how many files to convert.
 	bool convertAll = false;
 	size_t filesToConvert;
 
@@ -169,19 +184,26 @@ void main()
 	{
 		convertAll = true;
 		filesToConvert = 0;
+
 	} else if (convertCountParsed == 0)
 	{
-
 		filesToConvert = 1;
 	} else filesToConvert = convertCountParsed;
 
+	//see if we need to write at home or not.
 	writeAtHomeFlag = (argWriteAtHome.c_str()[0] == '1');
 
 	//TODO: Output log file of converter activity (session report in text format).
 
 	string * XFile = &argf1; 
 	
-	//TODO: add 'convertcount'
+
+	if(!fileExists(XFile->c_str()))
+	{
+		printf("Error: Specified first metadata file does not exist");
+		return 1;
+	}
+
 	while(XFile != NULL && (convertAll || filesToConvert > 0))
 	{
 		if(filesToConvert > 0)
@@ -190,14 +212,17 @@ void main()
 		//Pulls all data from X-XML file.
 		XMLDocument XDoc;
 
-		//fails? check a different path.
-		//change-wd and file/exists.
+		//We know this file exists be at the end of the loop before.
 		XDoc.LoadFile(XFile->c_str());
 
 		pullXMetadata(&XDoc);
 
-		//TODO rename the old file
-	
+		std::string XFileOld(XFile->c_str());
+		XFileOld.append(".old");
+
+		//Rename the old file, IF it does not exist.
+		rename(XFile->c_str(),XFileOld.c_str());
+
 		//TODO To be logged
 		/**
 		std::cout << "---FILE SUMMARY---\n";
@@ -221,8 +246,7 @@ void main()
 		mFile.Offset(blockOffsetInBytes);
 		std::string nextFile (toConvert.nextFile);
 		nextFile = *changeExt(&nextFile,"tgx");
-		//TODO: tgd/old.
-		std::string nextFileSDRX = *changeExt(&nextFile,"sdrx");
+		std::string nextFileSDRX = *changeExt(&nextFile,"tgx");
 		mFile.Next(AnyUri(nextFileSDRX));
 
 		//Done with file! now make a lane.
@@ -319,7 +343,7 @@ void main()
 		mFile.Lane(mLane);
 		md.Files().push_back(mFile);
 
-		std::string * SDRXName = changeExt(XFile,"sdrx");
+		std::string * SDRXName = changeExt(XFile,"tgx");
 
 		try
 		{
@@ -366,6 +390,8 @@ void main()
 			XFile = NULL;
 		}
 	}
+	
+	return 0;
 
 }
 
