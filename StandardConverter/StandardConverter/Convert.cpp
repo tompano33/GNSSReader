@@ -10,7 +10,7 @@ using namespace tinyxml2;
 using namespace GnssMetadata;
 using namespace std;
 
-//Stream information pulled from old XML
+//Stream information pulled from old XML - Packaged Inside Metadata
 struct XStream {
 
 	const char* index;
@@ -46,36 +46,44 @@ struct XMetadata {
 
 //Current set of Metadata that has been pulled
 struct XMetadata toConvert;
+
+//Parsed command line args
 vector <String> paths;
 int convertCountParsed;
 bool writeAtHomeFlag;
 
-//arguments. f1 is the inital file. 
-String f1;
+//Raw command line args.
+
+//f1 is the initial file. 
+String argf1;
 //all paths, but as CSV.
-String pathsCSV;
-String convertCount;
-String writeAtHome;
+String argPathsCSV;
+//count of all the files to convert. 0 means convert all.
+String argConvertCount;
+//write at home specifies that we want to write to this apps directory.
+String argWriteAtHome;
 
 //Given an old XML document, pulls metadata to be put in toConvert.
 bool pullXMetadata(XMLDocument*);
 
-//Given a string and extension, changes the file extension.
+//Given a string and extension, returns new string with the new file extension.
 string * changeExt(string*,const char *);
 
+//Extracts PathsCsv to a vector of strings.
 void extractPaths()
 {
 	std::string delimiter = ",";
 	size_t pos = 0;
 	std::string token;
-	while ((pos = pathsCSV.find(delimiter)) != std::string::npos) {
-		token = pathsCSV.substr(0, pos);
+	while ((pos = argPathsCSV.find(delimiter)) != std::string::npos) {
+		token = argPathsCSV.substr(0, pos);
 		paths.push_back(token);
-		pathsCSV.erase(0, pos + delimiter.length());	
+		argPathsCSV.erase(0, pos + delimiter.length());	
 	}
-	paths.push_back(pathsCSV);
+	paths.push_back(argPathsCSV);
 }
 
+//Changes Working Directory.
 void changeWD(const char* pathToFile)
 {
 	//Simply change the working directory.
@@ -89,11 +97,13 @@ void changeWD(const char* pathToFile)
 		chdir(dir.c_str());
 }
 
+//True if the file exists in the current working directory
 bool fileExists(const char* file) {
     struct stat buf;
     return (stat(file, &buf) == 0);
 }
 
+//Gets size of file in current working directory
 long getFileSize(const char* file)
 {
 	struct stat stat_buf;
@@ -101,64 +111,82 @@ long getFileSize(const char* file)
 	return stat_buf.st_size;
 }
 	
+//Console Dialogue to get args if none were passed
 void noArgDialogue()
 {
 	//First tgx file name
 	cout << "Enter the name of the first tgx file\n";
-	getline (cin, f1);
+	getline (cin, argf1);
 
 	//quick and dirty test
-	if(f1.size() == 0)
+	if(argf1.size() == 0)
 	{
-		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
-		f1 = def;
+	//	std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
+		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
+	
+		argf1 = def;
 	}
 
 	//PathsCsv (where to find the files, paths separated by commas – similar to the decoder)
 	cout << "Enter the list of paths to search, seperated by commas. \n";
-	getline (cin, pathsCSV);
+	getline (cin, argPathsCSV);
 
 	
 	//quick and dirty test
-	if(pathsCSV.size() == 0)
+	if(argPathsCSV.size() == 0)
 	{
 		//why... doesn't this get popped off the stack? shouldn't defs constructor be called?
-		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\");
-		pathsCSV = def;
+		//std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\");
+		//argPathsCSV = def;
 	}
 
 	//Splice Mode (int_32): 0: convert this file only, >0: attempt to find this many concurrent files and convert, <0: keep converting files until concurrent sequence ends
 	cout << "Enter the count of files to convert. '0' means convert all that are found. \n";
-	getline (cin, convertCount);
+	getline (cin, argConvertCount);
 
 	//Write Mode (bool): 0: write converted files to source dir and rename old file.tgx file to file.tgx_old; 1: write all converted files to app home directory
-	cout << "Would you like to write the converted files to the source directory? Otherwise they will be written to this app directory. (Type 'Y' for yes, otherwise press enter) \n";
-	getline (cin, writeAtHome);
+	cout << "Would you like to write the converted files to the source directory? Otherwise they will be written to this app directory. (Type '1' for yes, otherwise press enter) \n";
+	getline (cin, argWriteAtHome);
 
 }
 
 void main()
 {
 	//pass nothing? Get this dialogue.
-	//pass 1 arg? Well, that's an XML file holding all these parameters.
-	//pass 5 args? That's all the arguments we need.
 	noArgDialogue();
+	//pass 1 arg? Well, that's an XML file holding all these parameters. Parse it.
 
+	//pass 5 args? That's all the arguments we need.
+	//parse all the data
 	extractPaths();
+	paths.push_back(argf1.c_str());
+	convertCountParsed = atoi(argConvertCount.c_str());
 
-	convertCountParsed = atoi(convertCount.c_str());
+	bool convertAll = false;
+	size_t filesToConvert;
 
-	writeAtHomeFlag = (writeAtHome.c_str()[0] == 'Y');
+	if(convertCountParsed < 0)
+	{
+		convertAll = true;
+		filesToConvert = 0;
+	} else if (convertCountParsed == 0)
+	{
 
+		filesToConvert = 1;
+	} else filesToConvert = convertCountParsed;
 
-	//Output log file of converter activity (session report in text format).
-	//TODO
+	writeAtHomeFlag = (argWriteAtHome.c_str()[0] == '1');
 
-	string * XFile = &f1; 
+	//TODO: Output log file of converter activity (session report in text format).
+
+	string * XFile = &argf1; 
 	
 	//TODO: add 'convertcount'
-	while(XFile != NULL)
+	while(XFile != NULL && (convertAll || filesToConvert > 0))
 	{
+		if(filesToConvert > 0)
+			filesToConvert--;
+
 		//Pulls all data from X-XML file.
 		XMLDocument XDoc;
 
@@ -167,7 +195,11 @@ void main()
 		XDoc.LoadFile(XFile->c_str());
 
 		pullXMetadata(&XDoc);
+
+		//TODO rename the old file
 	
+		//TODO To be logged
+		/**
 		std::cout << "---FILE SUMMARY---\n";
 		std::cout << " Streams: " <<  toConvert.numStreams <<"\n";
 		std::cout << " Bits/Sample: " <<  toConvert.bitsPerSample <<"\n";
@@ -175,6 +207,7 @@ void main()
 		std::cout << " FooterMask: " <<  toConvert.footerMask <<"\n";
 		std::cout << " SampleRate (Hz): " <<  toConvert.sampleRateHz <<"\n";
 		std::cout << " Next File: " <<  toConvert.nextFile <<"\n";
+		*/
 
 		Metadata md;
 		XmlProcessor proc;
@@ -188,6 +221,7 @@ void main()
 		mFile.Offset(blockOffsetInBytes);
 		std::string nextFile (toConvert.nextFile);
 		nextFile = *changeExt(&nextFile,"tgx");
+		//TODO: tgd/old.
 		std::string nextFileSDRX = *changeExt(&nextFile,"sdrx");
 		mFile.Next(AnyUri(nextFileSDRX));
 
@@ -276,14 +310,10 @@ void main()
 		Block * copy = (new Block("Converted Block"));
 		copy->IsReference(true);
 
-		//this can't be right. But how else can I designate a post-block-stream footer? time to read the draft.
-		//too many, nerfing to 100
-		//need a fix to this
-		for(int i = 0 + 1; i != 100; i++)
-		{
-			mLane.Blocks().push_back(*copy);
-		}
-		
+		//this can't be right. But how else can I designate a post-block-stream footer? It turns out this is a special case in the XML.
+		mLane.Blocks().push_back(*copy);
+
+
 		mLane.Systems().push_back(mSystem);
 		mLane.Sessions().push_back(mSession);
 		mFile.Lane(mLane);
@@ -302,15 +332,19 @@ void main()
 
 		
 		bool foundFile = false;
-		//naivgate to a valid directory
+
+		//find the next X_FILE
+
 		for(std::vector<String>::iterator fileit = paths.begin(); fileit != paths.end(); ++fileit) {
 			changeWD((*fileit).c_str());
-			if(fileExists(XFile->c_str()))
+			if(fileExists(nextFile.c_str()))
 			{
+				printf("Found ");
 				foundFile = true;
 				break;
 			}
 		}
+
 		if(!foundFile)
 		{
 			printf(XFile->c_str());
@@ -326,14 +360,13 @@ void main()
 		}
 		else
 		{
-			printf("Finish!");
-			printf(toConvert.nextFile);
+			printf("Finish!: file did not exist");
+			printf(nextFile.c_str());
+		//	printf(fileExists(nextFile.c_str()));
 			XFile = NULL;
 		}
 	}
 
-	
-		cin.get();cin.get();
 }
 
 bool pullXMetadata(tinyxml2::XMLDocument * doc)
