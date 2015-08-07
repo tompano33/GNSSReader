@@ -154,7 +154,22 @@ void noArgDialogue()
 
 }
 
-void parseXMLConfig(){;}
+void parseXMLConfig(const char* pathToConfig){
+	
+		//Pulls all data from X-XML file.
+		XMLDocument config;
+
+		//We know this file exists be at the end of the loop before.
+		config.LoadFile(pathToConfig);
+
+		XMLElement* titleElement = config.FirstChildElement();
+
+		argf1 = titleElement->FirstChildElement("FIRSTTGX")->GetText();
+		argPathsCSV = titleElement->FirstChildElement("PATHSCSV")->GetText();
+		argConvertCount = titleElement->FirstChildElement("FILESTOCONVERT")->GetText();
+		argWriteAtHome = titleElement->FirstChildElement("WRITEMODE")->GetText();
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -164,7 +179,7 @@ int main(int argc, char *argv[])
 	if(argc == 1)
 		noArgDialogue();
 	else if (argc == 2)
-		parseXMLConfig();
+		parseXMLConfig(argv[1]);
 	else if (argc == 5)
 	{
 		argf1 = *(new String(argv[1]));
