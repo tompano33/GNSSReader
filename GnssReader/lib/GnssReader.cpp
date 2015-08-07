@@ -209,7 +209,7 @@ using namespace GnssMetadata;
 
 			//Breaks things
 			//TODO filereader should really handle this
-			//fr->skipBufferedBytes(md->Files().front().Offset());
+			fr->skipBufferedBytes(md->Files().front().Offset());
 
 			//we don't do filesets yet, but almost
 			if(md->FileSets().size() > 0 || md->Files().size() != 1)
@@ -263,11 +263,13 @@ using namespace GnssMetadata;
 						//TODO more elegant way
 						blockCount++;
 
+						//TODO clean this up, fr->get buffered bytes to void pointer, so much more
+						//Including use a DWORD if on windows, but that isnt cross platfrom.
 						uint32_t unMaskedFooter = 0;
 						unsigned char* vals = reinterpret_cast<unsigned char*>(fr->getBufferedBytes(4));
 					
-						//This is the only way I could get it to work. Reinterpreting to unsignedint didn't work.
-						unMaskedFooter = (vals[0])*(256*256*256) + (vals[1])*256*256 + (vals[2])*256 + (vals[3]);
+						//This is the only way I could get it to work. Reinterpreting to unsignedint didn't work. DWORD is better proabably.
+						unMaskedFooter = (vals[3])*(256*256*256) + (vals[2])*256*256 + (vals[1])*256 + (vals[0]);
 
 						fr->doneReading(4);
 						

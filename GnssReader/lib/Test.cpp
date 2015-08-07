@@ -242,7 +242,7 @@ void testSuite()
 			while(!test.isDone()){;}
 			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 		}
-
+		/**
 		{
 			GNSSReader test (pathTo("trigrBadData\\TRIGRDATA.sdrx"),5000L,10L,1000000L,5);
 			test.makeDecStreams();
@@ -256,6 +256,7 @@ void testSuite()
 			while(!test.isDone()){;}
 			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 		}
+		*/
 
 
 
