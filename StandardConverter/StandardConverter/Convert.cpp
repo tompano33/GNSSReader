@@ -1,3 +1,5 @@
+//Replaces all files along paths correctly.
+
 #include <tinyxml2.h>
 #include <GnssMetadata/Metadata.h>
 #include <GnssMetadata/XML/XmlProcessor.h>
@@ -47,6 +49,8 @@ struct XMetadata {
 
 //Current set of Metadata that has been pulled
 struct XMetadata toConvert;
+
+const char* appDir;
 
 //Parsed command line args
 vector <String> paths;
@@ -124,7 +128,6 @@ void noArgDialogue()
 	{
 	//	std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
 		std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.tgx");
-	
 		argf1 = def;
 	}
 
@@ -137,8 +140,8 @@ void noArgDialogue()
 	if(argPathsCSV.size() == 0)
 	{
 		//why... doesn't this get popped off the stack? shouldn't defs constructor be called?
-		//std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\");
-		//argPathsCSV = def;
+	//	std::string def ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder2\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\folder\\folder\\,C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrPaths\\");
+	//	argPathsCSV = def;
 	}
 
 	//Splice Mode (int_32): 0: convert this file only, >0: attempt to find this many concurrent files and convert, <0: keep converting files until concurrent sequence ends
@@ -146,7 +149,7 @@ void noArgDialogue()
 	getline (cin, argConvertCount);
 
 	//Write Mode (bool): 0: write converted files to source dir and rename old file.tgx file to file.tgx_old; 1: write all converted files to app home directory
-	cout << "Would you like to write the converted files to the source directory? Otherwise they will be written to this app directory. (Type '1' for yes, otherwise press enter) \n";
+	cout << "Would you like to write the converted files to this app directory? Otherwise they will be written to the source directory. (Type '1' for yes, otherwise press enter) \n";
 	getline (cin, argWriteAtHome);
 
 }
@@ -155,6 +158,8 @@ void parseXMLConfig(){;}
 
 int main(int argc, char *argv[])
 {
+
+	appDir = argv[0];
 	//pass nothing? Get this dialogue.
 	if(argc == 1)
 		noArgDialogue();
@@ -197,7 +202,6 @@ int main(int argc, char *argv[])
 
 	string * XFile = &argf1; 
 	
-
 	if(!fileExists(XFile->c_str()))
 	{
 		printf("Error: Specified first metadata file does not exist");
@@ -219,9 +223,6 @@ int main(int argc, char *argv[])
 
 		std::string XFileOld(XFile->c_str());
 		XFileOld.append(".old");
-
-		//Rename the old file, IF it does not exist.
-		rename(XFile->c_str(),XFileOld.c_str());
 
 		//TODO To be logged
 		/**
@@ -261,7 +262,6 @@ int main(int argc, char *argv[])
 		mSession.Poc(toConvert.engineer);
 		mSession.Campaign(toConvert.campaign);
 
-
 		/**
 			//other info
 			const char* creationTime;
@@ -271,9 +271,6 @@ int main(int argc, char *argv[])
 			const char* company;
 			const char* copyright;
 		*/
-
-
-
 
 		//then, write a block to the lane.
 		Block mBlock ("Converted Block");
@@ -332,11 +329,10 @@ int main(int argc, char *argv[])
 
 		
 		Block * copy = (new Block("Converted Block"));
-		copy->IsReference(true);
 
+		//copy->IsReference(true);
 		//this can't be right. But how else can I designate a post-block-stream footer? It turns out this is a special case in the XML.
-		mLane.Blocks().push_back(*copy);
-
+		//mLane.Blocks().push_back(*copy);
 
 		mLane.Systems().push_back(mSystem);
 		mLane.Sessions().push_back(mSession);
@@ -344,9 +340,36 @@ int main(int argc, char *argv[])
 		md.Files().push_back(mFile);
 
 		std::string * SDRXName = changeExt(XFile,"tgx");
+		//If we happen upon an absolute file path, remove it. 
+				std::cout << writeAtHomeFlag;
+		
+		const size_t lastSlashIndex = SDRXName->rfind('\\');
+		String relativeName;
+
+		if(lastSlashIndex != String::npos)
+		{
+			printf(SDRXName->c_str());
+			cout << lastSlashIndex;
+			relativeName = SDRXName->substr(lastSlashIndex+1,String::npos);
+			SDRXName = &relativeName;
+			printf(SDRXName->c_str());
+		}
+
+		if(!writeAtHomeFlag)
+		{
+			//Rename the old file.
+			rename(XFile->c_str(),XFileOld.c_str());
+		}
 
 		try
 		{
+			if(writeAtHomeFlag)
+			{
+				//put it in this app directory, don't touch old SDRs.
+				cout << appDir;
+				changeWD(appDir);
+			}
+
 			proc.Save( SDRXName->c_str(),  md);
 		}
 		catch( ApiException& e)
