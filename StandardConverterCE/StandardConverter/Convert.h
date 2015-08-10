@@ -65,9 +65,6 @@ class Convert
 	//Changes Working Directory
 	static void changeWD(const char*);
 
-	//returns true if file exists
-	bool fileExists(const char* file);
-
 	//returns size of file
 	long getFileSize(const char* file);
 
@@ -77,6 +74,9 @@ class Convert
 public:
 
 	void start();
+	//returns true if file exists
+	static bool fileExists(const char* file);
+
 	Convert::Convert(const char*, const char*, std::vector<std::string>, int, bool);
 
 };

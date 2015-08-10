@@ -246,11 +246,12 @@ void Convert::start()
 			if(writeAtHomeFlag)
 			{
 				//put it in this app directory, don't touch old SDRs.
-				cout << "Appdiris" <<  appDir << "\n";
+				cout << "\nAppdiris\n" <<  appDir << "\n";
 				changeWD(appDir);
 			}
 
 			proc.Save( SDRXName->c_str(),  md);
+			cin.get();
 		}
 		catch( ApiException& e)
 		{

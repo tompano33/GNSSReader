@@ -1,10 +1,12 @@
-﻿Build started 8/10/2015 1:59:39 PM.
+﻿Build started 8/10/2015 7:35:31 PM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverterCE\StandardConverter\StandardConverter.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\StandardConverter.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverterCE\StandardConverter\..\..\GnssMetadata\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverterCE\StandardConverter\..\..\GnssMetadata\lib\tinyxml2 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ConvertConsole.cpp
-         ConvertConsole.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverterCE\StandardConverter\..\..\GnssMetadata\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\StandardConverterCE\StandardConverter\..\..\GnssMetadata\lib\tinyxml2 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Convert.cpp
+         Convert.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\standardconverterce\standardconverter\convert.cpp(69): warning C4996: 'chdir': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _chdir. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\direct.h(123) : see declaration of 'chdir'
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -66,4 +68,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.07
+Time Elapsed 00:00:05.46

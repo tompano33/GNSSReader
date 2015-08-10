@@ -16,15 +16,22 @@ void extractPaths();
 
 using namespace tinyxml2;
 
+//Just test, fix, GC.
 int main (int argc, const char * argv[])
 {
 	const char* appDir = argv[0];
 
-	/**
 	if(argc == 1)
 		noArgDialogue();
 	else if (argc == 2)
-		parseXMLConfig(argv[2]);
+	{
+		if(argv[1] == NULL || !Convert::fileExists(argv[1]))
+		{
+			printf("XML config File does not exist");
+			return 1;
+		}
+		parseXMLConfig(argv[1]);
+	}
 	else if (argc == 5)
 	{
 		argf1 = *(new std::string(argv[1]));
@@ -35,12 +42,13 @@ int main (int argc, const char * argv[])
 	{
 		printf("Error, please supply 0, 1, or 4 args");
 	}
-	*/
-	parseXMLConfig("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrtest\\config.xml");
+
 	//parse all the data
 	extractPaths();
 	//xmmlll
-	paths.push_back("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\trigrtest\\");
+	if(argc == 2)
+		paths.push_back(argv[1]);
+
 	int convertCountParsed = atoi(argConvertCount.c_str());
 	bool writeAtHomeFlag = (argWriteAtHome.c_str()[0] == '1');
 	Convert converter (appDir,argf1.c_str(),paths,convertCountParsed,writeAtHomeFlag);
