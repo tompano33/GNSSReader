@@ -1,0 +1,3 @@
+GnssMeta:
+	g++ -I include/ -I lib/tinyxml2/ -I lib/GnssMetadata/Xml/ -I lib/GnssMetadata/ app/TestApp/*.cpp lib/tinyxml2/*.cpp lib/GnssMetadata/Xml/*.cpp  lib/GnssMetadata/*.cpp -D LINUX -o TestApp
+
