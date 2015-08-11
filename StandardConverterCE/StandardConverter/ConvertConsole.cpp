@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 #include <tinyxml2.h>
+#include <limits.h>
+#include <direct.h>
 #include "Convert.h"
 
 std::string argf1;
@@ -19,8 +21,14 @@ using namespace tinyxml2;
 //Just test, fix, GC.
 int main (int argc, const char * argv[])
 {
-	const char* appDir = argv[0];
+    char* cwd;
+    char buff[4096];
+    cwd = getcwd( buff, 4096 + 1 );
 
+	std::string addEnd (cwd);
+	addEnd.append("\\");
+	const char* appDir = addEnd.c_str();
+	
 	if(argc == 1)
 		noArgDialogue();
 	else if (argc == 2)
