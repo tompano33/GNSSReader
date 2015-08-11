@@ -8,23 +8,35 @@
 #define FILEREADER_H_H
 
 #include <vector>
-#include <windows.h>
 #include <stdio.h>
-#include <process.h>
+
+#ifdef _WIN32
+	#include <windows.h>
+	#include <process.h>
+#else
+
+#endif
+
 #include <stdint.h>
 
 #include "IBuffer.h"
 
 class FileReader{
 
+#ifdef _WIN32
 	//Handle to the file that is currently being read.
 	HANDLE sdrFile;		
+	//Count of total bytes in the file
+	LARGE_INTEGER fileSize;
+#else
+
+#endif
+
 	//How many bytes to read at once
 	uint64_t readBufferSize;	
 	//Count of total bytes read from the current file so far
 	volatile int64_t bytesRead;	
-	//Count of total bytes in the file
-	LARGE_INTEGER fileSize;			
+	
 	//A Flag that kills the thread if made true.
 	bool killThreadFlag;				
 	//Holds all the SDR files names in consecutive order.
@@ -49,7 +61,7 @@ class FileReader{
 public:
 
 	//Needs a list of sdr data file names, the count of how many bytes to read a time, and the size of the buffer to store the bytes in terms of readBufferSize
-	FileReader::FileReader(std::vector<std::string> fname,uint64_t readBufferSize, uint64_t intermediateBufferSize, const char *origPath, const char** paths, uint64_t pathCount);
+	FileReader(std::vector<std::string> fname,uint64_t readBufferSize, uint64_t intermediateBufferSize, const char *origPath, const char** paths, uint64_t pathCount);
 
 	//Starts a thread that populates intermediatebuffer.
 	void readAll();

@@ -26,7 +26,7 @@ class ChunkBuffer{
 public:
 
 	/** Pass in the size of a buffer, and a pre-allocated buffer with the chunk already defined */
-	ChunkBuffer::ChunkBuffer(uint64_t size, char* buf); 
+	ChunkBuffer(uint64_t size, char* buf); 
 
 	/** Given a number of bitsToRead and an encoding, pops a sample from the buffer, formats it to the encoding, returns it */
 	int64_t readBits(uint8_t bitsToRead, std::string  encoding);

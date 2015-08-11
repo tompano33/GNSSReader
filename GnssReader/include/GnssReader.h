@@ -90,7 +90,7 @@ class GNSSReader {
 public:
 
 	//Takes a path to an XML file, the size of the readbuffer, the size of the intermediate buffer, the output streamsize, any additional paths to search, and count of blocks to read.
-	GNSSReader::GNSSReader(const char* pathToFile,uint64_t readSize,uint64_t buffSize,uint64_t streamSize, uint64_t blockTotal = -1,const char** addlPaths = NULL, uint64_t pathCount = 0);
+	GNSSReader(const char* pathToFile,uint64_t readSize,uint64_t buffSize,uint64_t streamSize, uint64_t blockTotal = -1,const char** addlPaths = NULL, uint64_t pathCount = 0);
 
 	//Changes Working Directory.
 	static void changeWD(const char* pathToFile);

@@ -1,23 +1,14 @@
-﻿Build started 8/11/2015 2:35:13 PM.
+﻿Build started 8/11/2015 6:19:10 PM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GnssReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\tinyxml2\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\GnssMetadata\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _ITERATOR_DEBUG_LEVEL=0 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\GnssMetadata\lib\GnssMetadata\AnyUri.cpp ..\..\GnssMetadata\lib\GnssMetadata\AttributedObject.cpp ..\..\GnssMetadata\lib\GnssMetadata\Band.cpp ..\..\GnssMetadata\lib\GnssMetadata\BaseTypes.cpp ..\..\GnssMetadata\lib\GnssMetadata\Block.cpp ..\..\GnssMetadata\lib\GnssMetadata\Chunk.cpp ..\..\GnssMetadata\lib\GnssMetadata\Cluster.cpp ..\..\GnssMetadata\lib\GnssMetadata\Comment.cpp ..\..\GnssMetadata\lib\GnssMetadata\Date.cpp ..\..\GnssMetadata\lib\GnssMetadata\Duration.cpp ..\..\GnssMetadata\lib\GnssMetadata\File.cpp ..\..\GnssMetadata\lib\GnssMetadata\Frequency.cpp ..\..\GnssMetadata\lib\GnssMetadata\Lane.cpp ..\..\GnssMetadata\lib\GnssMetadata\Lump.cpp ..\..\GnssMetadata\lib\GnssMetadata\Metadata.cpp ..\..\GnssMetadata\lib\GnssMetadata\Position.cpp ..\..\GnssMetadata\lib\GnssMetadata\Session.cpp ..\..\GnssMetadata\lib\GnssMetadata\Source.cpp ..\..\GnssMetadata\lib\GnssMetadata\Stream.cpp ..\..\GnssMetadata\lib\GnssMetadata\System.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\AnyUriTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\BandTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\BlockTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\ChunkTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\ClusterTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\DurationTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\FileSetTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\FileTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\FrequencyTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\LaneTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\LumpTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\MetadataTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\OscillatorTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\PositionTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\RfConfigTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\SessionTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\SourceTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\StreamTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\SystemTranslator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\Translator.cpp ..\..\GnssMetadata\lib\GnssMetadata\Xml\XmlProcessor.cpp ..\..\GnssMetadata\lib\tinyxml2\tinyxml2.cpp ..\lib\ChunkBuffer.cpp ..\lib\DecStream.cpp ..\lib\FileReader.cpp ..\lib\GnssReader.cpp ..\lib\IBuffer.cpp ..\lib\StreamAnalytics.cpp ..\lib\Test.cpp ..\lib\XMLtoMeta.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\tinyxml2\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\GnssMetadata\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _ITERATOR_DEBUG_LEVEL=0 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\lib\ChunkBuffer.cpp ..\lib\DecStream.cpp ..\lib\FileReader.cpp ..\lib\GnssReader.cpp ..\lib\IBuffer.cpp ..\lib\StreamAnalytics.cpp ..\lib\Test.cpp ..\lib\XMLtoMeta.cpp
          XMLtoMeta.cpp
-         Test.cpp
-         StreamAnalytics.cpp
-         IBuffer.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(17): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(67): warning C4244: '+=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(124): warning C4244: 'argument' : conversion from 'uint64_t' to 'size_t', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(143): warning C4244: '-=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(176): warning C4146: unary minus operator applied to unsigned type, result still unsigned
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(184): warning C4146: unary minus operator applied to unsigned type, result still unsigned
          GnssReader.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(476): warning C4996: 'chdir': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _chdir. See online help for details.
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(478): warning C4996: 'chdir': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _chdir. See online help for details.
                  c:\program files (x86)\microsoft visual studio 10.0\vc\include\direct.h(123) : see declaration of 'chdir'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(514): warning C4244: 'argument' : conversion from 'int64_t' to 'double', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(516): warning C4244: 'argument' : conversion from 'int64_t' to 'double', possible loss of data
          FileReader.cpp
      1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(34): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
      1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(35): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
@@ -29,113 +20,25 @@
      1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(82): warning C4244: 'argument' : conversion from 'uint64_t' to 'DWORD', possible loss of data
      1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(109): warning C4244: 'argument' : conversion from 'volatile int64_t' to 'LONG', possible loss of data
      1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(126): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
+         Compiling...
+         Test.cpp
+         StreamAnalytics.cpp
+         IBuffer.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(17): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(67): warning C4244: '+=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(124): warning C4244: 'argument' : conversion from 'uint64_t' to 'size_t', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(143): warning C4244: '-=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(176): warning C4146: unary minus operator applied to unsigned type, result still unsigned
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(184): warning C4146: unary minus operator applied to unsigned type, result still unsigned
          DecStream.cpp
      1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\decstream.cpp(17): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
      1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\decstream.cpp(18): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+         Generating Code...
+         Skipping... (no relevant changes detected)
          ChunkBuffer.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\chunkbuffer.cpp(96): warning C4334: '<<' : result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\chunkbuffer.cpp(116): warning C4334: '<<' : result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
-         tinyxml2.cpp
-         XmlProcessor.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\xmlprocessor.cpp(147): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(363) : see declaration of '_snprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\xmlprocessor.cpp(156): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(363) : see declaration of '_snprintf'
-         Translator.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\translator.cpp(151): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\translator.cpp(172): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\translator.cpp(194): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\translator.cpp(216): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\translator.cpp(254): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\translator.cpp(268): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-         SystemTranslator.cpp
-         StreamTranslator.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\streamtranslator.cpp(152): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\streamtranslator.cpp(158): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\streamtranslator.cpp(164): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-         SourceTranslator.cpp
-         SessionTranslator.cpp
-         RfConfigTranslator.cpp
-         PositionTranslator.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\positiontranslator.cpp(76): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\positiontranslator.cpp(78): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\positiontranslator.cpp(80): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-         OscillatorTranslator.cpp
-         MetadataTranslator.cpp
-         LumpTranslator.cpp
-         Generating Code...
-         Compiling...
-         LaneTranslator.cpp
-         FrequencyTranslator.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\frequencytranslator.cpp(68): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\frequencytranslator.cpp(105): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\frequencytranslator.cpp(110): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-         FileTranslator.cpp
-         FileSetTranslator.cpp
-         DurationTranslator.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\xml\durationtranslator.cpp(83): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-         ClusterTranslator.cpp
-         ChunkTranslator.cpp
-         BlockTranslator.cpp
-         BandTranslator.cpp
-         AnyUriTranslator.cpp
-         System.cpp
-         Stream.cpp
-         Source.cpp
-         Session.cpp
-         Position.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\position.cpp(47): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(363) : see declaration of '_snprintf'
-         Metadata.cpp
-         Lump.cpp
-         Lane.cpp
-         Frequency.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\frequency.cpp(45): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(363) : see declaration of '_snprintf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\frequency.cpp(51): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(363) : see declaration of '_snprintf'
-         File.cpp
-         Generating Code...
-         Compiling...
-         Duration.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\duration.cpp(40): warning C4996: '_snprintf': This function or variable may be unsafe. Consider using _snprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(363) : see declaration of '_snprintf'
-         Date.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\date.cpp(48): warning C4996: 'gmtime': This function or variable may be unsafe. Consider using gmtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\time.inl(99) : see declaration of 'gmtime'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\date.cpp(57): warning C4996: '__timezone': This function or variable may be unsafe. Consider using _get_timezone instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\time.h(139) : see declaration of '__timezone'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\date.cpp(131): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssmetadata\lib\gnssmetadata\date.cpp(162): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
-         Comment.cpp
-         Cluster.cpp
-         Chunk.cpp
-         Block.cpp
-         BaseTypes.cpp
-         Band.cpp
-         AttributedObject.cpp
-         AnyUri.cpp
-         Generating Code...
        ManifestResourceCompile:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\GnssReader.exe.embed.manifest.res" Debug\GnssReader_manifest.rc 
+         All outputs are up-to-date.
        Link:
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\Debug\GnssReader.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GnssReader.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\Debug\GnssReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\Debug\GnssReader.lib" /MACHINE:X86 Debug\GnssReader.exe.embed.manifest.res
          Debug\AnyUri.obj
@@ -190,59 +93,9 @@
          Debug\XMLtoMeta.obj
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\GnssReader.exe.embed.manifest" /manifest Debug\GnssReader.exe.intermediate.manifest
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\GnssReader.exe.embed.manifest.res" Debug\GnssReader_manifest.rc 
+         All outputs are up-to-date.
        LinkEmbedManifest:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\Debug\GnssReader.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GnssReader.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\Debug\GnssReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\Debug\GnssReader.lib" /MACHINE:X86 Debug\GnssReader.exe.embed.manifest.res
-         Debug\AnyUri.obj
-         Debug\AttributedObject.obj
-         Debug\Band.obj
-         Debug\BaseTypes.obj
-         Debug\Block.obj
-         Debug\Chunk.obj
-         Debug\Cluster.obj
-         Debug\Comment.obj
-         Debug\Date.obj
-         Debug\Duration.obj
-         Debug\File.obj
-         Debug\Frequency.obj
-         Debug\Lane.obj
-         Debug\Lump.obj
-         Debug\Metadata.obj
-         Debug\Position.obj
-         Debug\Session.obj
-         Debug\Source.obj
-         Debug\Stream.obj
-         Debug\System.obj
-         Debug\AnyUriTranslator.obj
-         Debug\BandTranslator.obj
-         Debug\BlockTranslator.obj
-         Debug\ChunkTranslator.obj
-         Debug\ClusterTranslator.obj
-         Debug\DurationTranslator.obj
-         Debug\FileSetTranslator.obj
-         Debug\FileTranslator.obj
-         Debug\FrequencyTranslator.obj
-         Debug\LaneTranslator.obj
-         Debug\LumpTranslator.obj
-         Debug\MetadataTranslator.obj
-         Debug\OscillatorTranslator.obj
-         Debug\PositionTranslator.obj
-         Debug\RfConfigTranslator.obj
-         Debug\SessionTranslator.obj
-         Debug\SourceTranslator.obj
-         Debug\StreamTranslator.obj
-         Debug\SystemTranslator.obj
-         Debug\Translator.obj
-         Debug\XmlProcessor.obj
-         Debug\tinyxml2.obj
-         Debug\ChunkBuffer.obj
-         Debug\DecStream.obj
-         Debug\FileReader.obj
-         Debug\GnssReader.obj
-         Debug\IBuffer.obj
-         Debug\StreamAnalytics.obj
-         Debug\Test.obj
-         Debug\XMLtoMeta.obj
+         All outputs are up-to-date.
          GnssReader.vcxproj -> C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\Debug\GnssReader.exe
        FinalizeBuildStatus:
          Deleting file "Debug\GnssReader.unsuccessfulbuild".
@@ -251,4 +104,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:01:21.24
+Time Elapsed 00:00:19.38

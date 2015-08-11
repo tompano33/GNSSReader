@@ -36,8 +36,8 @@ class XMLtoMeta
 
 public:
 
-	XMLtoMeta::XMLtoMeta(const char* metadataFile);
-	XMLtoMeta::XMLtoMeta();
+	XMLtoMeta(const char* metadataFile);
+	XMLtoMeta();
 	Metadata* getNonRefdMetadata();
 		
 };

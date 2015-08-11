@@ -13,7 +13,9 @@
 //For chdir
 //TODO: Put macro here
 //#include <unistd.h>
-#include <direct.h>
+#ifdef _WIN32
+	#include <direct.h>
+#endif
 
 #include<GnssMetadata/Metadata.h>
 

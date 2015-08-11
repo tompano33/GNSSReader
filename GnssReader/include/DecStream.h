@@ -48,7 +48,7 @@ class DecStream{
 public:
 	
 	//Pass in a sample capacity, an ID, and a stream. Creates a buffer. TODO: id???
-	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream* corStream,bool hasComplexPart, bool complexPartFirst);
+	DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream* corStream,bool hasComplexPart, bool complexPartFirst);
 
 	//Puts a sample in the buffer. Only supports doubles for now
 	void putSample(double sample);

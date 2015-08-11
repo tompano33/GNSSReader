@@ -9,7 +9,6 @@
 #include<GnssMetadata/Metadata.h>
 #include "DecStream.h"
 class StreamAnalytics{
-
 	//This will get destroyed by Reader. no need to kill it.
 	DecStream* s;
 	double mean;

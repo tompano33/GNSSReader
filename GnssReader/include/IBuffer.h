@@ -32,9 +32,10 @@ class IBuffer{
 
 	int filesFullyRead;
 
-
+#ifdef _WIN32
 	//do not write and read
 	CRITICAL_SECTION crit; 
+#endif
 
 
 public:
