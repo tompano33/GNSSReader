@@ -8,7 +8,11 @@
 #define DECSTREAM_H_H
 
 #include<stdint.h>
-#include <windows.h>
+
+#ifdef _WIN32
+	#include <windows.h>
+#endif
+
 #include<GnssMetadata/Xml/XmlProcessor.h>
 
 
@@ -35,8 +39,10 @@ class DecStream{
 	//If they are the same I know this is the right buffer.
 	GnssMetadata::Stream* correspondingStream;
 
-	//do not write and read
-	CRITICAL_SECTION crit; 
+	#ifdef _WIN32
+		//do not write and read
+		CRITICAL_SECTION crit; 
+	#endif
 
 
 public:

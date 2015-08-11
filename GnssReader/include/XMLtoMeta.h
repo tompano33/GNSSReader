@@ -26,7 +26,7 @@ class XMLtoMeta
 	*   This function here does just that. Fixes a referenced object list and puts it into an array.
 	*   T is an original object, PT is a pointer of type T.
 	*/
-	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList, T** objArray);
+	template<typename T, typename PT> void fixRefdObjs(Metadata* md,std::list<T, std::allocator<T> >* objList, T** objArray);
 	
 	//Retrives a single XML Link (not for lists).
 	template<typename T> T findNonRefObj(Metadata* md, AttributedObject* obj);

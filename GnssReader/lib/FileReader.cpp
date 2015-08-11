@@ -7,12 +7,12 @@
 
 #ifdef _WIN32
 	#include <windows.h>
+	#include <process.h>
 #else
 	//linux
 #endif
 
 #include <stdio.h>
-#include <process.h>
 
 #include "FileReader.h"
 #include "IBuffer.h"

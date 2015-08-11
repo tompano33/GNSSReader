@@ -9,6 +9,7 @@ Finish writing test cases.
 DataFileCouldNotBeFound
 Linux - Download the latest and start converting
 pass SAMPLERATE, others
+remove cstdint.h (c++ 11)
 
 [wait]
 Peg data to decstream 

@@ -20,7 +20,7 @@ public:
 };
 
 
-	template<typename T, typename PT> void XMLtoMeta::fixRefdObjs(Metadata* md,std::list<T, std::allocator<T>>* objList, T** objArray)
+	template<typename T, typename PT> void XMLtoMeta::fixRefdObjs(Metadata* md,std::list<T, std::allocator <T> >* objList, T** objArray)
 	{
 
 		int i = 0;

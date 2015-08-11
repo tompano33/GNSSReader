@@ -7,7 +7,10 @@
 #define IBUFFER_H_H
 
 #include <stdint.h>
-#include <windows.h>
+
+#ifdef _WIN32
+	#include <windows.h>
+#endif
 
 class IBuffer{
 
