@@ -4,7 +4,13 @@
  */
 #include <iostream>
 #include <vector>
-#include <windows.h>
+
+#ifdef _WIN32
+	#include <windows.h>
+#else
+	//linux
+#endif
+
 #include <stdio.h>
 #include <process.h>
 
@@ -143,7 +149,11 @@
 
 	void FileReader::readAll()
 	{
-		_beginthread(FileReader::ThreadEntry, 0, this);
+		#ifdef _WIN32
+			_beginthread(FileReader::ThreadEntry, 0, this);
+		#else 
+			//call threadentry
+		#endif
 	};
 
 	std::string FileReader::fileBeingDecoded()
@@ -158,8 +168,12 @@
 
 	void FileReader::ThreadEntry(void *p)
 	{
-		((FileReader *) p)->readFile();   
-		_endthread();
+		#ifdef _WIN32
+ 			((FileReader *) p)->readFile();   
+			_endthread();
+		#else
+			//linuxy
+		#endif
 	}
 
 	void FileReader::doneReading(uint64_t count)

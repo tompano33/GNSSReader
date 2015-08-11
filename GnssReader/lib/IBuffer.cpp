@@ -1,4 +1,8 @@
-#include <windows.h>
+#ifdef _WIN32
+	#include <windows.h>
+#else
+	//linux
+#endif
 #include <iostream>
 #include "IBuffer.h"
 
