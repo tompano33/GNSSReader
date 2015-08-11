@@ -1,0 +1,2 @@
+GnssMeta:
+	g++ -I ../GnssMetadata/lib/tinyxml2.h ../GnssMetadata/lib/tinyxml2/*.cpp 

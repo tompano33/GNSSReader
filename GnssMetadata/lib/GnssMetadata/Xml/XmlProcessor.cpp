@@ -144,7 +144,7 @@ bool XmlProcessor::Load( const char* szFilename, const bool bProcessIncludes, Me
 	if( err != XML_SUCCESS)
 	{
 		char buff[512];
-		_snprintf( buff, 512, "XML parsing error in file, %s", szFilename);
+		printf( buff, 512, "XML parsing error in file, %s", szFilename);
 		throw TranslationException(buff, err);
 	}
 
@@ -153,7 +153,8 @@ bool XmlProcessor::Load( const char* szFilename, const bool bProcessIncludes, Me
 	if( pmetadata == NULL)
 	{
 		char buff[512];
-		_snprintf( buff, 512, "Metadata element not found in file, %s", szFilename);
+		//todo: convert back to translation exception
+		printf( buff, 512, "Metadata element not found in file, %s", szFilename);
 		throw TranslationException(buff);
 	}
 
