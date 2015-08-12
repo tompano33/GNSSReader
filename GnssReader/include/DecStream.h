@@ -18,7 +18,7 @@
 
 class DecStream{
 
-	//TODO: Get rid of a double-buffered approach
+	//TODO: Consider getting rid of a double-buffered approach
 
 	double* sampleBuf1;			//A buffer for samples
 	double* sampleBuf2;			//A buffer for samples

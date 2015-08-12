@@ -1,27 +1,20 @@
-﻿Build started 8/12/2015 2:26:34 PM.
+﻿Build started 8/12/2015 3:03:14 PM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\GnssReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\GnssReader.unsuccessfulbuild".
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\tinyxml2\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\GnssMetadata\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _ITERATOR_DEBUG_LEVEL=0 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\lib\DecStream.cpp ..\lib\FileReader.cpp ..\lib\GnssReader.cpp ..\lib\IBuffer.cpp ..\lib\Test.cpp
-         IBuffer.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(18): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(73): warning C4244: '+=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(129): warning C4244: 'argument' : conversion from 'uint64_t' to 'size_t', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(147): warning C4244: '-=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(182): warning C4146: unary minus operator applied to unsigned type, result still unsigned
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(190): warning C4146: unary minus operator applied to unsigned type, result still unsigned
-         GnssReader.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(481): warning C4996: 'chdir': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _chdir. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\direct.h(123) : see declaration of 'chdir'
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(529): warning C4244: 'argument' : conversion from 'int64_t' to 'double', possible loss of data
-         DecStream.cpp
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\decstream.cpp(18): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
-     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\decstream.cpp(19): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         Test.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\tinyxml2\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\GnssMetadata\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _ITERATOR_DEBUG_LEVEL=0 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\lib\FileReader.cpp
          FileReader.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(37): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(38): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(238) : see declaration of 'strdup'
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(42): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(238) : see declaration of 'strdup'
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(233): warning C4244: 'argument' : conversion from 'uint64_t' to 'LONG', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(245): warning C4018: '>=' : signed/unsigned mismatch
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(264): warning C4244: 'argument' : conversion from 'uint64_t' to 'DWORD', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(291): warning C4244: 'argument' : conversion from 'volatile int64_t' to 'LONG', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(308): warning C4018: '<' : signed/unsigned mismatch
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -89,4 +82,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:11.29
+Time Elapsed 00:00:05.34

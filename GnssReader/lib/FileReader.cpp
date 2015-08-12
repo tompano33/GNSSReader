@@ -14,10 +14,12 @@
 #endif
 
 #include <stdio.h>
+#include <sys/stat.h>
 
 #include "FileReader.h"
 #include "IBuffer.h"
 #include "GnssReader.h"
+
 
 	FileReader::FileReader(std::vector<std::string> fnames,uint64_t inBlockSize, uint64_t inBlockCount,const char* origPath,const char** addlPaths,uint64_t pathCount){
 	
@@ -316,6 +318,129 @@
 		#endif
 	}
 
-	void FileReader::readFileNix(){}
+	void FileReader::readFileNix(){
+
+		//test for Tom
+		
+		while(true)
+		{
+		double sin(double x);
+		}
+	/**
+
+		//Perhaps there is a more elegant way to run and kill the thread, but this works
+		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
+		{
+			uint64_t thisLoopReadBufferSize = readBufferSize;
+
+			while(ib->isFinished())
+			{;}
+
+			int finish = false;
+
+			if(readBufferSize >= fileSize.QuadPart - bytesRead)
+			{
+				thisLoopReadBufferSize = fileSize.QuadPart - bytesRead;
+				finish = true;
+			}
+
+			//Does all the reading
+			DWORD numBytesRead;
+			char* space = NULL;
+			while(space == NULL && !killThreadFlag)
+			{
+				space = ib->canWriteBlock();
+			}
+
+			if(finish)
+				{
+					ib->finishWrite(thisLoopReadBufferSize);
+				}
+
+			int readFile = ReadFile(sdrFile, space, thisLoopReadBufferSize, &numBytesRead, NULL);
+
+			if(killThreadFlag)
+				return;
+
+			if(numBytesRead != thisLoopReadBufferSize)
+				std::cout << "Final Read" <<  numBytesRead << "\n";
+
+			if(!readFile && GetLastError() != ERROR_IO_PENDING)
+			{
+
+				printf ("ReadFile failed with error %d.\n", GetLastError());
+				
+				//attempt to recover
+				filePtr--;
+				int oldFp = filePtr;
+				prepareHandle();
+				if(filePtr == oldFp)
+				{
+					printf ("\nLost access to file and no alternates exist, aborting.\n");
+					killThreadFlag = true;
+					//read fail,abort!
+					return;
+				} else {					
+					printf ("\nLost access to file but recovered.\n");
+					//recovery successful!
+					//TODO: test on files > 4 GB (for low part)
+					SetFilePointer(sdrFile,bytesRead,NULL,FILE_BEGIN);
+
+				}
+
+			}
+
+			if(readFile){
+				//Todo: find out how to abandon this thead for a while.
+				ib->doneWritingBlock();
+
+				bytesRead = bytesRead + numBytesRead;
+
+			} else {
+				std::cout << "Error, Not a full read"   << std::endl;
+			}
+			//load in next file
+			//(that is, file is done reading and there are more files).
+			if(bytesRead == fileSize.QuadPart && filePtr < fnames.size())
+			{
+				CloseHandle(sdrFile);
+				prepareHandle();
+				std::cout << "Opening file " << filePtr << " \n";
+			}
+
+		}
+		
+		CloseHandle(sdrFile);
+		#endif
+		*/
+
+
+
+		/**
+    ifstream ifs(filename, ios::binary|ios::ate);
+    ifstream::pos_type pos = ifs.tellg();
+
+	if(startByteLocation != 0)	
+		ifs.seekg(startByteLocation, ios::beg);
+	else
+		ifs.seekg(0, ios::beg);
+
+	//Perhaps there is a more elegant way to run and kill the thread, but this works
+	while(bytesRead < fileSize.QuadPart && !killThreadFlag)
+	{
+	}
+
+
+  //  ifs.read(&result[0], pos);
+  */
+}
+	
+long FileReader::getFileSizeNix(std::string filename)
+{
+    struct stat stat_buf;
+    int rc = stat(filename.c_str(), &stat_buf);
+    return rc == 0 ? stat_buf.st_size : -1;
+}
+
 
 

@@ -7,6 +7,8 @@
 #ifndef FILEREADER_H_H
 #define FILEREADER_H_H
 
+
+
 #include <vector>
 #include <stdio.h>
 
@@ -61,6 +63,8 @@ class FileReader{
 	void readFileWin();
 	
 	void readFileNix();
+
+	long getFileSizeNix(std::string);
 
 public:
 
