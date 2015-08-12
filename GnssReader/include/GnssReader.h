@@ -10,6 +10,7 @@
 #include<cstdint>
 #include <vector>
 #include<GnssMetadata/Metadata.h>
+#include <stdexcept>
 #include "DecStream.h"
 #include "FileReader.h"
 #include "ChunkBuffer.h"

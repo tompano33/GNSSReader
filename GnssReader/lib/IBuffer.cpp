@@ -4,6 +4,7 @@
 	//linux
 #endif
 #include <iostream>
+#include <cstring>
 #include "IBuffer.h"
 
 	IBuffer::IBuffer(uint64_t writeBlockSize, uint64_t writeBlockCount){
@@ -135,7 +136,7 @@
 
 			else if( (startBufferDataSize + endOfBufferDataSize) > count)
 			{
-				memcpy(ibuf+(preBufferSize-endOfBufferDataSize),ibuf+oldPtr,endOfBufferDataSize);
+				std::memcpy(ibuf+(preBufferSize-endOfBufferDataSize),ibuf+oldPtr,endOfBufferDataSize);
 				retval =  ibuf+(preBufferSize-endOfBufferDataSize);
 			} 
 			
@@ -175,7 +176,9 @@
 			if(endOfBufferDataSize > count)
 			{
 				oldPtr += count;
-				LeaveCriticalSection(&crit);			
+				#ifdef _WIN32
+					LeaveCriticalSection(&crit);
+				#endif			
 				return;
 			} 
 

@@ -44,6 +44,7 @@
 
 	void FileReader::readFile()
 	{
+		#ifdef _WIN32
 		//prep first handle
 		prepareHandle();
 
@@ -133,6 +134,7 @@
 		}
 		
 		CloseHandle(sdrFile);
+		#endif
 	};
 
 	char* FileReader::getBufferedBytes(int count)
@@ -182,11 +184,20 @@
 	}
 
 	bool FileReader::hasReadWholeFile(){
+		#ifdef _WIN32
 		return (bytesRead == fileSize.QuadPart && (ib->getFileReadCount() == filePtr));
+		#else
+		return false;
+		#endif
+		
 	}
 
 	uint64_t FileReader::numBytesLeftToReadFromFile(){
+		#ifdef _WIN32
 		return fileSize.QuadPart - bytesRead;
+		#else
+		return 0;
+		#endif
 	}
 
 	uint64_t FileReader::numBytesLeftInBuffer(){
@@ -210,6 +221,8 @@
 	void FileReader::prepareHandle()
 	{
 		
+
+		#ifdef _WIN32
 		bytesRead = 0;
 		std::wstring stemp = std::wstring(fnames.at(filePtr).begin(), fnames.at(filePtr).end());
 		LPCWSTR wfname = stemp.c_str();
@@ -235,6 +248,7 @@
 		{
 			printf("Data file could not be found");
 		}
+		#endif
 	}
 
 	double FileReader::getIBufPercent()
@@ -248,6 +262,7 @@
 
 	uint64_t FileReader::getSizeOfFile(std::string fname)
 	{
+		#ifdef _WIN32
 		std::wstring stemp = std::wstring(fname.begin(), fname.end());
 		LPCWSTR wfname =  stemp.c_str();
 		HANDLE tempSdrFile;
@@ -270,6 +285,7 @@
 
 		//throw error
 		printf("Error: Could not find a file \n");
+		#endif
 		return 0;
 	}
 

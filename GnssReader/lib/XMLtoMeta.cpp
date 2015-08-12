@@ -25,7 +25,8 @@ public:
 
 		int i = 0;
 		//for every object in the list.
-		for(std::list<T>::iterator iter = objList->begin();
+	
+		for(typename std::list<T>::iterator iter = objList->begin();
 			iter !=objList->end();iter++)
 		{
 			//The object is a reference, so we are going to need to search to find the original object.

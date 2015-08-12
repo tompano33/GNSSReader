@@ -1,10 +1,41 @@
-﻿Build started 8/11/2015 8:09:44 PM.
+﻿Build started 8/12/2015 12:11:28 PM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GnssReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\tinyxml2\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\GnssMetadata\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _ITERATOR_DEBUG_LEVEL=0 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\lib\XMLtoMeta.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\include /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\tinyxml2\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\GnssMetadata\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\lib\ /IC:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj\..\..\..\GnssMetadata\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _ITERATOR_DEBUG_LEVEL=0 /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\lib\ChunkBuffer.cpp ..\lib\DecStream.cpp ..\lib\FileReader.cpp ..\lib\GnssReader.cpp ..\lib\IBuffer.cpp ..\lib\StreamAnalytics.cpp ..\lib\Test.cpp ..\lib\XMLtoMeta.cpp
          XMLtoMeta.cpp
+         Test.cpp
+         StreamAnalytics.cpp
+         IBuffer.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(18): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(78): warning C4244: '+=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(139): warning C4244: 'argument' : conversion from 'uint64_t' to 'size_t', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(162): warning C4244: '-=' : conversion from 'uint64_t' to 'volatile int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(197): warning C4146: unary minus operator applied to unsigned type, result still unsigned
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\ibuffer.cpp(205): warning C4146: unary minus operator applied to unsigned type, result still unsigned
+         GnssReader.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(480): warning C4996: 'chdir': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _chdir. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\direct.h(123) : see declaration of 'chdir'
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\gnssreader.cpp(522): warning C4244: 'argument' : conversion from 'int64_t' to 'double', possible loss of data
+         FileReader.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(34): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(35): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(238) : see declaration of 'strdup'
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(39): warning C4996: 'strdup': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _strdup. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\string.h(238) : see declaration of 'strdup'
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(52): warning C4244: 'argument' : conversion from 'uint64_t' to 'LONG', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(64): warning C4018: '>=' : signed/unsigned mismatch
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(83): warning C4244: 'argument' : conversion from 'uint64_t' to 'DWORD', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(110): warning C4244: 'argument' : conversion from 'volatile int64_t' to 'LONG', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\filereader.cpp(127): warning C4018: '<' : signed/unsigned mismatch
+         DecStream.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\decstream.cpp(17): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\decstream.cpp(18): warning C4244: 'initializing' : conversion from 'uint64_t' to 'unsigned int', possible loss of data
+         ChunkBuffer.cpp
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\chunkbuffer.cpp(96): warning C4334: '<<' : result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+     1>c:\users\antadmin\desktop\sdr_standard\gnssreader\lib\chunkbuffer.cpp(116): warning C4334: '<<' : result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+         Generating Code...
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -72,4 +103,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.47
+Time Elapsed 00:00:25.55

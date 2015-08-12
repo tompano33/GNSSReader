@@ -9,16 +9,17 @@
 #include<iostream>
 #include<stdio.h>
 #include<sys/stat.h>
+#include<stdexcept>
+#include <string>
 
-//For chdir
-//TODO: Put macro here
-//#include <unistd.h>
 #ifdef _WIN32
 	#include <direct.h>
 	//To check memleaks
 	#define _CRTDBG_MAP_ALLOC
 	#include <stdlib.h>
 	#include <crtdbg.h>
+#else
+	#include <unistd.h>
 #endif
 
 #include<GnssMetadata/Metadata.h>
@@ -60,7 +61,7 @@ using namespace GnssMetadata;
 			else
 				std::cout << "XML error: " <<  e.what() << "\n";
 
-			throw std::exception("File was not read\n");
+			//g++ does not like this: throw std::exception("File was not read\n");
 		}
 
 		TRIGRmode = false;
@@ -173,6 +174,7 @@ using namespace GnssMetadata;
 		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
 		{
 			//add the metadata and it's information to the list.
+//g++ not happy with this address of reference
 			x2m = new XMLtoMeta((&(nextMeta->Files().front().Next().toString()))->c_str());
 			nextMeta = x2m->getNonRefdMetadata();
 			int bc = nextMeta->Files().front().nLane->blockCount;
@@ -480,13 +482,17 @@ using namespace GnssMetadata;
 	
 	void GNSSReader::ThreadEntry(void *p)
 	{
+#ifdef _WIN32
 		((GNSSReader *) p)->start(); 
 		_endthread();
+#endif
 	}
 
 	void GNSSReader::startAsThread()
 	{
+#ifdef _WIN32
 		_beginthread(GNSSReader::ThreadEntry, 0, this);
+#endif
 	};
 
 	bool GNSSReader::isDone()
