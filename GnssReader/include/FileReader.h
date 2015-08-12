@@ -29,7 +29,7 @@ class FileReader{
 	//Count of total bytes in the file
 	LARGE_INTEGER fileSize;
 #else
-
+	pthread_t readThread;
 #endif
 
 	//How many bytes to read at once
@@ -57,6 +57,10 @@ class FileReader{
 
 	//Populates intermediate buffer with samples until there are no samples left to be read.
 	void readFile();
+
+	void readFileWin();
+	
+	void readFileNix();
 
 public:
 
@@ -108,6 +112,8 @@ public:
 
 	//Kills off all buffers
 	~FileReader();
+
+
 
 };
 #endif

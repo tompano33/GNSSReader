@@ -10,6 +10,7 @@
 	#include <process.h>
 #else
 	//linux
+	#include <pthread.h>
 #endif
 
 #include <stdio.h>
@@ -43,6 +44,184 @@
 	}
 
 	void FileReader::readFile()
+	{
+		#ifdef _WIN32
+			readFileWin();
+		#else
+			readFileNix();
+		#endif
+		
+	};
+
+	char* FileReader::getBufferedBytes(int count)
+	{
+		char* c = NULL;
+		while(c == NULL)
+		{
+			c = ib->tryRead(count);
+		}
+
+		return c;
+
+	}
+
+	void FileReader::readAll()
+	{
+		#ifdef _WIN32
+			_beginthread(FileReader::ThreadEntry, 0, this);
+		#else 
+			pthread_create (&readThread, NULL, (void *) FileReader::ThreadEntry, (void *) &this);
+		#endif
+	};
+
+	std::string FileReader::fileBeingDecoded()
+	{
+		//transitioning
+		if(filePtr == 0)
+		{
+			return "loading...";
+		}
+		return fnames.at(filePtr-1);
+	}
+
+	void FileReader::ThreadEntry(void *p)
+	{
+		#ifdef _WIN32
+ 			((FileReader *) p)->readFile();   
+			_endthread();
+		#else
+			((FileReader *) p)->readFile();   
+			pthread_exit(NULL);
+		#endif
+	}
+
+	void FileReader::doneReading(uint64_t count)
+	{
+		ib->doneReading(count);
+	}
+
+	//TODO linux
+	bool FileReader::hasReadWholeFile(){
+		#ifdef _WIN32
+		return (bytesRead == fileSize.QuadPart && (ib->getFileReadCount() == filePtr));
+		#else
+		return true;
+		#endif
+		
+	}
+
+	//TODO linux
+	uint64_t FileReader::numBytesLeftToReadFromFile(){
+		#ifdef _WIN32
+		return fileSize.QuadPart - bytesRead;
+		#else
+		return 0;
+		#endif
+	}
+
+	uint64_t FileReader::numBytesLeftInBuffer(){
+		return  ib->getNumBytesStored();
+	}
+
+	void FileReader::killReadThread()
+	{
+		killThreadFlag = true;
+	}
+
+	void FileReader::skipBufferedBytes(int count)
+	{
+		if(count != 0)
+		{
+			getBufferedBytes(count);
+			doneReading(count);
+		}
+	}
+
+	//TODO linux
+	void FileReader::prepareHandle()
+	{
+		#ifdef _WIN32
+
+		bytesRead = 0;
+		std::wstring stemp = std::wstring(fnames.at(filePtr).begin(), fnames.at(filePtr).end());
+		LPCWSTR wfname = stemp.c_str();
+		boolean fileFound = false;
+		
+		for(int i = 0; i < pathNameCount; i++)
+		{			
+			GNSSReader::changeWD(pathNames[i]);
+			sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
+
+			if(sdrFile == INVALID_HANDLE_VALUE)
+			{
+				continue;
+			}	
+
+			GetFileSizeEx(sdrFile,&fileSize);
+			filePtr++;
+			fileFound = true;
+			break;
+		}
+
+		if(!fileFound)
+		{
+			printf("Data file could not be found");
+		}
+
+		#endif
+	}
+
+	double FileReader::getIBufPercent()
+	{
+		return ib->getPercent();
+	}
+
+	FileReader::~FileReader(){
+	//	delete ib;
+	}
+
+	//TODO linux
+	uint64_t FileReader::getSizeOfFile(std::string fname)
+	{
+		#ifdef _WIN32
+		std::wstring stemp = std::wstring(fname.begin(), fname.end());
+		LPCWSTR wfname =  stemp.c_str();
+		HANDLE tempSdrFile;
+
+		for(int i = 0; i < pathNameCount; i++)
+		{			
+			GNSSReader::changeWD(pathNames[i]);
+			tempSdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
+
+			if(tempSdrFile == INVALID_HANDLE_VALUE)
+			{
+				continue;
+			}	
+			//dword?
+			LARGE_INTEGER tempFileSize;
+			GetFileSizeEx(tempSdrFile,&tempFileSize);
+			CloseHandle(tempSdrFile);
+			return tempFileSize.QuadPart;
+		}
+
+		//throw error
+		printf("Error: Could not find a file \n");
+		#endif
+		return 0;
+	}
+
+	void FileReader::setStartLocation(int loc, uint64_t bytesSkip)
+	{
+		filePtr = loc;
+		startByteLocation = bytesSkip;
+	}
+
+	uint64_t FileReader::filesFullyReadCount()
+	{
+		return ib->getFileReadCount();
+	}
+
+	void FileReader::readFileWin()
 	{
 		#ifdef _WIN32
 		//prep first handle
@@ -135,169 +314,8 @@
 		
 		CloseHandle(sdrFile);
 		#endif
-	};
-
-	char* FileReader::getBufferedBytes(int count)
-	{
-		char* c = NULL;
-		while(c == NULL)
-		{
-			c = ib->tryRead(count);
-		}
-
-		return c;
-
 	}
 
-	void FileReader::readAll()
-	{
-		#ifdef _WIN32
-			_beginthread(FileReader::ThreadEntry, 0, this);
-		#else 
-			//call threadentry
-		#endif
-	};
-
-	std::string FileReader::fileBeingDecoded()
-	{
-		//transitioning
-		if(filePtr == 0)
-		{
-			return "loading...";
-		}
-		return fnames.at(filePtr-1);
-	}
-
-	void FileReader::ThreadEntry(void *p)
-	{
-		#ifdef _WIN32
- 			((FileReader *) p)->readFile();   
-			_endthread();
-		#else
-			//linuxy
-		#endif
-	}
-
-	void FileReader::doneReading(uint64_t count)
-	{
-		ib->doneReading(count);
-	}
-
-	bool FileReader::hasReadWholeFile(){
-		#ifdef _WIN32
-		return (bytesRead == fileSize.QuadPart && (ib->getFileReadCount() == filePtr));
-		#else
-		return false;
-		#endif
-		
-	}
-
-	uint64_t FileReader::numBytesLeftToReadFromFile(){
-		#ifdef _WIN32
-		return fileSize.QuadPart - bytesRead;
-		#else
-		return 0;
-		#endif
-	}
-
-	uint64_t FileReader::numBytesLeftInBuffer(){
-		return  ib->getNumBytesStored();
-	}
-
-	void FileReader::killReadThread()
-	{
-		killThreadFlag = true;
-	}
-
-	void FileReader::skipBufferedBytes(int count)
-	{
-		if(count != 0)
-		{
-			getBufferedBytes(count);
-			doneReading(count);
-		}
-	}
-
-	void FileReader::prepareHandle()
-	{
-		
-
-		#ifdef _WIN32
-		bytesRead = 0;
-		std::wstring stemp = std::wstring(fnames.at(filePtr).begin(), fnames.at(filePtr).end());
-		LPCWSTR wfname = stemp.c_str();
-		boolean fileFound = false;
-		
-		for(int i = 0; i < pathNameCount; i++)
-		{			
-			GNSSReader::changeWD(pathNames[i]);
-			sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
-
-			if(sdrFile == INVALID_HANDLE_VALUE)
-			{
-				continue;
-			}	
-
-			GetFileSizeEx(sdrFile,&fileSize);
-			filePtr++;
-			fileFound = true;
-			break;
-		}
-
-		if(!fileFound)
-		{
-			printf("Data file could not be found");
-		}
-		#endif
-	}
-
-	double FileReader::getIBufPercent()
-	{
-		return ib->getPercent();
-	}
-
-	FileReader::~FileReader(){
-	//	delete ib;
-	}
-
-	uint64_t FileReader::getSizeOfFile(std::string fname)
-	{
-		#ifdef _WIN32
-		std::wstring stemp = std::wstring(fname.begin(), fname.end());
-		LPCWSTR wfname =  stemp.c_str();
-		HANDLE tempSdrFile;
-
-		for(int i = 0; i < pathNameCount; i++)
-		{			
-			GNSSReader::changeWD(pathNames[i]);
-			tempSdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
-
-			if(tempSdrFile == INVALID_HANDLE_VALUE)
-			{
-				continue;
-			}	
-			//dword?
-			LARGE_INTEGER tempFileSize;
-			GetFileSizeEx(tempSdrFile,&tempFileSize);
-			CloseHandle(tempSdrFile);
-			return tempFileSize.QuadPart;
-		}
-
-		//throw error
-		printf("Error: Could not find a file \n");
-		#endif
-		return 0;
-	}
-
-	void FileReader::setStartLocation(int loc, uint64_t bytesSkip)
-	{
-		filePtr = loc;
-		startByteLocation = bytesSkip;
-	}
-
-	uint64_t FileReader::filesFullyReadCount()
-	{
-		return ib->getFileReadCount();
-	}
+	void FileReader::readFileNix(){}
 
 

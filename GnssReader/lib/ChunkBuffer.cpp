@@ -1,6 +1,7 @@
 /**
  * File: ChunkBuffer.cpp
  * Author: WJLIDDY
+ * Cross-Platform
  */
 #include "ChunkBuffer.h"
 

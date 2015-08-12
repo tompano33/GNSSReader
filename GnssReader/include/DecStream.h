@@ -42,6 +42,8 @@ class DecStream{
 	#ifdef _WIN32
 		//do not write and read
 		CRITICAL_SECTION crit; 
+	#else 
+		pthread_mutex_t mutex;
 	#endif
 
 
@@ -65,6 +67,9 @@ public:
 
 	bool hasComplexPart();
 	bool complexPartFirst();
+
+	void lockMutex();
+	void unlockMutex();
 
 	~DecStream();
 };

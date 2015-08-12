@@ -3,6 +3,7 @@
  * A double buffered stream. 
  * Author: WJLIDDY
  * TODO: Document
+ * c-p untested
  */
 
 #include "DecStream.h"
@@ -25,6 +26,8 @@
 
 		#ifdef _WIN32
 			InitializeCriticalSection(&crit);
+		#else 
+			 pthread_mutex_init(&mutex, NULL);
 		#endif
 	};
 
@@ -40,10 +43,7 @@
 		while(samplePtr >= sampleCapacity){;}
 		//wait for a withdraw
 
-		#ifdef _WIN32
-       		EnterCriticalSection(&crit);
-		#endif
-
+		lockMutex();
 		//write to the sample buf that isn't locked
 		if(!lockSampleBuf1)
 			sampleBuf1[samplePtr] = sample;
@@ -52,9 +52,7 @@
 
 		samplePtr++;
 	
-		#ifdef _WIN32
-        	LeaveCriticalSection(&crit);
-		#endif
+		unlockMutex();
 
 	};
 
@@ -79,17 +77,13 @@
 	//does not care if sample not paired. Todo?
 	double* DecStream::flushOutputStream(uint64_t* byteCount)
 	{	
-		#ifdef _WIN32
-       			EnterCriticalSection(&crit);
-		#endif
+		lockMutex();
 		
 		*byteCount = samplePtr;
 		samplePtr = 0;
 		lockSampleBuf1 = !lockSampleBuf1;
 
-		#ifdef _WIN32
-		LeaveCriticalSection(&crit);
-		#endif
+		unlockMutex();
 
 		//return the sample that isn't locked, (we just intverted it)
 		if(lockSampleBuf1)
@@ -107,4 +101,22 @@
 	bool DecStream::complexPartFirst()
 	{
 		return CPartFirst;
+	}
+
+	void DecStream::lockMutex()
+	{
+		#ifdef _WIN32
+       		EnterCriticalSection(&crit);
+		#else 
+		   pthread_mutex_lock (&mutex);
+		#endif
+	}
+
+	void DecStream::unlockMutex()
+	{
+		#ifdef _WIN32
+        	LeaveCriticalSection(&crit);
+		#else
+			 pthread_mutex_unlock (&mutex);
+		#endif
 	}

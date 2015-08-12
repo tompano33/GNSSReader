@@ -3,6 +3,7 @@
  * Author: WJLIDDY
  * Description: Points to a chunk of raw SDR data, and returns individual samples in order based on the requested encoding.
  * TODO: While the current implementation works fine, I feel like I need to return something with Generic Types rather than making everything 64bit.
+ * Cross-Platform
  */
 
 #ifndef CHUNKBUFFER_H_H
