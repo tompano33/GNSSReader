@@ -19,16 +19,23 @@
 		bufPtr = preBufferSize;
 		oldPtr = preBufferSize;
 		filesFullyRead = 0;
-		InitializeCriticalSection(&crit);
+
+			
+		#ifdef _WIN32
+			InitializeCriticalSection(&crit);
+		#endif
 	}
+
 
 	//returns true if a block of 'writeblocksize' can be written, false if not
 
 	char* IBuffer::canWriteBlock()
 	{
 		char* retval;
-
-        EnterCriticalSection(&crit);
+		
+		#ifdef _WIN32
+			EnterCriticalSection(&crit);
+		#endif
 
 		if(bufPtr == oldPtr)
 		{
@@ -55,14 +62,17 @@
 			}
 		}
 
-		LeaveCriticalSection(&crit);
+		#ifdef _WIN32
+			LeaveCriticalSection(&crit);
+		#endif
 		return retval;
 	}
 
 	void IBuffer::doneWritingBlock()
 	{
-
-        EnterCriticalSection(&crit);
+		#ifdef _WIN32
+			EnterCriticalSection(&crit);
+		#endif
 
 		numBytesStored += writeBlockSize;
 		bufPtr+=writeBlockSize;
@@ -73,7 +83,9 @@
 		}
 
 		
-		LeaveCriticalSection(&crit);
+		#ifdef _WIN32
+			LeaveCriticalSection(&crit);
+		#endif
 	}
 
 	double IBuffer::getPercent()
@@ -83,8 +95,10 @@
 	
 	char* IBuffer::tryRead(uint64_t count)
 	{
-		
-        EnterCriticalSection(&crit);
+			
+		#ifdef _WIN32
+			EnterCriticalSection(&crit);
+		#endif
 		
 		char* retval;
 
@@ -129,16 +143,20 @@
 			
 		}
 
-		
-		LeaveCriticalSection(&crit);
+		#ifdef _WIN32
+			LeaveCriticalSection(&crit);
+		#endif
+
 		return retval;
 	};
 
 	void IBuffer::doneReading(uint64_t count)
 	{
 		
-
-        EnterCriticalSection(&crit);
+	
+		#ifdef _WIN32
+			EnterCriticalSection(&crit);
+		#endif
 
 		numBytesStored -= count;
 		//we need not worry about overlap
@@ -190,7 +208,9 @@
 				filesFullyRead++;
 			}
 		}
-		LeaveCriticalSection(&crit);
+		#ifdef _WIN32
+			LeaveCriticalSection(&crit);
+		#endif
 
 	};
 

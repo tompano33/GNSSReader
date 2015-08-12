@@ -15,6 +15,10 @@
 //#include <unistd.h>
 #ifdef _WIN32
 	#include <direct.h>
+	//To check memleaks
+	#define _CRTDBG_MAP_ALLOC
+	#include <stdlib.h>
+	#include <crtdbg.h>
 #endif
 
 #include<GnssMetadata/Metadata.h>
@@ -24,10 +28,6 @@
 #include "XMLtoMeta.h"
 #include "DecStream.h"
 
-//To check memleaks
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
 
 
 

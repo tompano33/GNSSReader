@@ -41,7 +41,7 @@ class IBuffer{
 public:
 
 	//makes a buffer.
-	IBuffer::IBuffer(uint64_t writeBlockSize, uint64_t writeBlockCount);
+	IBuffer(uint64_t writeBlockSize, uint64_t writeBlockCount);
 
 	//If there is space in the buffer, returns a pointer to the buffer where writing may begin for 'n' bytes. Returns 'null' if no such space exists
 	char* canWriteBlock();

@@ -7,7 +7,7 @@
 
 #include "DecStream.h"
 #include <stdint.h>
-#include "GnssMetadata\Stream.h"
+#include <GnssMetadata/Stream.h>
 #include <iostream>
 
 	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream * corStream, bool hasComplexPart, bool complexPartFirst)
@@ -23,7 +23,9 @@
 		this->hasCPart = hasComplexPart;
 		this->CPartFirst = complexPartFirst;
 
-		InitializeCriticalSection(&crit);
+		#ifdef _WIN32
+			InitializeCriticalSection(&crit);
+		#endif
 	};
 
 	DecStream::~DecStream()
@@ -38,7 +40,10 @@
 		while(samplePtr >= sampleCapacity){;}
 		//wait for a withdraw
 
-        EnterCriticalSection(&crit);
+		#ifdef _WIN32
+       		EnterCriticalSection(&crit);
+		#endif
+
 		//write to the sample buf that isn't locked
 		if(!lockSampleBuf1)
 			sampleBuf1[samplePtr] = sample;
@@ -46,7 +51,10 @@
 			sampleBuf2[samplePtr] = sample;
 
 		samplePtr++;
-        LeaveCriticalSection(&crit);
+	
+		#ifdef _WIN32
+        	LeaveCriticalSection(&crit);
+		#endif
 
 	};
 
@@ -71,11 +79,18 @@
 	//does not care if sample not paired. Todo?
 	double* DecStream::flushOutputStream(uint64_t* byteCount)
 	{	
-        EnterCriticalSection(&crit);
+		#ifdef _WIN32
+       			EnterCriticalSection(&crit);
+		#endif
+		
 		*byteCount = samplePtr;
 		samplePtr = 0;
 		lockSampleBuf1 = !lockSampleBuf1;
+
+		#ifdef _WIN32
 		LeaveCriticalSection(&crit);
+		#endif
+
 		//return the sample that isn't locked, (we just intverted it)
 		if(lockSampleBuf1)
 			return sampleBuf1;
