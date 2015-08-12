@@ -21,9 +21,10 @@
 		oldPtr = preBufferSize;
 		filesFullyRead = 0;
 
-			
 		#ifdef _WIN32
 			InitializeCriticalSection(&crit);
+		#else 
+			 pthread_mutex_init(&mutex, NULL);
 		#endif
 	}
 
@@ -34,9 +35,7 @@
 	{
 		char* retval;
 		
-		#ifdef _WIN32
-			EnterCriticalSection(&crit);
-		#endif
+		lockMutex();
 
 		if(bufPtr == oldPtr)
 		{
@@ -63,17 +62,13 @@
 			}
 		}
 
-		#ifdef _WIN32
-			LeaveCriticalSection(&crit);
-		#endif
+		unlockMutex();
 		return retval;
 	}
 
 	void IBuffer::doneWritingBlock()
 	{
-		#ifdef _WIN32
-			EnterCriticalSection(&crit);
-		#endif
+			lockMutex();
 
 		numBytesStored += writeBlockSize;
 		bufPtr+=writeBlockSize;
@@ -83,10 +78,7 @@
 			bufPtr = preBufferSize;
 		}
 
-		
-		#ifdef _WIN32
-			LeaveCriticalSection(&crit);
-		#endif
+		unlockMutex();
 	}
 
 	double IBuffer::getPercent()
@@ -97,9 +89,7 @@
 	char* IBuffer::tryRead(uint64_t count)
 	{
 			
-		#ifdef _WIN32
-			EnterCriticalSection(&crit);
-		#endif
+			lockMutex();
 		
 		char* retval;
 
@@ -144,9 +134,7 @@
 			
 		}
 
-		#ifdef _WIN32
-			LeaveCriticalSection(&crit);
-		#endif
+		unlockMutex();
 
 		return retval;
 	};
@@ -154,10 +142,7 @@
 	void IBuffer::doneReading(uint64_t count)
 	{
 		
-	
-		#ifdef _WIN32
-			EnterCriticalSection(&crit);
-		#endif
+			lockMutex();
 
 		numBytesStored -= count;
 		//we need not worry about overlap
@@ -211,10 +196,8 @@
 				filesFullyRead++;
 			}
 		}
-		#ifdef _WIN32
-			LeaveCriticalSection(&crit);
-		#endif
 
+		unlockMutex();
 	};
 
 
@@ -248,4 +231,22 @@
 	int IBuffer::getFileReadCount()
 	{
 		return filesFullyRead;
+	}
+
+	void IBuffer::lockMutex()
+	{
+		#ifdef _WIN32
+       		EnterCriticalSection(&crit);
+		#else 
+		   pthread_mutex_lock (&mutex);
+		#endif
+	}
+
+	void IBuffer::unlockMutex()
+	{
+		#ifdef _WIN32
+        	LeaveCriticalSection(&crit);
+		#else
+			 pthread_mutex_unlock (&mutex);
+		#endif
 	}

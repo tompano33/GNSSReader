@@ -20,6 +20,7 @@
 	#include <crtdbg.h>
 #else
 	#include <unistd.h>
+	#include <pthreads.h>
 #endif
 
 #include<GnssMetadata/Metadata.h>
@@ -482,17 +483,23 @@ using namespace GnssMetadata;
 	
 	void GNSSReader::ThreadEntry(void *p)
 	{
-#ifdef _WIN32
-		((GNSSReader *) p)->start(); 
-		_endthread();
-#endif
+		#ifdef _WIN32
+			((GNSSReader *) p)->start(); 
+			_endthread();
+		#else 
+			((FileReader *) p)->readFile();   
+			pthread_exit(NULL);
+		#endif
+
 	}
 
 	void GNSSReader::startAsThread()
 	{
-#ifdef _WIN32
-		_beginthread(GNSSReader::ThreadEntry, 0, this);
-#endif
+		#ifdef _WIN32
+			_beginthread(GNSSReader::ThreadEntry, 0, this);
+		#else 
+			pthread_create (&readThread, NULL, (void *) GNSSReader::ThreadEntry, (void *) &this);
+		#endif
 	};
 
 	bool GNSSReader::isDone()

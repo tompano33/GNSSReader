@@ -32,10 +32,12 @@ class IBuffer{
 
 	int filesFullyRead;
 
-#ifdef _WIN32
-	//do not write and read
-	CRITICAL_SECTION crit; 
-#endif
+	#ifdef _WIN32
+		//do not write and read
+		CRITICAL_SECTION crit; 
+	#else 
+		pthread_mutex_t mutex;
+	#endif
 
 
 public:
@@ -67,6 +69,9 @@ public:
 	double getPercent();
 
 	int getFileReadCount();
+
+	void lockMutex();
+	void unlockMutex();
 
 };
 #endif
