@@ -72,7 +72,7 @@
 		#ifdef _WIN32
 			_beginthread(FileReader::ThreadEntry, 0, this);
 		#else 
-			pthread_create (&readThread, NULL, (void *) FileReader::ThreadEntry, (void *) &this);
+			pthread_create (&readThread, NULL, (void *) FileReader::ThreadEntry, (void *) this);
 		#endif
 	};
 

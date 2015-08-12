@@ -20,7 +20,7 @@
 	#include <crtdbg.h>
 #else
 	#include <unistd.h>
-	#include <pthreads.h>
+	#include <pthread.h>
 #endif
 
 #include<GnssMetadata/Metadata.h>
@@ -498,7 +498,7 @@ using namespace GnssMetadata;
 		#ifdef _WIN32
 			_beginthread(GNSSReader::ThreadEntry, 0, this);
 		#else 
-			pthread_create (&readThread, NULL, (void *) GNSSReader::ThreadEntry, (void *) &this);
+			pthread_create (&decThread, NULL, (void *) GNSSReader::ThreadEntry, (void *) this);
 		#endif
 	};
 
