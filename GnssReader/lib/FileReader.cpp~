@@ -336,8 +336,8 @@
 			{
 				space = ib->canWriteBlock();
 			}
-
-		ib->finishWrite(readBufferSize);
+		//write here
+		ib->doneWritingBlock();
 		}
 	/**
 

@@ -78,6 +78,7 @@ using namespace GnssMetadata;
 
 	void GNSSReader::readChunkCycles(Block * block, uint32_t cycles)
 	{
+		
 		//for every cycle:
 		for(;cycles != 0; cycles--)
 		{
@@ -91,7 +92,9 @@ using namespace GnssMetadata;
 	
 				int chunkBufferSize = sizeWord*countWord;
 
+				std::cout << "Prebuf\n";
 				char* buf = fr->getBufferedBytes(chunkBufferSize);
+				std::cout << "PostBuf\n";
 
 				//The chunkbuffer does not allocate a new buffer, it simply uses the one passed to it from fileReader
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
@@ -252,6 +255,7 @@ using namespace GnssMetadata;
 					uint32_t headerSize = block->SizeHeader();
 					uint32_t footerSize = block->SizeFooter();
 			
+
 					fr->skipBufferedBytes(headerSize);
 					readChunkCycles(block, cycles);
 
