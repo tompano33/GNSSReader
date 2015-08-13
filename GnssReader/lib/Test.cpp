@@ -40,7 +40,13 @@ void testSuite()
 		//alignment: Tests quantization and aligned bits. 
 		{
 			printf("Expecting: [5, -2, -16, 15]\n");
+
+			#ifndef _WIN32
 			GNSSReader test ("/home/jack/Desktop/test/test.xml",50L,1000L,1000000L);
+			#else
+			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\header\\test.xml",50L,1000L,1000000L);
+			#endif
+
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
