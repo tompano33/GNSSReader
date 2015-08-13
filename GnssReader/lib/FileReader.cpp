@@ -329,15 +329,15 @@
 
 		while(true)
 		{
-
-		char* space;
+		//std::cout << "Running!";
+		char* space = NULL;
 
 			while(space == NULL)
 			{
 				space = ib->canWriteBlock();
 			}
 
-		ib->finishWrite(1337);
+		ib->finishWrite(readBufferSize);
 		}
 	/**
 

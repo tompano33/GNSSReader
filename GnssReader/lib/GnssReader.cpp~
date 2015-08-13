@@ -487,7 +487,7 @@ using namespace GnssMetadata;
 			((GNSSReader *) p)->start(); 
 			_endthread();
 		#else 
-			((FileReader *) p)->readFile();   
+			((GNSSReader *) p)->start();   
 			pthread_exit(NULL);
 		#endif
 
