@@ -321,15 +321,12 @@
 
 	void FileReader::readFileNix(){
 
-		//test for Tom
-		
-	//	while(true)
-//		{
-//		double sin(double x);
-//		}
+		struct timespec tim1, tim2;
+		tim1.tv_sec = 0;
+		tim1.tv_nsec = 5000L;
 
 		//don't kill it with the writes
-		for(int i =0; i != 50; i++)
+		while(true)
 		{
 		//std::cout << "Running!";
 		char* space = NULL;
@@ -339,6 +336,9 @@
 				space = ib->canWriteBlock();
 			}
 		//write here
+		nanosleep(&tim1,&tim2);
+		//for(int j = 0; i j=  
+
 		ib->doneWritingBlock();
 		}
 	/**
