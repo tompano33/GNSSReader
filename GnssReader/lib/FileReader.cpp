@@ -60,6 +60,7 @@
 		char* c = NULL;
 		while(c == NULL)
 		{
+			std::cout << "stuck\n";
 			c = ib->tryRead(count);
 		}
 
@@ -327,7 +328,8 @@
 //		double sin(double x);
 //		}
 
-		while(true)
+		//don't kill it with the writes
+		for(int i =0; i != 50; i++)
 		{
 		//std::cout << "Running!";
 		char* space = NULL;

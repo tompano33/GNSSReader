@@ -4,6 +4,7 @@
 	//linux
 #endif
 #include <iostream>
+#include <cstring>
 #include "IBuffer.h"
 
 	IBuffer::IBuffer(uint64_t writeBlockSize, uint64_t writeBlockCount){
@@ -19,16 +20,25 @@
 		bufPtr = preBufferSize;
 		oldPtr = preBufferSize;
 		filesFullyRead = 0;
-		InitializeCriticalSection(&crit);
+
+		#ifdef _WIN32
+			InitializeCriticalSection(&crit);
+		#else 
+			 pthread_mutex_init(&mutex, NULL);
+		#endif
 	}
+
 
 	//returns true if a block of 'writeblocksize' can be written, false if not
 
+	//This gets called REALLY often.
 	char* IBuffer::canWriteBlock()
 	{
 		char* retval;
 
-        EnterCriticalSection(&crit);
+		//std::cout << "Awaiting Mutex... WRITE \n";
+		lockMutex();
+		//std::cout << "Done! \n";
 
 		if(bufPtr == oldPtr)
 		{
@@ -55,14 +65,15 @@
 			}
 		}
 
-		LeaveCriticalSection(&crit);
+		unlockMutex();
 		return retval;
 	}
 
 	void IBuffer::doneWritingBlock()
-	{
-
-        EnterCriticalSection(&crit);
+	{	
+		//std::cout << "Awaiting Mutex... DRB \n";
+		lockMutex();
+		//std::cout << "Done! \n";
 
 		numBytesStored += writeBlockSize;
 		bufPtr+=writeBlockSize;
@@ -72,8 +83,7 @@
 			bufPtr = preBufferSize;
 		}
 
-		
-		LeaveCriticalSection(&crit);
+		unlockMutex();
 	}
 
 	double IBuffer::getPercent()
@@ -83,8 +93,9 @@
 	
 	char* IBuffer::tryRead(uint64_t count)
 	{
-		
-        EnterCriticalSection(&crit);
+		std::cout << "Awaiting Mutex... READ \n";
+		lockMutex();
+		std::cout << "Done! \n";
 		
 		char* retval;
 
@@ -121,7 +132,7 @@
 
 			else if( (startBufferDataSize + endOfBufferDataSize) > count)
 			{
-				memcpy(ibuf+(preBufferSize-endOfBufferDataSize),ibuf+oldPtr,endOfBufferDataSize);
+				std::memcpy(ibuf+(preBufferSize-endOfBufferDataSize),ibuf+oldPtr,endOfBufferDataSize);
 				retval =  ibuf+(preBufferSize-endOfBufferDataSize);
 			} 
 			
@@ -129,16 +140,16 @@
 			
 		}
 
-		
-		LeaveCriticalSection(&crit);
+		unlockMutex();
+
 		return retval;
 	};
 
 	void IBuffer::doneReading(uint64_t count)
 	{
-		
-
-        EnterCriticalSection(&crit);
+		std::cout << "Awaiting Mutex... DONE_READ \n";
+		lockMutex();
+		std::cout << "Done! \n";
 
 		numBytesStored -= count;
 		//we need not worry about overlap
@@ -157,7 +168,9 @@
 			if(endOfBufferDataSize > count)
 			{
 				oldPtr += count;
-				LeaveCriticalSection(&crit);			
+				#ifdef _WIN32
+					LeaveCriticalSection(&crit);
+				#endif			
 				return;
 			} 
 
@@ -190,8 +203,8 @@
 				filesFullyRead++;
 			}
 		}
-		LeaveCriticalSection(&crit);
 
+		unlockMutex();
 	};
 
 
@@ -225,4 +238,22 @@
 	int IBuffer::getFileReadCount()
 	{
 		return filesFullyRead;
+	}
+
+	void IBuffer::lockMutex()
+	{
+		#ifdef _WIN32
+       		EnterCriticalSection(&crit);
+		#else 
+		   pthread_mutex_lock (&mutex);
+		#endif
+	}
+
+	void IBuffer::unlockMutex()
+	{
+		#ifdef _WIN32
+        		LeaveCriticalSection(&crit);
+		#else
+			pthread_mutex_unlock (&mutex);
+		#endif
 	}

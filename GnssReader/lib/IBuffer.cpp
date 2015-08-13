@@ -31,11 +31,14 @@
 
 	//returns true if a block of 'writeblocksize' can be written, false if not
 
+	//This gets called REALLY often.
 	char* IBuffer::canWriteBlock()
 	{
 		char* retval;
-		
+
+		//std::cout << "Awaiting Mutex... WRITE \n";
 		lockMutex();
+		//std::cout << "Done! \n";
 
 		if(bufPtr == oldPtr)
 		{
@@ -67,8 +70,10 @@
 	}
 
 	void IBuffer::doneWritingBlock()
-	{
-			lockMutex();
+	{	
+		//std::cout << "Awaiting Mutex... DRB \n";
+		lockMutex();
+		//std::cout << "Done! \n";
 
 		numBytesStored += writeBlockSize;
 		bufPtr+=writeBlockSize;
@@ -88,8 +93,9 @@
 	
 	char* IBuffer::tryRead(uint64_t count)
 	{
-			
-			lockMutex();
+		std::cout << "Awaiting Mutex... READ \n";
+		//TEST ONLY lockMutex();
+		std::cout << "Done! \n";
 		
 		char* retval;
 
@@ -134,15 +140,16 @@
 			
 		}
 
-		unlockMutex();
+		//TEST ONLY unlockMutex();
 
 		return retval;
 	};
 
 	void IBuffer::doneReading(uint64_t count)
 	{
-		
-			lockMutex();
+		std::cout << "Awaiting Mutex... DONE_READ \n";
+		lockMutex();
+		std::cout << "Done! \n";
 
 		numBytesStored -= count;
 		//we need not worry about overlap
@@ -245,8 +252,8 @@
 	void IBuffer::unlockMutex()
 	{
 		#ifdef _WIN32
-        	LeaveCriticalSection(&crit);
+        		LeaveCriticalSection(&crit);
 		#else
-			 pthread_mutex_unlock (&mutex);
+			pthread_mutex_unlock (&mutex);
 		#endif
 	}
