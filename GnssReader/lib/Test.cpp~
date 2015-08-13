@@ -41,7 +41,7 @@ void testSuite()
 		test.makeDecStreams();
 		test.setPrintOptions(false,true);
 		test.startAsThread();
-		while(!test.isDone()){printf("ZZ");}
+		while(!test.isDone()){;}
 		}
 /**
 		//alignment: Tests quantization and aligned bits. 
