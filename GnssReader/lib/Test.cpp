@@ -44,7 +44,7 @@ void testSuite()
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
-			while(!test.isDone()){printf("P");}
+			while(!test.isDone()){}
 		}
 	
 /**

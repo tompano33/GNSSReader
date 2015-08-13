@@ -22,6 +22,7 @@ void profile()
 
 void testSuite()
 {
+/**
 	std::cout << "Enter the path to your 'Tests' Directory:\n";
 	std::string path;
 	std::getline (std::cin, path);
@@ -32,29 +33,21 @@ void testSuite()
 	{
 		pathToTests = path; 
 	}
-
+*/
 	try
 	{
-		
-		{
-		GNSSReader test ("/home/jack/Desktop/test/test.xml",500L,500L,1000L);
-		test.makeDecStreams();
-		test.setPrintOptions(false,true);
-		test.startAsThread();
-		while(!test.isDone()){printf("ZZ");}
-		}
-/**
+
 		//alignment: Tests quantization and aligned bits. 
 		{
 			printf("Expecting: [5, -2, -16, 15]\n");
-			GNSSReader test (pathTo("alignment\\test.xml"),50L,1000L,1000000L);
+			GNSSReader test ("/home/jack/Desktop/test/test.xml",50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
-			while(!test.isDone()){;}
+			while(!test.isDone()){}
 		}
 	
-
+/**
 		//altPaths: Tests quantization and aligned bits. 
 		{
 			printf("Expecting: A nice introduction \n");
@@ -265,6 +258,7 @@ void testSuite()
 			//while(!test.isDone()){std::cout << test.getIBufPercent() << "\n";}
 		}
 		*/
+
 
 
 	} catch (std::exception& e) {

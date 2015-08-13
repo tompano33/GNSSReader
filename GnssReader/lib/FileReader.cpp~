@@ -322,9 +322,22 @@
 
 		//test for Tom
 		
+	//	while(true)
+//		{
+//		double sin(double x);
+//		}
+
 		while(true)
 		{
-		double sin(double x);
+
+		char* space;
+
+			while(space == NULL)
+			{
+				space = ib->canWriteBlock();
+			}
+
+		ib->finishWrite(1337);
 		}
 	/**
 
