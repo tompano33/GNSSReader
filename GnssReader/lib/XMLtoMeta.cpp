@@ -1,7 +1,7 @@
 #include<GnssMetadata/Xml/XmlProcessor.h>
 #include "XMLtoMeta.h"
 #include<iostream>
-
+//This is more of a static class-> clean it up
 using namespace GnssMetadata;
 //If there are zero declarations of an XML AttributedObject, this error is to be thrown.
 class BadID: public std::exception
@@ -138,6 +138,10 @@ public:
 	Metadata* XMLtoMeta::getNonRefdMetadata(){
 
 		return &md;
+	}
+
+	XMLtoMeta::XMLtoMeta(){
+	
 	}
 
 		

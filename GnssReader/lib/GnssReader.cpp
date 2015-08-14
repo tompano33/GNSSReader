@@ -400,9 +400,35 @@ using namespace GnssMetadata;
 							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s,!((s->Format() == s->IF) || (s->Format() == s->IFn)),
 								(s->Format() == s->QI) || (s->Format() == s->QnIn) || (s->Format() == s->QIn) || (s->Format() == s->QnI));
 
-							//decStreamArray[decStreamCount] = 
+							/**
+							XMLtoMeta * x2m = new XMLtoMeta();
 
+							Band * nonRefdBand;
+							if(s->Bands().front().IsReference())
+							{
+								//Not working!?!
+								//*findNonRefObj<Lane*>(&md,&singleFile->Lane())
+								//nonRefdBand =; x2m->findNonRefObj<GnssMetadata::Band*>(mdList->at(0),&(s->Bands().front()));
+							} else {
+								 nonRefdBand = &(s->Bands().front());
+							}
+
+							System * nonRefdSystem;
+							if(singleLane->Systems().front().IsReference())
+							{
+							//	nonRefdSystem = x2m->findNonRefObj<System*>(mdList->at(0),&(singleLane->Systems().front()));
+							} else {
+								 nonRefdSystem = &(singleLane->Systems().front());
+							}
+
+							uint64_t sr = nonRefdSystem->BaseFrequency().toHertz() * s->RateFactor();
+							uint64_t cf = nonRefdBand->CenterFrequency().toHertz();
+							uint64_t tf = nonRefdBand->TranslatedFrequency().toHertz();
+
+							decStreamArray[decStreamCount]->setFreqs(sr,cf,tf);
+							*/
 							decStreamCount++;
+
 						}
 					}
 				}
