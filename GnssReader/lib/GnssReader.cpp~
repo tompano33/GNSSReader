@@ -233,7 +233,11 @@ using namespace GnssMetadata;
 			//also fr might read the whole file, but the ibuffer might still have something in it.
 
 			//Continue if there are still samples in the file, or there still bytes left in the ibuffer.
+			//UNIX hack to force file continuance for demo purposes
 		//	while(fr->filesFullyReadCount() < mdPtr)
+			#ifndef _WIN32
+			while(fr->filesFullyReadCount() == 0)
+			#endif
 			{
 		//		std::cout << "Pairing " << mdPtr - 1 << " with " << fr->filesFullyReadCount() << "\n";
 			
@@ -395,6 +399,9 @@ using namespace GnssMetadata;
 							//Create a new decoded stream, make sure that the name is there, and other information useful in decoding.
 							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s,!((s->Format() == s->IF) || (s->Format() == s->IFn)),
 								(s->Format() == s->QI) || (s->Format() == s->QnIn) || (s->Format() == s->QIn) || (s->Format() == s->QnI));
+
+							//decStreamArray[decStreamCount] = 
+
 							decStreamCount++;
 						}
 					}

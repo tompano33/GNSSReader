@@ -126,8 +126,5 @@
 		sampleRate = sample;
 		centerFreq = center;
 		interFreq = inter;
-	}
 
-	uint64_t DecStream::getSampleRate(){return sampleRate;}
-	uint64_t DecStream::getCenterFreq(){return centerFreq;}
-	uint64_t DecStream::getInterFreq(){return interFreq;}
+	}

@@ -399,6 +399,9 @@ using namespace GnssMetadata;
 							//Create a new decoded stream, make sure that the name is there, and other information useful in decoding.
 							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s,!((s->Format() == s->IF) || (s->Format() == s->IFn)),
 								(s->Format() == s->QI) || (s->Format() == s->QnIn) || (s->Format() == s->QIn) || (s->Format() == s->QnI));
+
+							//decStreamArray[decStreamCount] = 
+
 							decStreamCount++;
 						}
 					}
