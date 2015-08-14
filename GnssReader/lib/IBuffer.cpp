@@ -93,9 +93,9 @@
 	
 	char* IBuffer::tryRead(uint64_t count)
 	{
-		std::cout << "Awaiting Mutex... READ \n";
+		//std::cout << "Awaiting Mutex... READ \n";
 		//TEST ONLY lockMutex();
-		std::cout << "Done! \n";
+		//std::cout << "Done! \n";
 		
 		char* retval;
 
@@ -147,9 +147,9 @@
 
 	void IBuffer::doneReading(uint64_t count)
 	{
-		std::cout << "Awaiting Mutex... DONE_READ \n";
+		//std::cout << "Awaiting Mutex... DONE_READ \n";
 		lockMutex();
-		std::cout << "Done! \n";
+		//std::cout << "Done! \n";
 
 		numBytesStored -= count;
 		//we need not worry about overlap

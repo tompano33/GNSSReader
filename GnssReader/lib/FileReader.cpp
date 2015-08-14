@@ -3,6 +3,7 @@
  * Author: WJLIDDY
  */
 #include <iostream>
+#include <fstream>
 #include <vector>
 
 #ifdef _WIN32
@@ -60,7 +61,10 @@
 		char* c = NULL;
 		while(c == NULL)
 		{
-			std::cout << "stuck\n";
+			
+			//std::cout << "stuck\n";
+			//std::cout << "stuck\n";
+
 			c = ib->tryRead(count);
 		}
 
@@ -321,6 +325,17 @@
 
 	void FileReader::readFileNix(){
 
+		GNSSReader::changeWD(fnames.at(0).c_str());
+		std::ifstream sdr (fnames.front().c_str(), std::ios::in|std::ios::binary|std::ios::ate);
+
+		if(!sdr.is_open())	
+		{		
+			std::cout << "Error: file not opened \n";
+			return;
+		}	
+
+		sdr.seekg(0,std::ios::beg);
+
 		struct timespec tim1, tim2;
 		tim1.tv_sec = 0;
 		tim1.tv_nsec = 5000L;
@@ -336,11 +351,14 @@
 				space = ib->canWriteBlock();
 			}
 		//write here
+		sdr.read(space,readBufferSize);
+
 		nanosleep(&tim1,&tim2);
 		//for(int j = 0; i j=  
 
 		ib->doneWritingBlock();
 		}
+		sdr.close();
 	/**
 
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
