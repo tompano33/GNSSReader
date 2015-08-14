@@ -44,7 +44,7 @@ void testSuite()
 			#ifndef _WIN32
 			GNSSReader test ("/home/jack/Desktop/singleStream/test.xml",500L,1000L,1000000L);
 			#else
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\header\\test.xml",50L,1000L,1000000L);
+			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\singleStream\\test.xml",50L,1000L,1000000L);
 			#endif
 
 			test.makeDecStreams();

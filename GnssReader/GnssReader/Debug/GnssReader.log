@@ -1,4 +1,4 @@
-﻿Build started 8/13/2015 5:05:54 PM.
+﻿Build started 8/14/2015 1:13:20 PM.
      1>Project "C:\Users\ANTadmin\Desktop\SDR_STANDARD\GnssReader\GnssReader\GnssReader.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GnssReader.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -72,4 +72,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.36
+Time Elapsed 00:00:05.37

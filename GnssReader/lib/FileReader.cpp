@@ -324,7 +324,7 @@
 	}
 
 	void FileReader::readFileNix(){
-
+		#ifndef _WIN32
 		GNSSReader::changeWD(fnames.at(0).c_str());
 		std::ifstream sdr (fnames.front().c_str(), std::ios::in|std::ios::binary|std::ios::ate);
 
@@ -466,6 +466,7 @@
 
   //  ifs.read(&result[0], pos);
   */
+#endif
 }
 	
 long FileReader::getFileSizeNix(std::string filename)
