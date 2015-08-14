@@ -92,9 +92,9 @@ using namespace GnssMetadata;
 	
 				int chunkBufferSize = sizeWord*countWord;
 
-				std::cout << "Prebuf\n";
+				//std::cout << "Prebuf\n";
 				char* buf = fr->getBufferedBytes(chunkBufferSize);
-				std::cout << "PostBuf\n";
+				//std::cout << "PostBuf\n";
 
 				//The chunkbuffer does not allocate a new buffer, it simply uses the one passed to it from fileReader
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);

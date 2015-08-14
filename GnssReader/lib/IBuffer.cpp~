@@ -94,7 +94,7 @@
 	char* IBuffer::tryRead(uint64_t count)
 	{
 		//std::cout << "Awaiting Mutex... READ \n";
-		//TEST ONLY lockMutex();
+		lockMutex();
 		//std::cout << "Done! \n";
 		
 		char* retval;
@@ -140,7 +140,7 @@
 			
 		}
 
-		//TEST ONLY unlockMutex();
+		unlockMutex();
 
 		return retval;
 	};
@@ -168,9 +168,7 @@
 			if(endOfBufferDataSize > count)
 			{
 				oldPtr += count;
-				#ifdef _WIN32
-					LeaveCriticalSection(&crit);
-				#endif			
+				unlockMutex();		
 				return;
 			} 
 
