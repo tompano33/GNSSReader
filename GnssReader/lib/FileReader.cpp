@@ -19,7 +19,7 @@
 
 #include "FileReader.h"
 #include "IBuffer.h"
-#include "GnssReader.h"
+#include "Decoder.h"
 
 
 	FileReader::FileReader(std::vector<std::string> fnames,uint64_t inBlockSize, uint64_t inBlockCount,const char* origPath,const char** addlPaths,uint64_t pathCount){
@@ -156,7 +156,7 @@
 		
 		for(int i = 0; i < pathNameCount; i++)
 		{			
-			GNSSReader::changeWD(pathNames[i]);
+			Decoder::changeWD(pathNames[i]);
 			sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
 			if(sdrFile == INVALID_HANDLE_VALUE)
@@ -197,7 +197,7 @@
 
 		for(int i = 0; i < pathNameCount; i++)
 		{			
-			GNSSReader::changeWD(pathNames[i]);
+			Decoder::changeWD(pathNames[i]);
 			tempSdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
 			if(tempSdrFile == INVALID_HANDLE_VALUE)
@@ -325,7 +325,7 @@
 
 	void FileReader::readFileNix(){
 		#ifndef _WIN32
-		GNSSReader::changeWD(fnames.at(0).c_str());
+		Decoder::changeWD(fnames.at(0).c_str());
 		std::ifstream sdr (fnames.front().c_str(), std::ios::in|std::ios::binary|std::ios::ate);
 
 		if(!sdr.is_open())	

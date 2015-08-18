@@ -27,9 +27,6 @@
     <ClCompile Include="..\lib\FileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\GnssReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\lib\IBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -168,15 +165,15 @@
     <ClCompile Include="..\..\GnssMetadata\lib\tinyxml2\tinyxml2.cpp">
       <Filter>Source Files\Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\lib\Decoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\DecStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\GnssReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\IBuffer.h">
@@ -250,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="..\..\GnssMetadata\lib\GnssMetadata\Xml\XmlDefs.h">
       <Filter>Source Files\Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Decoder.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

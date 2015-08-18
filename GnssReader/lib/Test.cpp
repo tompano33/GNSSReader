@@ -1,5 +1,5 @@
-//Tests the GnssReader using files in the Test directory
-#include "GnssReader.h"
+//Tests the Decoder using files in the Test directory
+#include "Decoder.h"
 #include <iostream>
 
 std::string pathToTests;
@@ -22,7 +22,6 @@ void profile()
 
 void testSuite()
 {
-/**
 	std::cout << "Enter the path to your 'Tests' Directory:\n";
 	std::string path;
 	std::getline (std::cin, path);
@@ -33,7 +32,6 @@ void testSuite()
 	{
 		pathToTests = path; 
 	}
-*/
 	try
 	{
 
@@ -42,9 +40,9 @@ void testSuite()
 			printf("Expecting: [5, -2, -16, 15]\n");
 
 			#ifndef _WIN32
-			GNSSReader test ("/home/jack/Desktop/singleStream/test.xml",500L,1000L,1000000L);
+			Decoder test ("/home/jack/Desktop/singleStream/test.xml",500L,1000L,1000000L);
 			#else
-			GNSSReader test ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\singleStream\\test.xml",50L,1000L,1000000L);
+			Decoder test ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\singleStream\\test.xml",50L,1000L,1000000L,10);
 			#endif
 
 			test.makeDecStreams();
@@ -53,7 +51,6 @@ void testSuite()
 			while(!test.isDone()){}
 		}
 	
-/**
 		//altPaths: Tests quantization and aligned bits. 
 		{
 			printf("Expecting: A nice introduction \n");
@@ -63,7 +60,7 @@ void testSuite()
 			paths[1] = (pathTo("altPaths\\storage\\superstorage\\"));
 			paths[2] = (pathTo("altPaths\\storage\\superstorage\\extremestorage\\"));
 		
-			GNSSReader test (pathTo("altPaths\\test.xml"),6L,3L,1000000L,-1,paths,3);
+			Decoder test (pathTo("altPaths\\test.xml"),6L,3L,1000000L,-1,paths,3);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -75,7 +72,7 @@ void testSuite()
 		{
 			try{
 				printf("Expecting: Printed 'foostream1' \n");
-				GNSSReader test (pathTo("exception\\test.xml"),50L,1000L,1000000L);
+				Decoder test (pathTo("exception\\test.xml"),50L,1000L,1000000L);
 				test.makeDecStreams();
 				test.setPrintOptions(false,true);
 				test.startAsThread();
@@ -89,7 +86,7 @@ void testSuite()
 		//floatingpoint: tests reading of floating point numbers
 		{
 			printf("Expecting: [-5.168466E29 -2.4479542E-19 6.3108872E-30 0 ] and two doubles. \n");
-			GNSSReader test (pathTo("floatingPoint\\test.xml"),50L,1000L,1000000L);
+			Decoder test (pathTo("floatingPoint\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -99,7 +96,7 @@ void testSuite()
 		//formatOne: tests IQ, IF formats
 		{
 			printf("Expecting reals of 10, complexes of -2\n");
-			GNSSReader test (pathTo("formatOne\\test.xml"),50L,1000L,1000000L,-1);
+			Decoder test (pathTo("formatOne\\test.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -109,7 +106,7 @@ void testSuite()
 		//header: tests skipping of headers and footers of various sizes.
 		{
 			printf("Expecting: [HELLO___SDR_WORLD___THISIS__A___TEST_!_]  \n");
-			GNSSReader test (pathTo("header\\test.xml"),50L,1000L,1000000L);
+			Decoder test (pathTo("header\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -121,7 +118,7 @@ void testSuite()
 		//multistream: outputs four 1-bit streams.
 		//INVESTIGATE the mean & variance are wrong
 		{
-			GNSSReader test (pathTo("multiStream\\test.xml"),50L,1000L,1000000L,1);
+			Decoder test (pathTo("multiStream\\test.xml"),50L,1000L,1000000L,1);
 			test.makeDecStreams();
 			test.setPrintOptions(true,false);
 			test.startAsThread();
@@ -131,7 +128,7 @@ void testSuite()
 		//offset-binary
 		{
 			printf("Expecting 0100 0101 0100 1100 0100 1111  -2 -3 -2 0 2 -3 -3 3 -4 -3 -4 4 -4 7\n");
-			GNSSReader test (pathTo("offsetBin\\test.xml"),50L,1000L,1000000L,-1);
+			Decoder test (pathTo("offsetBin\\test.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -141,7 +138,7 @@ void testSuite()
 		//padAndShift: Tests padding and shifting.
 		{
 			printf("Expecting repeated pattern\n");
-			GNSSReader test (pathTo("padAndShift\\lshp.xml"),50L,1000L,1000000L,-1);
+			Decoder test (pathTo("padAndShift\\lshp.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -151,7 +148,7 @@ void testSuite()
 		//padding: Tests Padding 
 		{
 			printf("Expecting repeated pattern\n");
-			GNSSReader test (pathTo("padding\\test.xml"),50L,1000L,1000000L,-1);
+			Decoder test (pathTo("padding\\test.xml"),50L,1000L,1000000L,-1);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -160,7 +157,7 @@ void testSuite()
 
 		//SampleBits: tests samples of various sizes
 		{
-			GNSSReader test (pathTo("sampleBits\\test.xml"),50L,1000L,1000000L);
+			Decoder test (pathTo("sampleBits\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -169,7 +166,7 @@ void testSuite()
 
 		//Seven Eight: a 7 bit and 8 bit stream
 		{
-			GNSSReader test (pathTo("sevenEight\\test.xml"),50L,1000L,1000000L);
+			Decoder test (pathTo("sevenEight\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -178,7 +175,7 @@ void testSuite()
 
 		//Sign-Magnitude:
 		{
-			GNSSReader test ( pathTo("signMag\\test.xml"),50L,1000L,1000000L);
+			Decoder test ( pathTo("signMag\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
@@ -187,20 +184,21 @@ void testSuite()
 
 		//SixtyFour
 		{
-			GNSSReader test (pathTo("sixtyFour\\test.xml"),50L,1000L,1000000L);
+			Decoder test (pathTo("sixtyFour\\test.xml"),50L,1000L,1000000L);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
-			while(!test.isDone()){std::cout << test.fileBeingDecoded();}
+			while(!test.isDone()){;}
 		}
 
-			printf("\n sine \n");
+			printf("\n sine fails? \n");
 		
 	
+			/**
 		//Sine as does work, but if you try to open the file again later an error is thrown. Perhaps the handle is not closed as i thought?
 		{
 			//fix a chunkbuffer that is too small
-			GNSSReader test (pathTo("sine\\test.xml"),5000L,10L,1000000L);
+			Decoder test (pathTo("sine\\test.xml"),5000L,10L,1000000L);
 		
 			test.makeDecStreams();
 			//test.setPrintOptions(true,false);
@@ -220,11 +218,11 @@ void testSuite()
 				}
 			
 		}
-
+		*/
 
 		//SingleStream
 		{
-			GNSSReader test (pathTo("singleStream\\test.xml"),5000L,5L,1000000L,5);
+			Decoder test (pathTo("singleStream\\test.xml"),5000L,5L,1000000L,5);
 			test.makeDecStreams();
 			test.setPrintOptions(true,false);
 
@@ -237,7 +235,7 @@ void testSuite()
 		}
 
 		{
-			GNSSReader test (pathTo("trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.sdrx"),10000L,10L,1000000L,5);
+			Decoder test (pathTo("trigr\\TRIGRDATA_56320kHz_04bit_Ch0123_2014-06-09-13-01-43-546.sdrx"),10000L,10L,1000000L,5);
 			test.makeDecStreams();
 			test.setPrintOptions(true,false);
 
@@ -251,7 +249,7 @@ void testSuite()
 		}
 		/**
 		{
-			GNSSReader test (pathTo("trigrBadData\\TRIGRDATA.sdrx"),5000L,10L,1000000L,5);
+			Decoder test (pathTo("trigrBadData\\TRIGRDATA.sdrx"),5000L,10L,1000000L,5);
 			test.makeDecStreams();
 			test.setPrintOptions(true,false);
 

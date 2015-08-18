@@ -14,6 +14,7 @@
     <ProjectGuid>{6B54DAC2-0B34-46DB-BAA7-79379B234DE0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GnssReader</RootNamespace>
+    <ProjectName>IONSDRDecoder</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -120,7 +121,7 @@
     <ClCompile Include="..\lib\ChunkBuffer.cpp" />
     <ClCompile Include="..\lib\DecStream.cpp" />
     <ClCompile Include="..\lib\FileReader.cpp" />
-    <ClCompile Include="..\lib\GnssReader.cpp" />
+    <ClCompile Include="..\lib\Decoder.cpp" />
     <ClCompile Include="..\lib\IBuffer.cpp" />
     <ClCompile Include="..\lib\StreamAnalytics.cpp" />
     <ClCompile Include="..\lib\Test.cpp" />
@@ -150,7 +151,7 @@
     <ClInclude Include="..\include\ChunkBuffer.h" />
     <ClInclude Include="..\include\DecStream.h" />
     <ClInclude Include="..\include\FileReader.h" />
-    <ClInclude Include="..\include\GnssReader.h" />
+    <ClInclude Include="..\include\Decoder.h" />
     <ClInclude Include="..\include\IBuffer.h" />
     <ClInclude Include="..\include\StreamAnalytics.h" />
     <ClInclude Include="..\include\XMLtoMeta.h" />
