@@ -4,13 +4,16 @@
  */
 #include "Decoder.h"
 
-#include<list>
-#include<cstdint>
-#include<iostream>
-#include<stdio.h>
-#include<sys/stat.h>
-#include<stdexcept>
+#include <list>
+#include <cstdint>
+#include <iostream>
+#include <stdexcept>
 #include <string>
+
+#include <stdio.h>
+#include <sys/stat.h>
+
+//thread specific includes
 
 #ifdef _WIN32
 	#include <direct.h>
@@ -30,32 +33,32 @@
 #include "XMLtoMeta.h"
 #include "DecStream.h"
 
-
-
-
 using namespace GnssMetadata;
 	
 	Decoder::Decoder(const char* pathToFile, uint64_t readSize, uint64_t buffSize, uint64_t streamSize, uint64_t blockTotal, const char** addlPaths, uint64_t pathCount)
 	{
-		done = false;
-		blocksLeftToRead = blockTotal;
-		printStats = false;
-		printSamples = false;
-		mdPtr = 0;
-		//to parse XML.
+		_done = false;
+		_blocksLeftToRead = blockTotal;
+		_printStats = false;
+		_printSamples = false;
+		_mdPtr = 0;
+		//to parse the first XML file, we need to change the WD to the first path.
 		changeWD(pathToFile);
 		std::string fname = std::string(pathToFile,strlen(pathToFile));
-		this->streamSize = streamSize;
+		this->_streamSize = streamSize;
 		
 		try
 		{
+			//Make list of _mdList _sdrFileNames, and associated data.
 			makeFileList(fname);
-			fr = new FileReader(*sdrFileNames,readSize,buffSize,pathToFile,addlPaths,pathCount);
+			//Create but do not start filereader object.
+			_fr = new FileReader(*_sdrFileNames,readSize,buffSize,pathToFile,addlPaths,pathCount);
 			fetchFileSizes();
 
 		} catch (TranslationException e)
 		{
 			//See if file even exists, since x2m does not throw this.
+			//TODO: Functionize this.
 			struct stat buf;
 			if(stat(pathToFile, &buf) == -1)
 				std::cout<< "Specified metadata file does not exist.\n";
@@ -65,13 +68,14 @@ using namespace GnssMetadata;
 			//g++ does not like this: throw std::exception("File was not read\n");
 		}
 
-		TRIGRmode = false;
-		if(sdrFileNames->at(0).substr(sdrFileNames->at(0).find_last_of(".") + 1) == "tgd")
+		//If the file was a converted trigr file, then we run a special test on the footers.
+		_TRIGRmode = false;
+		if(_sdrFileNames->at(0).substr(_sdrFileNames->at(0).find_last_of(".") + 1) == "tgd")
 			{
-				TRIGRmode = true;
-				TRIGRlastFooterValSet = false;
-				//To be read from XML somewhere.
-				TRIGRmask = 0x00FFFFFF;
+				_TRIGRmode = true;
+				_TRIGRlastFooterValSet = false;
+				//TODO: To be read from XML somewhere.
+				_TRIGRmask = 0x00FFFFFF;
 			}
 
 	}
@@ -85,6 +89,7 @@ using namespace GnssMetadata;
 			//for every chunk in the block:
 			for(int i = 0; i != block->chunkCount; i++)
 			{
+
 				Chunk* chunk = block->chunkArray[i];
 
 				uint8_t sizeWord = chunk->SizeWord();
@@ -92,20 +97,17 @@ using namespace GnssMetadata;
 	
 				int chunkBufferSize = sizeWord*countWord;
 
-				//std::cout << "Prebuf\n";
-				char* buf = fr->getBufferedBytes(chunkBufferSize);
-				//std::cout << "PostBuf\n";
+				char* buf = _fr->getBufferedBytes(chunkBufferSize);
 
-				//The chunkbuffer does not allocate a new buffer, it simply uses the one passed to it from fileReader
 				ChunkBuffer cb = ChunkBuffer(chunkBufferSize,buf);
 
 				//while there are still bits left in the chunk:
+				//TODO: Error if lump chunk doesn't fully read lump.
 				while(!cb.chunkFullyRead())
 				{					
 					//for each lump
 					for(int i = 0; i != chunk->lumpCount; i++)
 					{
-
 						Lump* lump = chunk->lumpArray[i];
 
 						//skip any padding at the start.
@@ -127,10 +129,10 @@ using namespace GnssMetadata;
 								stream = lump->streamArray[i];
 
 							//find the correct decoded-Stream based on address
-							for(int i = 0; i != decStreamCount; i++)
+							for(int i = 0; i != _decStreamCount; i++)
 							{
 				
-								if(decStreamArray[i]->getCorrespondingStream() == stream){
+								if(_decStreamArray[i]->getCorrespondingStream() == stream){
 									//decode this sample.
 									decodeFormattedStream(stream,&cb,i);
 								}
@@ -147,7 +149,7 @@ using namespace GnssMetadata;
 				}
 
 				//now that we are done reading the chunk, we can alert the filereader to release this chunk.
-				fr->doneReading(chunkBufferSize);
+				_fr->doneReading(chunkBufferSize);
 			}
 		}
 	}
@@ -156,68 +158,68 @@ using namespace GnssMetadata;
 	{
 
 		int totalBlocksDiscovered = 0;
-		mdList = new std::vector<Metadata*>;
-		sdrFileNames = new std::vector<std::string>;
+		_mdList = new std::vector<Metadata*>;
+		_sdrFileNames = new std::vector<std::string>;
 
-		mdBlockSizes = new std::vector<int*>;
-		mdBlockSizesCount = new std::vector<int>;
+		_mdBlockSizes = new std::vector<int*>;
+		_mdBlockSizesCount = new std::vector<int>;
 
 		//get the metadata of first file.
 		XMLtoMeta* x2m = new XMLtoMeta(pathToFile.c_str());
 		Metadata* nextMeta = x2m->getNonRefdMetadata();
 		
 		//add it to the queue
-		mdList->push_back(nextMeta);
-		sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
+		_mdList->push_back(nextMeta);
+		_sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
 
 		//add all block sizes of this metadata. 
-		mdBlockSizesCount->push_back(nextMeta->Files().front().Lane().blockCount);
-		mdBlockSizes->push_back(generateBlockSizeArray(&nextMeta->Files().front().Lane()));
+		_mdBlockSizesCount->push_back(nextMeta->Files().front().Lane().blockCount);
+		_mdBlockSizes->push_back(generateBlockSizeArray(&nextMeta->Files().front().Lane()));
  		
 		//If there is a next file, and there are still blocks to read (or we elect to read infinite)
-		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < blocksLeftToRead || blocksLeftToRead == -1))
+		while(nextMeta->Files().front().Next().IsDefined() && (totalBlocksDiscovered < _blocksLeftToRead || _blocksLeftToRead == -1))
 		{
 			//add the metadata and it's information to the list.
-//g++ not happy with this address of reference
+			//g++ not happy with this address of reference
 			x2m = new XMLtoMeta((&(nextMeta->Files().front().Next().toString()))->c_str());
 			nextMeta = x2m->getNonRefdMetadata();
 			int bc = nextMeta->Files().front().nLane->blockCount;
 			totalBlocksDiscovered += bc;
-			mdList->push_back(nextMeta);
-			sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
+			_mdList->push_back(nextMeta);
+			_sdrFileNames->push_back(nextMeta->Files().front().Url().Value());
 			
 		}
 	}
 
 	void Decoder::fetchFileSizes()
 	{
-		sdrFileSize = new std::vector<uint64_t>;
-		for(int i = 0; i != sdrFileNames->size(); i++)
+		_sdrFileSize = new std::vector<uint64_t>;
+		for(int i = 0; i != _sdrFileNames->size(); i++)
 		{
-			sdrFileSize->push_back(fr->getSizeOfFile(sdrFileNames->at(i)));
+			_sdrFileSize->push_back(_fr->getSizeOfFile(_sdrFileNames->at(i)));
 		}
 	}
 
 	void Decoder::start(){
 
 		//start the filereading thread.
-		fr->readAll();
+		_fr->readAll();
 
 		//pointer to next metadata to read
 		Metadata* md;
 
 		//for all metadatas
-		while(mdPtr < mdList->size())
+		while(_mdPtr < _mdList->size())
 		{
 			//increment the pointer.
-			md =  mdList->at(mdPtr++);
+			md =  _mdList->at(_mdPtr++);
 		
 			//repair the decoded streams, since we use addresses to find the right decoding stream.
 			repairDecStreams(md);
 
 			//Breaks things
 			//TODO filereader should really handle this
-			fr->skipBufferedBytes(md->Files().front().Offset());
+			_fr->skipBufferedBytes(md->Files().front().Offset());
 
 			//we don't do filesets yet, but almost
 			if(md->FileSets().size() > 0 || md->Files().size() != 1)
@@ -243,11 +245,11 @@ using namespace GnssMetadata;
 			
 			uint64_t blockCount = 0; //for testing purposes
 			//for each block in lane
-				for(int i = 0; i != singleLane->blockCount && blocksLeftToRead != 0; i++)
+				for(int i = 0; i != singleLane->blockCount && _blocksLeftToRead != 0; i++)
 				{
 
-					if(blocksLeftToRead > 0)
-						blocksLeftToRead--;
+					if(_blocksLeftToRead > 0)
+						_blocksLeftToRead--;
 
 					Block* block = singleLane->blockArray[i];
 			
@@ -260,12 +262,12 @@ using namespace GnssMetadata;
 					uint32_t footerSize = block->SizeFooter();
 			
 
-					fr->skipBufferedBytes(headerSize);
+					_fr->skipBufferedBytes(headerSize);
 					readChunkCycles(block, cycles);
 
-					if(!TRIGRmode)
+					if(!_TRIGRmode)
 					{
-						fr->skipBufferedBytes(footerSize);
+						_fr->skipBufferedBytes(footerSize);
 					} else
 					{
 						//Only in TRIGGERMODE do overlaps exist.
@@ -279,20 +281,20 @@ using namespace GnssMetadata;
 						//TODO clean this up, fr->get buffered bytes to void pointer, so much more
 						//Including use a DWORD if on windows, but that isnt cross platfrom.
 						uint32_t unMaskedFooter = 0;
-						unsigned char* vals = reinterpret_cast<unsigned char*>(fr->getBufferedBytes(4));
+						unsigned char* vals = reinterpret_cast<unsigned char*>(_fr->getBufferedBytes(4));
 					
 						//This is the only way I could get it to work. Reinterpreting to unsignedint didn't work. DWORD is better proabably.
 						unMaskedFooter = (vals[3])*(256*256*256) + (vals[2])*256*256 + (vals[1])*256 + (vals[0]);
 
-						fr->doneReading(4);
+						_fr->doneReading(4);
 						
-						if(!TRIGRlastFooterValSet)
+						if(!_TRIGRlastFooterValSet)
 						{
-							TRIGRlastFooterVal = unMaskedFooter & TRIGRmask;
-							TRIGRlastFooterValSet= true;
+							_TRIGRlastFooterVal = unMaskedFooter & _TRIGRmask;
+							_TRIGRlastFooterValSet= true;
 						}
 						else{
-							uint32_t maskedFooter = unMaskedFooter & TRIGRmask;
+							uint32_t maskedFooter = unMaskedFooter & _TRIGRmask;
 							//increment and compare
 							//wrap-around
 
@@ -301,13 +303,13 @@ using namespace GnssMetadata;
 							//E26A9C00
 
 
-							TRIGRlastFooterVal = ((1+TRIGRlastFooterVal) % (1+TRIGRmask)); 
+							_TRIGRlastFooterVal = ((1+_TRIGRlastFooterVal) % (1+_TRIGRmask)); 
 
 							std::cout << unMaskedFooter << std::endl;
 							std::cout << maskedFooter << std::endl;
-							std::cout << TRIGRlastFooterVal << std::endl;
+							std::cout << _TRIGRlastFooterVal << std::endl;
 
-							if(maskedFooter != TRIGRlastFooterVal)
+							if(maskedFooter != _TRIGRlastFooterVal)
 								std::cout << "\n\n Warning: TRIGR footer didn't match for " << blockCount <<"\n\n";
 							}
 
@@ -319,13 +321,13 @@ using namespace GnssMetadata;
 				//This will be discarded when code is fully tests.
 
 				StreamAnalytics sa;
-				for(int i = 0; i != decStreamCount; i++)
+				for(int i = 0; i != _decStreamCount; i++)
 				{
-						sa.setStream(decStreamArray[i]);
+						sa.setStream(_decStreamArray[i]);
 					
-						if(printSamples)
+						if(_printSamples)
 							sa.printAllSamples();
-						if(printStats)
+						if(_printStats)
 							sa.printMeanAndVar();
 				}
 
@@ -336,23 +338,23 @@ using namespace GnssMetadata;
 
 		//Done reading all blocks specified by metadata. TODO: Loop over a block set, but that's easy.
 		//see if there are any bytes in the File or IBuffer. If there are, print a warning but kill the process anyhow.
-		if(!fr->hasReadWholeFile())
+		if(!_fr->hasReadWholeFile())
 		{
-			std::cout << "Warning: Some samples did not get read! In Buffer: " << fr->numBytesLeftInBuffer() << " In File: " << fr->numBytesLeftToReadFromFile() << "\n" ;
-			fr->killReadThread();
+			std::cout << "Warning: Some samples did not get read! In Buffer: " << _fr->numBytesLeftInBuffer() << " In File: " << _fr->numBytesLeftToReadFromFile() << "\n" ;
+			_fr->killReadThread();
 		}
 		
 		//done! Signal that we are done reading.
-		done = true;
+		_done = true;
 	}
 
 	//TODO Improve arbitrary array to vector.
 	void Decoder::makeDecStreams(){
 
 		//Count of all the streams we have found so far.
-		decStreamCount = 0;
+		_decStreamCount = 0;
 		//TODO magic number!
-		decStreamArray = new DecStream*[256];
+		_decStreamArray = new DecStream*[256];
 
 		/** I need to find how many streams there are, and also, data about them. 
 		/ * How can I get that?
@@ -362,7 +364,7 @@ using namespace GnssMetadata;
         **/
 
 		//Start with the lane of the first metadata file.
-		Lane* singleLane = mdList->at(0)->Files().front().nLane;
+		Lane* singleLane = _mdList->at(0)->Files().front().nLane;
 
 		//for every stream in every lump in every chunk in every block
 		for(int i = 0; i != singleLane->blockCount; i++){
@@ -388,8 +390,8 @@ using namespace GnssMetadata;
 						bool newStream = true;
 
 						//Iterate through all streams, if the address of this stream matches another, it's not new.
-						for(int c = 0; newStream &&  c != decStreamCount; c++){	
-							if(s == decStreamArray[c]->getCorrespondingStream())
+						for(int c = 0; newStream &&  c != _decStreamCount; c++){	
+							if(s == _decStreamArray[c]->getCorrespondingStream())
 									newStream = false;
 						}
 
@@ -397,7 +399,7 @@ using namespace GnssMetadata;
 						if(newStream)
 						{
 							//Create a new decoded stream, make sure that the name is there, and other information useful in decoding.
-							decStreamArray[decStreamCount] = new DecStream(streamSize,s->Id(),s,!((s->Format() == s->IF) || (s->Format() == s->IFn)),
+							_decStreamArray[_decStreamCount] = new DecStream(_streamSize,s->Id(),s,!((s->Format() == s->IF) || (s->Format() == s->IFn)),
 								(s->Format() == s->QI) || (s->Format() == s->QnIn) || (s->Format() == s->QIn) || (s->Format() == s->QnI));
 
 							/**
@@ -427,7 +429,7 @@ using namespace GnssMetadata;
 
 							decStreamArray[decStreamCount]->setFreqs(sr,cf,tf);
 							*/
-							decStreamCount++;
+							_decStreamCount++;
 
 						}
 					}
@@ -438,7 +440,7 @@ using namespace GnssMetadata;
 	}
 
 	uint64_t Decoder::getDecStreamCount(){
-		return decStreamCount;
+		return _decStreamCount;
 	}
 
 	//TODO Do actually try to prevent memory leaks. Complicated becuase others may use my decoder
@@ -476,10 +478,10 @@ using namespace GnssMetadata;
 
 						bool streamReassigned = false;
 						//we got a stream! Match it with a predefined one, based on the ID.
-						for(int c = 0; c != decStreamCount; c++){	
-							if(s->Id().compare(decStreamArray[c]->getCorrespondingStream()->Id()) == 0)
+						for(int c = 0; c != _decStreamCount; c++){	
+							if(s->Id().compare(_decStreamArray[c]->getCorrespondingStream()->Id()) == 0)
 							{
-								decStreamArray[c]->setCorrespondingStream(s);
+								_decStreamArray[c]->setCorrespondingStream(s);
 								streamReassigned = true;
 								break;
 							}
@@ -496,13 +498,13 @@ using namespace GnssMetadata;
 	
 	void Decoder::setPrintOptions(bool stat, bool samp)
 	{
-		printSamples = samp;
-		printStats = stat;
+		_printSamples = samp;
+		_printStats = stat;
 	}
 
 	double Decoder::getIBufPercent()
 	{
-		return fr->getIBufPercent();
+		return _fr->getIBufPercent();
 	}
 
 	void Decoder::changeWD(const char* pathToFile)
@@ -541,7 +543,7 @@ using namespace GnssMetadata;
 
 	bool Decoder::isDone()
 	{
-		return done;
+		return _done;
 	};
 
 	void Decoder::readAndPutSample(ChunkBuffer * cb,GnssMetadata::Stream * s, int i, bool negate)
@@ -557,13 +559,13 @@ using namespace GnssMetadata;
 		if(cb->wasSampleFloat())
 		{
 			if(s->Quantization() == 64)
-				decStreamArray[i]->putSample(*(reinterpret_cast<double*>(&read)));
+				_decStreamArray[i]->putSample(*(reinterpret_cast<double*>(&read)));
 			if(s->Quantization() == 32)
-				decStreamArray[i]->putSample(*(reinterpret_cast<float*>(&read)));
+				_decStreamArray[i]->putSample(*(reinterpret_cast<float*>(&read)));
 
 		} else
 		{
-				decStreamArray[i]->putSample((read));
+				_decStreamArray[i]->putSample((read));
 		}
 	}
 
@@ -581,7 +583,7 @@ using namespace GnssMetadata;
 
 	std::string Decoder::fileBeingDecoded()
 	{
-		return fr->fileBeingDecoded();
+		return _fr->fileBeingDecoded();
 	}
 	
 	void Decoder::decodeFormattedStream(GnssMetadata::Stream* stream, ChunkBuffer * cb, int i)
@@ -666,24 +668,24 @@ using namespace GnssMetadata;
 
 		uint64_t bytesToSkip = 0;
 		
-		for(int fileNo = 0; fileNo != mdList->size();)
+		for(int fileNo = 0; fileNo != _mdList->size();)
 		{
 			//for each block in the file
-			for(int block = 0; block != mdBlockSizesCount->size() && bytesToSkip < sdrFileSize->at(fileNo); block++)
+			for(int block = 0; block != _mdBlockSizesCount->size() && bytesToSkip < _sdrFileSize->at(fileNo); block++)
 			{
 				targetBlock--;
-				bytesToSkip = bytesToSkip + mdBlockSizes->at(fileNo)[block];
+				bytesToSkip = bytesToSkip + _mdBlockSizes->at(fileNo)[block];
 				
 				//we found the target block!
 				//TODO Metadata will still not start at the correct block
 				if(targetBlock == 0)
 				{
-					fr->setStartLocation(fileNo,bytesToSkip);
+					_fr->setStartLocation(fileNo,bytesToSkip);
 					return;
 				}
 			}
 
-			if(bytesToSkip < sdrFileSize->at(fileNo))
+			if(bytesToSkip < _sdrFileSize->at(fileNo))
 				continue;
 			else
 				fileNo++;
@@ -712,8 +714,5 @@ using namespace GnssMetadata;
 	}
 	
 	DecStream** Decoder::getDecStreamArray(){
-		return decStreamArray;
+		return _decStreamArray;
 	}
-
-
-	

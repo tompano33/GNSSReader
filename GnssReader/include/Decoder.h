@@ -3,137 +3,160 @@
  * Author: WJLIDDY
  * Description: Using XML metadata files and associated source files, puts samples in output buffers.
  */
+
+//TODO: remove unused includes
 #ifndef Decoder_H_H
 #define Decoder_H_H
 
-#include<list>
-#include<cstdint>
+#include <list>
+#include <cstdint>
 #include <vector>
-#include<GnssMetadata/Metadata.h>
+#include <GnssMetadata/Metadata.h>
 #include <stdexcept>
+
 #include "DecStream.h"
 #include "FileReader.h"
 #include "ChunkBuffer.h"
+
 using namespace GnssMetadata;
 
 class Decoder {
+	
+	private:
 
-	#ifndef _WIN32
-		pthread_t decThread;
-	#endif
+		//If not on windows, we need an instance of a thread for decoding.
+		#ifndef _WIN32
+			pthread_t _decThread;
+		#endif
 
+		/** EXTRACTED METADATA FILE FIELDS */
 
-	//List of all metadata XML files converted to Metadata objects
-	std::vector<Metadata*>* mdList;  
-	//List of lengths of each block size for each metadata. Needed for fast skipping to an exact block.
-	std::vector<int*>* mdBlockSizes; 
-	//Count of block sizes in mdBlockSizes
-	std::vector<int>* mdBlockSizesCount;  
+		//List of all metadata XML files that have been converted to Metadata objects
+		std::vector<Metadata*>*_mdList;  
+		//List of lengths of each block size for each metadata. Needed for fast skipping to an exact block.
+		std::vector<int*>* _mdBlockSizes; 
+		//Count of block sizes in mdBlockSizes
+		std::vector<int>* _mdBlockSizesCount;  
+		//Pointer to next target metadata file object to decode.
+		unsigned int _mdPtr;
 
-	//Pointer to next target metadata object to decode.
-	unsigned int mdPtr;
+		/** RAW SDR FIELDS */
 
-	//List of all SDR file names to decode.
-	std::vector<std::string>* sdrFileNames; 
-	//Lengths of SDR files in sdrFileNames.
-	std::vector<uint64_t>* sdrFileSize; 
+		//List of all SDR file names to decode.
+		std::vector<std::string>* _sdrFileNames; 
+		//Lengths of SDR files in sdrFileNames.
+		std::vector<uint64_t>* _sdrFileSize; 
 
-	//Array of Decoded Sample Output Streams
-	DecStream** decStreamArray; 
-	//The count of these streams.
-	uint64_t decStreamCount; 
+		/** DECODED STREAM FIELDS */
 
-	//The size of an output stream.
-	uint64_t streamSize; 
-	//File reader, which reads an sdr file and puts it in a buffer.
-	FileReader* fr; 
+		//Array of Decoded Sample Output Streams
+		DecStream** _decStreamArray; 
+		//The count of these streams.
+		uint64_t _decStreamCount; 
+		//TODO: Belongs in decoder class, remove this variable
+		//The max size of an output stream. If an output stream reaches this size, decoding stops.
+		uint64_t _streamSize; 
 
-	//Given a block, puts it in the correct DecStreams
-	void readChunkCycles(Block * block, uint32_t cycles); 
+		/** OTHER FIELDS */
 
-	//Count of total blocks the caller wants to read.
-	uint64_t blocksLeftToRead; 
+		//File reader, which reads an sdr file and puts it in a buffer.
+		FileReader* _fr; 
+		//Count of total blocks the caller wants to read.
+		uint64_t _blocksLeftToRead; 
+		//If we want to print statistics as we decode blocks, then one or both of these will be true.
+		//Should not be in release version because these clear the decodedStreams.
+		bool _printStats, _printSamples; 
+		//flag if there are no more samples to read.
+		bool _done;
 
-	//If we want to print statistics as we decode blocks, then one or both of these will be true.
-	//Should not be in release version because these clear the decodedStreams.
-	bool printStats, printSamples; 
+		/** TRIGR PROTOCOLS */
 
-	//When we load in a new Metadata, we must associate the already-open streams with those found in the file.
-	void repairDecStreams(Metadata* md); 
+		//If true, check footers of TRIGR files for consistency
+		bool _TRIGRmode;
+		//If true, then the last footer value has been set and is not just garbage,
+		bool _TRIGRlastFooterValSet;
+		//The last read footer value, to compare against the current read footer values
+		uint64_t _TRIGRlastFooterVal;
+		//TODO: Acutally pull this from file. It's hardcoded somewhere.
+		uint64_t _TRIGRmask;
 
-	//Given the name of the first XML file, crawls through all the other XML files to build mdList, mdBlockSizes, mdBlockSizesCount, sdrFileList.
-	void makeFileList(std::string first);
+		/** PRIVATE METHODS */
 
-	//Helper function to start a thread of a class method at runtime.
-	static void ThreadEntry(void *p);
+		//Given a block with cycle cycles, puts it in the correct DecStreams
+		void readChunkCycles(Block * block, uint32_t cycles); 
 
-	//Reads and puts a sample from a chunkbuffer. Helper.
-	void readAndPutSample(ChunkBuffer * cb, Stream* s, int i, bool negate);
+		//When we load in a new metadata, we must associate the already-open streams with those found in the file. This reassigns the streams in the metadata object.
+		//TODO: Metadata object still has hacked-on pointers.
+		void repairDecStreams(Metadata* md); 
 
-	//Helpers for readChunkCycles
-	void skipLeftPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb);
-	void skipRightPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb);
-	//'i' represent the target stream in DecStreamArray
-	void decodeFormattedStream(GnssMetadata::Stream * stream, ChunkBuffer * cb, int i);
+		//Given the name of the first XML file, crawls through all the other XML files to build mdList, mdBlockSizes, mdBlockSizesCount, sdrFileList.
+		//TODO: Any more?
+		void makeFileList(std::string first);
 
-	//flag if there are no more samples to read.
-	bool done;
+		//Helper function to start a thread of a class method at runtime. 
+		//TODO: Needed by windows only?
+		static void ThreadEntry(void *p);
 
-	//Starts the reader, but not as a thread.
-	void start();
+		//Reads and puts a sample from a chunkbuffer into decStream[i]. negates it if need be. 
+		//TODO: i is crappy variable name
+		void readAndPutSample(ChunkBuffer * cb, Stream* s, int i, bool negate);
 
-	//get sizes of all sdr files. Used if we need to skip to a certain block.
-	void fetchFileSizes();
+		//Helpers for readChunkCycles
+		void skipLeftPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb);
+		void skipRightPackedBits(GnssMetadata::Stream * stream, ChunkBuffer * cb);
 
-	//From a lane, generates the size of all of the blocks in the lane. Needed for skipping.
-	int* generateBlockSizeArray(GnssMetadata::Lane*);
+		//'i' represent the target stream in DecStreamArray
+		void decodeFormattedStream(GnssMetadata::Stream * stream, ChunkBuffer * cb, int i);
 
-	bool TRIGRmode;
-	bool TRIGRlastFooterValSet;
-	uint64_t TRIGRmask ;//= 0x00FFFFFF;
-	uint64_t TRIGRlastFooterVal ;//= 0x00FFFFFF;
+		//Starts the reader, but as a single main thread. Eventually called by startAsThread();
+		void start();
 
-public:
+		//get sizes of all sdr files. Used if we need to skip to a certain block.
+		void fetchFileSizes();
 
-	//Takes a path to an XML file, the size of the readbuffer, the size of the intermediate buffer, the output streamsize, any additional paths to search, and count of blocks to read.
-	Decoder(const char* pathToFile,uint64_t readSize,uint64_t buffSize,uint64_t streamSize, uint64_t blockTotal = -1,const char** addlPaths = NULL, uint64_t pathCount = 0);
+		//From a lane, generates the size of all of the blocks in the lane. Needed for skipping.
+		int* generateBlockSizeArray(GnssMetadata::Lane*);
 
-	//Changes Working Directory.
-	static void changeWD(const char* pathToFile);
+	public:
 
-	//Returns Decoded Streams as an array
-	DecStream** getDecStreamArray();
+		//Takes a path to an XML file, the size of the readbuffer, the size of the intermediate buffer, the output streamsize, any additional paths to search, and count of blocks to read.
+		Decoder(const char* pathToFile,uint64_t readSize,uint64_t buffSize,uint64_t streamSize, uint64_t blockTotal = -1,const char** addlPaths = NULL, uint64_t pathCount = 0);
 
-	//Count of decoded streams
-	uint64_t getDecStreamCount();
+		//Changes Working Directory.
+		static void changeWD(const char* pathToFile);
 
-	//Instantiates the decoded streams. Must call before decoding!
-	void makeDecStreams();
+		//Returns Decoded Streams as an array
+		DecStream** getDecStreamArray();
 
-	//Call this if you want to print block statisitics to the console
-	void setPrintOptions(bool printStats, bool printSamples);
+		//Count of decoded streams
+		uint64_t getDecStreamCount();
 
-	//Starts the Reader as a thread.
-	void startAsThread();
+		//Instantiates the decoded streams. Must call before decoding!
+		void makeDecStreams();
 
-	//Returns true if the thread is finished working.
-	bool isDone();
+		//Call this if you want to print block statisitics to the console
+		void setPrintOptions(bool printStats, bool printSamples);
 
-	//Returns capacity of intermediate buffer.
-	double getIBufPercent();
+		//Starts the Reader as a thread.
+		void startAsThread();
 
-	//Returns name of file currently being moved to the IBuf
-	std::string fileBeingDecoded();
+		//Returns true if the thread is finished working.
+		bool isDone();
 
-	//Starts decoding at block specified. By default, this is block1.
-	void startAtBlock(uint64_t);
+		//Returns capacity of intermediate buffer.
+		double getIBufPercent();
 
-	//TODO: Decide how to handle memory management for decoded streams
-	~Decoder();
+		//Returns name of file currently being moved to the IBuf
+		std::string fileBeingDecoded();
 
+		//Starts decoding at block specified. By default, this is block1.
+		void startAtBlock(uint64_t);
+
+		//TODO: Decide how to handle memory management for decoded streams
+		~Decoder();
 };
 
 
-#endif
 
+#endif
 

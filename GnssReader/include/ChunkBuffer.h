@@ -3,6 +3,7 @@
  * Author: WJLIDDY
  * Description: Points to a chunk of raw SDR data, and gets individual samples in order based on the encoding.
  * TODO: While the current implementation works fine, I feel like I need to return something with Generic Types rather than making everything 64bit, then casting.
+ * Note: The chunkbuffer does not allocate a new buffer, it simply uses the one passed to it from fileReader
  */
 
 #ifndef CHUNKBUFFER_H_H
