@@ -24,26 +24,26 @@
 
 	FileReader::FileReader(std::vector<std::string> fnames,uint64_t inBlockSize, uint64_t inBlockCount,const char* origPath,const char** addlPaths,uint64_t pathCount){
 	
-		this->readBufferSize = inBlockSize;
+		this->_readBufferSize = inBlockSize;
 
-		ib = new IBuffer(inBlockSize,inBlockCount);
-		killThreadFlag = false;
-		this->fnames = fnames;
-		filePtr = 0;
-		bytesRead = 0;
+		_ib = new IBuffer(inBlockSize,inBlockCount);
+		_killThreadFlag = false;
+		this->_fnames = fnames;
+		_filePtr = 0;
+		_bytesRead = 0;
 
-		startByteLocation = 0;
+		_startByteLocation = 0;
 
 		//copy const strings to something that wont go out of scope.
-		pathNames = new char*[pathCount+1];
-		pathNames[0] = strdup(origPath);
+		_pathNames = new char*[pathCount+1];
+		_pathNames[0] = strdup(origPath);
 
 		for(int i = 1 ; i < pathCount+1; i++)
 		{
-			pathNames[i] = strdup(addlPaths[i-1]);
+			_pathNames[i] = strdup(addlPaths[i-1]);
 		}
 
-		pathNameCount = pathCount+1;
+		_pathNameCount = pathCount+1;
 	}
 
 	void FileReader::readFile()
@@ -61,11 +61,9 @@
 		char* c = NULL;
 		while(c == NULL)
 		{
-			
-			//std::cout << "stuck\n";
-			//std::cout << "stuck\n";
+		
 
-			c = ib->tryRead(count);
+			c = _ib->tryRead(count);
 		}
 
 		return c;
@@ -84,11 +82,11 @@
 	std::string FileReader::fileBeingDecoded()
 	{
 		//transitioning
-		if(filePtr == 0)
+		if(_filePtr == 0)
 		{
 			return "loading...";
 		}
-		return fnames.at(filePtr-1);
+		return _fnames.at(_filePtr-1);
 	}
 
 	void FileReader::ThreadEntry(void *p)
@@ -104,13 +102,13 @@
 
 	void FileReader::doneReading(uint64_t count)
 	{
-		ib->doneReading(count);
+		_ib->doneReading(count);
 	}
 
 	//TODO linux
 	bool FileReader::hasReadWholeFile(){
 		#ifdef _WIN32
-		return (bytesRead == fileSize.QuadPart && (ib->getFileReadCount() == filePtr));
+		return (_bytesRead == _fileSize.QuadPart && (_ib->getFileReadCount() == _filePtr));
 		#else
 		return true;
 		#endif
@@ -120,19 +118,19 @@
 	//TODO linux
 	uint64_t FileReader::numBytesLeftToReadFromFile(){
 		#ifdef _WIN32
-		return fileSize.QuadPart - bytesRead;
+		return _fileSize.QuadPart - _bytesRead;
 		#else
 		return 0;
 		#endif
 	}
 
 	uint64_t FileReader::numBytesLeftInBuffer(){
-		return  ib->getNumBytesStored();
+		return  _ib->getNumBytesStored();
 	}
 
 	void FileReader::killReadThread()
 	{
-		killThreadFlag = true;
+		_killThreadFlag = true;
 	}
 
 	void FileReader::skipBufferedBytes(int count)
@@ -149,23 +147,23 @@
 	{
 		#ifdef _WIN32
 
-		bytesRead = 0;
-		std::wstring stemp = std::wstring(fnames.at(filePtr).begin(), fnames.at(filePtr).end());
+		_bytesRead = 0;
+		std::wstring stemp = std::wstring(_fnames.at(_filePtr).begin(), _fnames.at(_filePtr).end());
 		LPCWSTR wfname = stemp.c_str();
 		boolean fileFound = false;
 		
-		for(int i = 0; i < pathNameCount; i++)
+		for(int i = 0; i < _pathNameCount; i++)
 		{			
-			Decoder::changeWD(pathNames[i]);
-			sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
+			Decoder::changeWD(_pathNames[i]);
+			_sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
-			if(sdrFile == INVALID_HANDLE_VALUE)
+			if(_sdrFile == INVALID_HANDLE_VALUE)
 			{
 				continue;
 			}	
 
-			GetFileSizeEx(sdrFile,&fileSize);
-			filePtr++;
+			GetFileSizeEx(_sdrFile,&_fileSize);
+			_filePtr++;
 			fileFound = true;
 			break;
 		}
@@ -180,7 +178,7 @@
 
 	double FileReader::getIBufPercent()
 	{
-		return ib->getPercent();
+		return _ib->getPercent();
 	}
 
 	FileReader::~FileReader(){
@@ -195,9 +193,9 @@
 		LPCWSTR wfname =  stemp.c_str();
 		HANDLE tempSdrFile;
 
-		for(int i = 0; i < pathNameCount; i++)
+		for(int i = 0; i < _pathNameCount; i++)
 		{			
-			Decoder::changeWD(pathNames[i]);
+			Decoder::changeWD(_pathNames[i]);
 			tempSdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
 			if(tempSdrFile == INVALID_HANDLE_VALUE)
@@ -219,13 +217,13 @@
 
 	void FileReader::setStartLocation(int loc, uint64_t bytesSkip)
 	{
-		filePtr = loc;
-		startByteLocation = bytesSkip;
+		_filePtr = loc;
+		_startByteLocation = bytesSkip;
 	}
 
 	uint64_t FileReader::filesFullyReadCount()
 	{
-		return ib->getFileReadCount();
+		return _ib->getFileReadCount();
 	}
 
 	void FileReader::readFileWin()
@@ -234,41 +232,41 @@
 		//prep first handle
 		prepareHandle();
 
-		if(startByteLocation != 0)
-			SetFilePointer(sdrFile,startByteLocation,NULL,FILE_BEGIN);
+		if(_startByteLocation != 0)
+			SetFilePointer(_sdrFile,_startByteLocation,NULL,FILE_BEGIN);
 
 		//Perhaps there is a more elegant way to run and kill the thread, but this works
-		while(bytesRead < fileSize.QuadPart && !killThreadFlag)
+		while(_bytesRead < _fileSize.QuadPart && !_killThreadFlag)
 		{
-			uint64_t thisLoopReadBufferSize = readBufferSize;
+			uint64_t thisLoopReadBufferSize = _readBufferSize;
 
-			while(ib->isFinished())
+			while(_ib->isFinished())
 			{;}
 
 			int finish = false;
 
-			if(readBufferSize >= fileSize.QuadPart - bytesRead)
+			if(_readBufferSize >= _fileSize.QuadPart - _bytesRead)
 			{
-				thisLoopReadBufferSize = fileSize.QuadPart - bytesRead;
+				thisLoopReadBufferSize = _fileSize.QuadPart - _bytesRead;
 				finish = true;
 			}
 
 			//Does all the reading
 			DWORD numBytesRead;
 			char* space = NULL;
-			while(space == NULL && !killThreadFlag)
+			while(space == NULL && !_killThreadFlag)
 			{
-				space = ib->canWriteBlock();
+				space = _ib->canWriteBlock();
 			}
 
 			if(finish)
 				{
-					ib->finishWrite(thisLoopReadBufferSize);
+					_ib->finishWrite(thisLoopReadBufferSize);
 				}
 
-			int readFile = ReadFile(sdrFile, space, thisLoopReadBufferSize, &numBytesRead, NULL);
+			int readFile = ReadFile(_sdrFile, space, thisLoopReadBufferSize, &numBytesRead, NULL);
 
-			if(killThreadFlag)
+			if(_killThreadFlag)
 				return;
 
 			if(numBytesRead != thisLoopReadBufferSize)
@@ -280,20 +278,20 @@
 				printf ("ReadFile failed with error %d.\n", GetLastError());
 				
 				//attempt to recover
-				filePtr--;
-				int oldFp = filePtr;
+				_filePtr--;
+				int oldFp = _filePtr;
 				prepareHandle();
-				if(filePtr == oldFp)
+				if(_filePtr == oldFp)
 				{
 					printf ("\nLost access to file and no alternates exist, aborting.\n");
-					killThreadFlag = true;
+					_killThreadFlag = true;
 					//read fail,abort!
 					return;
 				} else {					
 					printf ("\nLost access to file but recovered.\n");
 					//recovery successful!
 					//TODO: test on files > 4 GB (for low part)
-					SetFilePointer(sdrFile,bytesRead,NULL,FILE_BEGIN);
+					SetFilePointer(_sdrFile,_bytesRead,NULL,FILE_BEGIN);
 
 				}
 
@@ -301,25 +299,25 @@
 
 			if(readFile){
 				//Todo: find out how to abandon this thead for a while.
-				ib->doneWritingBlock();
+				_ib->doneWritingBlock();
 
-				bytesRead = bytesRead + numBytesRead;
+				_bytesRead = _bytesRead + numBytesRead;
 
 			} else {
 				std::cout << "Error, Not a full read"   << std::endl;
 			}
 			//load in next file
 			//(that is, file is done reading and there are more files).
-			if(bytesRead == fileSize.QuadPart && filePtr < fnames.size())
+			if(_bytesRead == _fileSize.QuadPart && _filePtr < _fnames.size())
 			{
-				CloseHandle(sdrFile);
+				CloseHandle(_sdrFile);
 				prepareHandle();
-				std::cout << "Opening file " << filePtr << " \n";
+				std::cout << "Opening file " << _filePtr << " \n";
 			}
 
 		}
 		
-		CloseHandle(sdrFile);
+		CloseHandle(_sdrFile);
 		#endif
 	}
 

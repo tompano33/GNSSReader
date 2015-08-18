@@ -10,7 +10,6 @@
 
 	DecStream::DecStream(uint64_t sampleCap, std::string id,GnssMetadata::Stream * corStream, bool hasComplexPart, bool complexPartFirst)
 	{
-		_done = false;
 		_sampleCapacity = sampleCap;
 		_sampleBuf1 = new double[_sampleCapacity];
 		_sampleBuf2 = new double[_sampleCapacity];

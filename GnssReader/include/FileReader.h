@@ -2,72 +2,70 @@
  * File: FileReader.h
  * Author: WJLIDDY
  * Description: From a vector of SDR data files, puts them into an intermediate buffer based on several parameters.
- * Then, lets other objects read from this buffer.
+ * Then, lets the Decoder read from this buffer via a chunkbuffer.
  */
 #ifndef FILEREADER_H_H
 #define FILEREADER_H_H
 
-
-
 #include <vector>
 #include <stdio.h>
+#include <stdint.h>
 
+//Needed for multithreading and also changing the working directory.
 #ifdef _WIN32
 	#include <windows.h>
 	#include <process.h>
 #else
-
+	//linux chdir commands
 #endif
-
-#include <stdint.h>
 
 #include "IBuffer.h"
 
 class FileReader{
 
-#ifdef _WIN32
-	//Handle to the file that is currently being read.
-	HANDLE sdrFile;		
-	//Count of total bytes in the file
-	LARGE_INTEGER fileSize;
-#else
-	pthread_t readThread;
-#endif
+	private:
 
-	//How many bytes to read at once
-	uint64_t readBufferSize;	
+	#ifdef _WIN32
+		//Handle to the file that is currently being read.
+		HANDLE _sdrFile;		
+		//Count of total bytes in the file
+		LARGE_INTEGER _fileSize;
+	#else
+		pthread_t _readThread;
+	#endif
+
+	//How many bytes to read at once from any SDR File.
+	uint64_t _readBufferSize;	
 	//Count of total bytes read from the current file so far
-	volatile int64_t bytesRead;	
-	
-	//A Flag that kills the thread if made true.
-	bool killThreadFlag;				
-	//Holds all the SDR files names in consecutive order.
-	std::vector<std::string> fnames;	
+	volatile int64_t _bytesRead;	
+	//A flag that kills the entire reading thread if true. Use this if something goes wrong in the decoder.
+	bool _killThreadFlag;				
+	//Holds all the SDR files names in consecutive order. TODO: Isn't this in the decoder??
+	std::vector<std::string> _fnames;	
 	//points to which file we are on in the vector.
-	int filePtr;			
-	//list of path names
-	char** pathNames;			
+	int _filePtr;			
+	//list of path names to search through
+	char** _pathNames;			
 	//count of path names
-	uint64_t pathNameCount;	
+	uint64_t _pathNameCount;	
 	//Buffer that holds the files that have been read.
-	IBuffer* ib;						
-	//The byte to start reading from
-	uint64_t startByteLocation;
+	IBuffer* _ib;						
+	//The byte to start reading from. used for block offsets (such as in TRIGR files)
+	uint64_t _startByteLocation;
 
 	//Helper function to start a thread of a class method at runtime.
 	static void ThreadEntry(void *p);
-
-	//Populates intermediate buffer with samples until there are no samples left to be read.
-
-public:
-
-	void readFile();
-
-	void readFileWin();
 	
+	//populates the Ibuffer. To be called on windows machines
+	void readFileWin();
+	//populate the Ibuffer. To be called on Unix machines.
 	void readFileNix();
-
+	//OS independdently populates the Ibuffer. Called by thread Entry.
+	void readFile();
+	//unused?
 	long getFileSizeNix(std::string);
+
+	public:
 
 	//Needs a list of sdr data file names, the count of how many bytes to read a time, and the size of the buffer to store the bytes in terms of readBufferSize
 	FileReader(std::vector<std::string> fname,uint64_t readBufferSize, uint64_t intermediateBufferSize, const char *origPath, const char** paths, uint64_t pathCount);

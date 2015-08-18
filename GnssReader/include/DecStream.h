@@ -35,8 +35,6 @@ class DecStream{
 		volatile uint64_t _samplePtr;	
 		//Name of this buffer's stream. TODO: Do I need this? I don't think I ever call it
 		std::string _id;	
-		//??????
-		bool _done;
 		//True if the sample has a complex part; it is IQ or QI data.
 		bool _hasCPart;
 		//True if the complex part comes first, it is QI data.
