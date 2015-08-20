@@ -37,12 +37,12 @@ void testSuite()
 
 		//alignment: Tests quantization and aligned bits. 
 		{
-			printf("Expecting: [5, -2, -16, 15]\n");
+			printf("GN3S\n");
 
 			#ifndef _WIN32
 			Decoder test ("/home/jack/Desktop/singleStream/test.xml",500L,1000L,1000000L);
 			#else
-			Decoder test ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\singleStream\\test.xml",50L,1000L,1000000L,10);
+			Decoder test ("G:\\Demo SDR Samples\\GN3S\\GN3S.xml",50L,1000L,1000000L,100);
 			#endif
 
 			test.makeDecStreams();
@@ -50,7 +50,22 @@ void testSuite()
 			test.startAsThread();
 			while(!test.isDone()){}
 		}
-	
+
+		{
+			printf("Fraunhofer\n");
+
+			#ifndef _WIN32
+			Decoder test ("/home/jack/Desktop/singleStream/test.xml",500L,1000L,1000000L);
+			#else
+			Decoder test ("G:\\Demo SDR Samples\\fraunhofer\\L0\\L125_III1b_15s.usbx",50L,1000L,1000000L,100);
+			#endif
+
+			test.makeDecStreams();
+			test.setPrintOptions(true,false);
+			test.startAsThread();
+			while(!test.isDone()){}
+		}
+/**	
 		//altPaths: Tests quantization and aligned bits. 
 		{
 			printf("Expecting: A nice introduction \n");
@@ -218,7 +233,7 @@ void testSuite()
 				}
 			
 		}
-		*/
+		
 
 		//SingleStream
 		{

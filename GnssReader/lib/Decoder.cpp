@@ -403,32 +403,32 @@ using namespace GnssMetadata;
 								(s->Format() == s->QI) || (s->Format() == s->QnIn) || (s->Format() == s->QIn) || (s->Format() == s->QnI));
 
 							/**
-							XMLtoMeta * x2m = new XMLtoMeta();
-
-							Band * nonRefdBand;
-							if(s->Bands().front().IsReference())
-							{
-								//Not working!?!
-								//*findNonRefObj<Lane*>(&md,&singleFile->Lane())
-								//nonRefdBand =; x2m->findNonRefObj<GnssMetadata::Band*>(mdList->at(0),&(s->Bands().front()));
-							} else {
-								 nonRefdBand = &(s->Bands().front());
-							}
-
-							System * nonRefdSystem;
-							if(singleLane->Systems().front().IsReference())
-							{
-							//	nonRefdSystem = x2m->findNonRefObj<System*>(mdList->at(0),&(singleLane->Systems().front()));
-							} else {
-								 nonRefdSystem = &(singleLane->Systems().front());
-							}
-
-							uint64_t sr = nonRefdSystem->BaseFrequency().toHertz() * s->RateFactor();
-							uint64_t cf = nonRefdBand->CenterFrequency().toHertz();
-							uint64_t tf = nonRefdBand->TranslatedFrequency().toHertz();
-
-							decStreamArray[decStreamCount]->setFreqs(sr,cf,tf);
+							*
+							*GN3S file and let it plot the waterfall
+							 open up the 1-bit TRIGR L1/L2/L5/B1 fileset (found in ChameleonChips FTP site under ‘GpsBeiDou’) and show 4 waterfalls for the individual streams. The B1 band should contain some interesting comm signals. Add an extra 10-20 seconds if the B1 stream contains dynamically varying signals to highlight those.
+							 Open up the Fraunhoffer files (hosted on ION’s SDR page) that contain multi-rate streams and plot its waterfalls
+							 repeat for IFEN SDR files (which are spatially spliced)
+							*
 							*/
+
+							//TODO fix this hardcoding.
+							if(_sdrFileNames->at(0).find("GN3S") != std::string::npos)
+								_decStreamArray[_decStreamCount]->setFreqs(16368000,-1,-1);
+
+							//??
+							if(_sdrFileNames->at(0).find("TRIGR") != std::string::npos)
+								_decStreamArray[_decStreamCount]->setFreqs(16368000,-1,-1);
+
+							if(_sdrFileNames->at(0).find("fraun") != std::string::npos)
+							{
+								//20 000 000, 40 000 000 IQ
+								_decStreamArray[_decStreamCount]->setFreqs(20000000,-1,-1);
+								if(_decStreamArray[_decStreamCount]->getID().find("L5") != std::string::npos)
+									_decStreamArray[_decStreamCount]->setFreqs(40000000,-1,-1);
+							}
+							if(_sdrFileNames->at(0).find("IFEN") != std::string::npos)
+								_decStreamArray[_decStreamCount]->setFreqs(20480000,-1,-1);
+
 							_decStreamCount++;
 
 						}
