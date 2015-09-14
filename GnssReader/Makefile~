@@ -1,3 +1,0 @@
-GnssMeta:
-	g++ build/*.o -I include/  lib/*.cpp -D LINUX -w -fmax-errors=1 -fpermissive -std=c++11 -lpthread  -o TestApp 
-
