@@ -25,22 +25,22 @@ void testSuite()
 	std::cout << "Enter the path to your 'Tests' Directory:\n";
 	std::string path;
 	std::getline (std::cin, path);
-	
+
 	//Change this to the path to your test suite if you want to set a default directory
 	pathToTests = ("C:\\Users\\ANTadmin\\Desktop\\SDR_STANDARD\\Tests\\");
 	if(path.size() != 0)
 	{
-		pathToTests = path; 
+		pathToTests = path;
 	}
 	try
 	{
 
-		//alignment: Tests quantization and aligned bits. 
+		//alignment: Tests quantization and aligned bits.
 		{
 			printf("GN3S\n");
 
 			#ifndef _WIN32
-			Decoder test ("/home/jack/Desktop/singleStream/test.xml",500L,1000L,1000000L);
+			Decoder test ("/home/mark/projects/ion_sdr_standard/GNSSStandardTests/Tests/singleStream/test.xml",500L,1000L,1000000L);
 			#else
 			Decoder test ("G:\\Demo SDR Samples\\GN3S\\GN3S.xml",50L,1000L,1000000L,100);
 			#endif
@@ -65,8 +65,8 @@ void testSuite()
 			test.startAsThread();
 			while(!test.isDone()){}
 		}
-/**	
-		//altPaths: Tests quantization and aligned bits. 
+/**
+		//altPaths: Tests quantization and aligned bits.
 		{
 			printf("Expecting: A nice introduction \n");
 
@@ -74,14 +74,14 @@ void testSuite()
 			paths[0] = (pathTo("altPaths\\storage\\"));
 			paths[1] = (pathTo("altPaths\\storage\\superstorage\\"));
 			paths[2] = (pathTo("altPaths\\storage\\superstorage\\extremestorage\\"));
-		
+
 			Decoder test (pathTo("altPaths\\test.xml"),6L,3L,1000000L,-1,paths,3);
 			test.makeDecStreams();
 			test.setPrintOptions(false,true);
 			test.startAsThread();
 			while(!test.isDone()){;}
 		}
-		
+
 
 		//exception: throws error if invalid XML exists.
 		{
@@ -92,7 +92,7 @@ void testSuite()
 				test.setPrintOptions(false,true);
 				test.startAsThread();
 				while(!test.isDone()){;}
-		
+
 			} catch (std::exception& e) {
 				printf(e.what());
 			}
@@ -160,7 +160,7 @@ void testSuite()
 			while(!test.isDone()){;}
 		}
 
-		//padding: Tests Padding 
+		//padding: Tests Padding
 		{
 			printf("Expecting repeated pattern\n");
 			Decoder test (pathTo("padding\\test.xml"),50L,1000L,1000000L,-1);
@@ -207,23 +207,23 @@ void testSuite()
 		}
 
 			printf("\n sine fails? \n");
-		
-	
+
+
 			/**
 		//Sine as does work, but if you try to open the file again later an error is thrown. Perhaps the handle is not closed as i thought?
 		{
 			//fix a chunkbuffer that is too small
 			Decoder test (pathTo("sine\\test.xml"),5000L,10L,1000000L);
-		
+
 			test.makeDecStreams();
 			//test.setPrintOptions(true,false);
 			test.startAsThread();
 			while(!test.isDone()){
 
-				uint64_t count = 0; 
-				test.getDecStreamArray()[0]->flushOutputStream(&count);				
+				uint64_t count = 0;
+				test.getDecStreamArray()[0]->flushOutputStream(&count);
 			//	std::cout << "Count is" << count << std::endl;
-			
+
 		//			for(int i = 0; i != count; i++)
 		//			{
 		//				std::cout << inbuf[i] << std::endl;
@@ -231,9 +231,9 @@ void testSuite()
 
 
 				}
-			
+
 		}
-		
+
 
 		//SingleStream
 		{
@@ -291,11 +291,10 @@ int main(int argc, char** argv)
 	clock_t tStart = clock();
 
 	testSuite();
-	
+
 	printf("Execution Time: %.2f s\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 
 	//_CrtDumpMemoryLeaks();
 	std::cin.get();
 	return 0;
 }
-

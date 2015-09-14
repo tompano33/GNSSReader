@@ -23,7 +23,7 @@
 
 
 	FileReader::FileReader(std::vector<std::string> fnames,uint64_t inBlockSize, uint64_t inBlockCount,const char* origPath,const char** addlPaths,uint64_t pathCount){
-	
+
 		this->_readBufferSize = inBlockSize;
 
 		_ib = new IBuffer(inBlockSize,inBlockCount);
@@ -53,7 +53,7 @@
 		#else
 			readFileNix();
 		#endif
-		
+
 	};
 
 	char* FileReader::getBufferedBytes(int count)
@@ -61,7 +61,7 @@
 		char* c = NULL;
 		while(c == NULL)
 		{
-		
+
 
 			c = _ib->tryRead(count);
 		}
@@ -74,8 +74,8 @@
 	{
 		#ifdef _WIN32
 			_beginthread(FileReader::ThreadEntry, 0, this);
-		#else 
-			pthread_create (&readThread, NULL, (void *) FileReader::ThreadEntry, (void *) this);
+		#else
+			pthread_create (&_readThread, NULL, (void *) FileReader::ThreadEntry, (void *) this);
 		#endif
 	};
 
@@ -92,10 +92,10 @@
 	void FileReader::ThreadEntry(void *p)
 	{
 		#ifdef _WIN32
- 			((FileReader *) p)->readFile();   
+ 			((FileReader *) p)->readFile();
 			_endthread();
 		#else
-			((FileReader *) p)->readFile();   
+			((FileReader *) p)->readFile();
 			pthread_exit(NULL);
 		#endif
 	}
@@ -112,7 +112,7 @@
 		#else
 		return true;
 		#endif
-		
+
 	}
 
 	//TODO linux
@@ -151,16 +151,16 @@
 		std::wstring stemp = std::wstring(_fnames.at(_filePtr).begin(), _fnames.at(_filePtr).end());
 		LPCWSTR wfname = stemp.c_str();
 		boolean fileFound = false;
-		
+
 		for(int i = 0; i < _pathNameCount; i++)
-		{			
+		{
 			Decoder::changeWD(_pathNames[i]);
 			_sdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
 			if(_sdrFile == INVALID_HANDLE_VALUE)
 			{
 				continue;
-			}	
+			}
 
 			GetFileSizeEx(_sdrFile,&_fileSize);
 			_filePtr++;
@@ -194,14 +194,14 @@
 		HANDLE tempSdrFile;
 
 		for(int i = 0; i < _pathNameCount; i++)
-		{			
+		{
 			Decoder::changeWD(_pathNames[i]);
 			tempSdrFile = CreateFile(wfname, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,NULL);
 
 			if(tempSdrFile == INVALID_HANDLE_VALUE)
 			{
 				continue;
-			}	
+			}
 			//dword?
 			LARGE_INTEGER tempFileSize;
 			GetFileSizeEx(tempSdrFile,&tempFileSize);
@@ -276,7 +276,7 @@
 			{
 
 				printf ("ReadFile failed with error %d.\n", GetLastError());
-				
+
 				//attempt to recover
 				_filePtr--;
 				int oldFp = _filePtr;
@@ -287,7 +287,7 @@
 					_killThreadFlag = true;
 					//read fail,abort!
 					return;
-				} else {					
+				} else {
 					printf ("\nLost access to file but recovered.\n");
 					//recovery successful!
 					//TODO: test on files > 4 GB (for low part)
@@ -316,21 +316,21 @@
 			}
 
 		}
-		
+
 		CloseHandle(_sdrFile);
 		#endif
 	}
 
 	void FileReader::readFileNix(){
 		#ifndef _WIN32
-		Decoder::changeWD(fnames.at(0).c_str());
-		std::ifstream sdr (fnames.front().c_str(), std::ios::in|std::ios::binary|std::ios::ate);
+		Decoder::changeWD(_fnames.at(0).c_str());
+		std::ifstream sdr (_fnames.front().c_str(), std::ios::in|std::ios::binary|std::ios::ate);
 
-		if(!sdr.is_open())	
-		{		
+		if(!sdr.is_open())
+		{
 			std::cout << "Error: file not opened \n";
 			return;
-		}	
+		}
 
 		sdr.seekg(0,std::ios::beg);
 
@@ -346,15 +346,15 @@
 
 			while(space == NULL)
 			{
-				space = ib->canWriteBlock();
+				space = _ib->canWriteBlock();
 			}
 		//write here
-		sdr.read(space,readBufferSize);
+		sdr.read(space,_readBufferSize);
 
 		nanosleep(&tim1,&tim2);
-		//for(int j = 0; i j=  
+		//for(int j = 0; i j=
 
-		ib->doneWritingBlock();
+		_ib->doneWritingBlock();
 		}
 		sdr.close();
 	/**
@@ -400,7 +400,7 @@
 			{
 
 				printf ("ReadFile failed with error %d.\n", GetLastError());
-				
+
 				//attempt to recover
 				filePtr--;
 				int oldFp = filePtr;
@@ -411,7 +411,7 @@
 					killThreadFlag = true;
 					//read fail,abort!
 					return;
-				} else {					
+				} else {
 					printf ("\nLost access to file but recovered.\n");
 					//recovery successful!
 					//TODO: test on files > 4 GB (for low part)
@@ -440,7 +440,7 @@
 			}
 
 		}
-		
+
 		CloseHandle(sdrFile);
 		#endif
 		*/
@@ -451,7 +451,7 @@
     ifstream ifs(filename, ios::binary|ios::ate);
     ifstream::pos_type pos = ifs.tellg();
 
-	if(startByteLocation != 0)	
+	if(startByteLocation != 0)
 		ifs.seekg(startByteLocation, ios::beg);
 	else
 		ifs.seekg(0, ios::beg);
@@ -466,13 +466,10 @@
   */
 #endif
 }
-	
+
 long FileReader::getFileSizeNix(std::string filename)
 {
     struct stat stat_buf;
     int rc = stat(filename.c_str(), &stat_buf);
     return rc == 0 ? stat_buf.st_size : -1;
 }
-
-
-
