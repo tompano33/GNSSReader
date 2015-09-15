@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>jetColorMap.txt</file>
-    </qresource>
-</RCC>
